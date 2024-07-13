@@ -1,0 +1,27 @@
+app-map {
+    position: relative; /* Ensure app-map can contain absolutely positioned children */
+}
+
+.toolbar {
+  position: absolute;
+  z-index: 1000; /* Ensure the toolbar is above the map */
+  background: transparent; /* Make the toolbar background transparent */
+}
+
+.side-menu-container {
+    height: 100vh;
+    background: #eee;
+}
+
+.side-menu {
+    width: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.menu-button {
+    position: absolute;
+    z-index: 1000;
+    margin-top: 30px;
+    margin-left: 10px;
+}

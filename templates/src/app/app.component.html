@@ -1,0 +1,17 @@
+<div class="menu-button">
+    <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+    </button>
+</div>
+<mat-drawer-container class="side-menu-container" autosize hasBackdrop="false">
+    <mat-drawer #drawer class="side-menu" mode="over">
+    </mat-drawer>
+  
+    <mat-drawer-content class="main-content">
+        <mat-toolbar class="toolbar">
+        </mat-toolbar>
+        <app-map></app-map>
+        <router-outlet></router-outlet>
+    </mat-drawer-content> 
+  </mat-drawer-container>
+  
