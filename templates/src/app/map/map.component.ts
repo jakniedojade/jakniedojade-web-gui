@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
+import { SideMenuComponent } from "../side-menu/side-menu.component";
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [],
+  imports: [SideMenuComponent],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss'
 })
