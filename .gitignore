@@ -19,3 +19,5 @@ __pycache__
 /static/
 
 waw_api_key.txt
+/templates/node_modules/
+
