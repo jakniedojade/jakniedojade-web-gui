@@ -23,5 +23,5 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'angular-app';
+  title = 'jakniedojade';
 }

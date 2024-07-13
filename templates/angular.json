@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-app": {
+    "jakniedojade": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/angular-app",
+            "outputPath": "dist/jakniedojade",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -66,10 +66,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-app:build:production"
+              "buildTarget": "jakniedojade:build:production"
             },
             "development": {
-              "buildTarget": "angular-app:build:development"
+              "buildTarget": "jakniedojade:build:development"
             }
           },
           "defaultConfiguration": "development"
