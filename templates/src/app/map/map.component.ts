@@ -11,7 +11,7 @@ import * as L from 'leaflet';
 export class MapComponent implements OnInit {
 
   private map!: L.Map;
-  private centroid: L.LatLngExpression = [52.230242538506374, 21.010196929725545] //Warsaw
+  private centroid: L.LatLngExpression = [52.2293364,20.958512] //Warsaw
 
   initMap() {
     this.map = L.map('map', {
