@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-welcome-screen',
@@ -9,5 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './welcome-screen.component.scss'
 })
 export class WelcomeScreenComponent {
+  constructor(private router: Router) { }
 
+  navigateTo(route: string) {
+    this.router.navigate([route]);
+  }
 }
