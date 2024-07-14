@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { WelcomeScreenComponent } from '../welcome-screen/welcome-screen.component';
 
 @Component({
   selector: 'app-side-menu',
   standalone: true,
-  imports: [MatButtonModule],
+  imports: [WelcomeScreenComponent],
   templateUrl: './side-menu.component.html',
   styleUrl: './side-menu.component.scss'
 })
