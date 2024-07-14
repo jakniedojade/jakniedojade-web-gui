@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { SideMenuComponent } from "../side-menu/side-menu.component";
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [SideMenuComponent],
+  imports: [
+    SideMenuComponent,
+    MatButtonModule,
+    MatIconModule
+  ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss'
 })
@@ -29,7 +35,13 @@ export class MapComponent implements OnInit {
     tiles.addTo(this.map)
   }
 
-  constructor() { }
+  zoomIn(): void {
+    this.map.setZoom(this.map.getZoom() + 1);
+  }
+
+  zoomOut(): void {
+    this.map.setZoom(this.map.getZoom() - 1);
+  }
 
   ngOnInit(): void {
     this.initMap()

@@ -1,3 +1,30 @@
 #map {
     height: 100vh;
 }
+
+.zoom-buttons-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    @media (max-width: 1200px) {
+        display: none;
+    }
+}
+
+#zoom-button-in {
+    bottom: 0;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+#zoom-button-out {
+    top: 0;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+.zoom-button {
+    background-color: white;
+    z-index: 1000;
+    height: 40px;
+}

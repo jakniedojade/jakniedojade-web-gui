@@ -1,3 +1,15 @@
 <div id="map">
 </div>
+<div class="zoom-buttons-container">
+    <div id="zoom-button-in">
+        <button class="zoom-button" id="zoom-button-in" mat-mini-fab color="primary" (click)="zoomIn()">
+            <mat-icon fontIcon="add"></mat-icon>
+        </button>
+    </div>
+    <div id="zoom-button-out">
+        <button class="zoom-button" id="zoom-button-out" mat-mini-fab color="primary" (click)="zoomOut()">
+            <mat-icon fontIcon="remove"></mat-icon>
+        </button>
+    </div>
+</div>
 <app-side-menu></app-side-menu>
