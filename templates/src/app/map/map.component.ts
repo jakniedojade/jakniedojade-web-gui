@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
-import { SideMenuComponent } from "../side-menu/side-menu.component";
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -8,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-map',
   standalone: true,
   imports: [
-    SideMenuComponent,
     MatButtonModule,
     MatIconModule
   ],
