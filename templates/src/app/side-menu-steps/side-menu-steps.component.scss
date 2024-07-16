@@ -1,0 +1,54 @@
+@use '@angular/material' as mat;
+@include mat.core();
+@import '../../styles.scss';
+
+#steps {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    z-index: 1;
+
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#steps button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    width: 80px;
+    background-color: white;
+    outline: 6px solid white;
+}
+
+#steps > .active-step {
+    background-color: mat.get-theme-color($_palettes, primary, 98);
+    border: 1px solid mat.get-theme-color($_palettes, primary, 40);
+}
+
+#steps .mat-icon {
+    font-size: 29px;
+    padding-bottom: 4px;
+    padding-right: 4px;
+}
+
+#steps .nav-text {
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+#steps-line {
+    margin-top: -40px;
+    height: 40px;
+    display: block;
+    position: relative;
+    border-top: 2px dashed mat.get-theme-color($_palettes, primary, 40);
+    z-index: -1;
+
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+}

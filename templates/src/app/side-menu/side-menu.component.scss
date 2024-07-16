@@ -23,6 +23,11 @@ main {
         max-width: none;
         border-radius: 40px 40px 0 0;
     }
+
+    padding: 40px 30px;
 }
 
-
+main > div {
+    width: 100%;
+    height: 100%;
+}

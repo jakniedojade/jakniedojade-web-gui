@@ -1,6 +1,16 @@
-<mat-horizontal-stepper (selectionChange)="onStepChange($event)">
-    <mat-step label="Select line"></mat-step>
-    <mat-step label="Settings"></mat-step>
-    <mat-step label="Results"></mat-step>
-</mat-horizontal-stepper>
+<section id="steps">
+    <button mat-icon-button class="active-step">
+        <mat-icon>directions_bus</mat-icon>
+        <span class="nav-text">Linie</span>
+    </button>
+    <button mat-icon-button>
+        <mat-icon>settings</mat-icon>
+        <span class="nav-text">Ustawienia</span>
+    </button>
+    <button mat-icon-button>
+        <mat-icon>poll_chart</mat-icon>
+        <span class="nav-text">Wyniki</span>
+    </button>
+</section>
+<span id="steps-line"></span>
 <router-outlet></router-outlet>
