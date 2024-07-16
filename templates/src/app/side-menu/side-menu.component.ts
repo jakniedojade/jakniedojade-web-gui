@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { WelcomeScreenComponent } from '../welcome-screen/welcome-screen.component';
 import { RouterOutlet } from '@angular/router';
+
 @Component({
   selector: 'app-side-menu',
   standalone: true,
