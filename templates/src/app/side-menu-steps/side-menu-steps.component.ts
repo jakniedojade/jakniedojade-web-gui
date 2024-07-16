@@ -33,9 +33,9 @@ export class SideMenuStepsComponent {
       case "lines":
         return this.currentRoute?.includes("analyze/lines") ? "active-step" : "";
       case "settings":
-        return  /^.analyze\/\d+$/.test(item) == true ? "active-step" : ""; //fix this regex
+        return /analyze\/\d+/.test(this.currentRoute!) == true ? "active-step" : ""; //fix this regex
       case "results":
-        return this.currentRoute?.includes("settings") ? "active-step" : "";
+        return this.currentRoute?.includes("analyze/results") ? "active-step" : "";
       default:
         return "";
     }
