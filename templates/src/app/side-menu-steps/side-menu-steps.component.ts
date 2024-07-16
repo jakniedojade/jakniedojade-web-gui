@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-side-menu-steps',
   standalone: true,
-  imports: [RouterOutlet, MatIconModule, MatButtonModule],
+  imports: [RouterOutlet, MatIconModule, MatButtonModule, CommonModule],
   templateUrl: './side-menu-steps.component.html',
   styleUrl: './side-menu-steps.component.scss',
   providers: [
@@ -24,5 +25,19 @@ export class SideMenuStepsComponent {
 
   ngOnInit() {
     this.currentRoute = this.router.url;
+    console.log(this.currentRoute);
+  }
+
+  isActive(item: string) {
+    switch(item) {
+      case "lines":
+        return this.currentRoute?.includes("analyze/lines") ? "active-step" : "";
+      case "settings":
+        return  /^.analyze\/\d+$/.test(item) == true ? "active-step" : ""; //fix this regex
+      case "results":
+        return this.currentRoute?.includes("settings") ? "active-step" : "";
+      default:
+        return "";
+    }
   }
 }

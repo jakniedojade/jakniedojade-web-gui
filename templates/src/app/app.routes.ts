@@ -10,8 +10,14 @@ export const routes: Routes = [
         component: SideMenuStepsComponent,
         children: [
             { path: 'lines', component: LineSelectionComponent },
-            { path: 'settings', component: LineSelectionComponent },
-            { path: 'results', component: LineSelectionComponent }
+            { path: ':line', component: LineSelectionComponent },
+            { 
+                path: 'results', 
+                component: LineSelectionComponent,
+                children: [
+                    { path: ':line', component: LineSelectionComponent },
+                ]
+            },
         ]
     },
 ];

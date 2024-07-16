@@ -1,13 +1,13 @@
 <section id="steps">
-    <button mat-icon-button class="active-step">
+    <button mat-icon-button [ngClass]="isActive('lines')">
         <mat-icon>directions_bus</mat-icon>
         <span class="nav-text">Linie</span>
     </button>
-    <button mat-icon-button>
+    <button mat-icon-button [ngClass]="isActive('lines')">
         <mat-icon>settings</mat-icon>
         <span class="nav-text">Ustawienia</span>
     </button>
-    <button mat-icon-button>
+    <button mat-icon-button [ngClass]="isActive('lines')">
         <mat-icon>poll_chart</mat-icon>
         <span class="nav-text">Wyniki</span>
     </button>
