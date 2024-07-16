@@ -1,13 +1,14 @@
 <section id="steps">
-    <button mat-icon-button [ngClass]="isActive('lines')">
+    <button mat-icon-button routerLink="/analyze/lines" routerLinkActive="active-step">
         <mat-icon>directions_bus</mat-icon>
         <span class="nav-text">Linie</span>
     </button>
-    <button mat-icon-button [ngClass]="isActive('settings')">
+    <!-- when line selection will be implemented, we need to handle currently selected line by state -->
+    <button mat-icon-button routerLink="/analyze/:line" routerLinkActive="active-step">
         <mat-icon>settings</mat-icon>
         <span class="nav-text">Ustawienia</span>
     </button>
-    <button mat-icon-button [ngClass]="isActive('results')">
+    <button mat-icon-button routerLink="/analyze/results" routerLinkActive="active-step">
         <mat-icon>poll_chart</mat-icon>
         <span class="nav-text">Wyniki</span>
     </button>

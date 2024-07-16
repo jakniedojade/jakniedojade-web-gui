@@ -11,6 +11,10 @@
     max-width: 450px;
     margin-left: auto;
     margin-right: auto;
+
+    @media (max-width: 470px) {
+        padding: 0 10px;
+    }
 }
 
 #steps button {
@@ -26,7 +30,7 @@
 
 #steps > .active-step {
     background-color: mat.get-theme-color($_palettes, primary, 98);
-    border: 1px solid mat.get-theme-color($_palettes, primary, 40);
+    border: 1px solid mat.get-theme-color($_palettes, primary, 60);
 }
 
 #steps .mat-icon {
@@ -51,4 +55,9 @@
     max-width: 450px;
     margin-left: auto;
     margin-right: auto;
+
+    @media (max-width: 470px) {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
 }
