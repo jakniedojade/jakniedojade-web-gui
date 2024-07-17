@@ -1,6 +1,8 @@
 <div class="buttons">
     @for (line of lines; track $index) {
-        <button mat-raised-button>{{line}}</button>
+        <button class="line-button" mat-raised-button>{{line}}</button>
     }
 </div>
-<button mat-flat-button (click)="navigateTo('')">Powrót</button>
+<div class="controls">
+    <button mat-flat-button (click)="navigateTo('')">Powrót</button>
+</div>

@@ -1,0 +1,19 @@
+.buttons {
+    height: 80%;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 5px;
+}
+  
+.line-button {
+    margin: 6px;
+    min-width: 100px;
+    max-width: calc(15% - 16px);
+}
+
+.controls {
+    margin-top: 10px;
+}
