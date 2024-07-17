@@ -1,2 +1,6 @@
-<button mat-flat-button (click)="navigateTo('')">Wróć</button>
-
+<div class="buttons">
+    @for (line of lines; track $index) {
+        <button mat-raised-button>{{line}}</button>
+    }
+</div>
+<button mat-flat-button (click)="navigateTo('')">Powrót</button>

@@ -10,12 +10,12 @@ export const routes: Routes = [
         component: SideMenuStepsComponent,
         children: [
             { path: 'lines', component: LineSelectionComponent },
-            { path: ':line', component: LineSelectionComponent },
+            { path: ':line', component: WelcomeScreenComponent },
             { 
                 path: 'results', 
-                component: LineSelectionComponent,
+                component: WelcomeScreenComponent,
                 children: [
-                    { path: ':line', component: LineSelectionComponent },
+                    { path: ':line', component: WelcomeScreenComponent },
                 ]
             },
         ]
