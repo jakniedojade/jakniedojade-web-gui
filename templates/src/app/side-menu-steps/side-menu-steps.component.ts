@@ -21,12 +21,6 @@ import { LineSelectionComponent } from '../line-selection/line-selection.compone
   ],
   templateUrl: './side-menu-steps.component.html',
   styleUrl: './side-menu-steps.component.scss',
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: {displayDefaultIndicatorType: false},
-    },
-  ],
 })
 export class SideMenuStepsComponent {
   lines: any[] = [];
