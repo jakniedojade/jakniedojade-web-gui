@@ -1,8 +1,9 @@
-<div class="buttons">
-    @for (line of lines; track $index) {
-        <button class="line-button" mat-raised-button>{{line}}</button>
-    }
-</div>
-<div class="controls">
-    <button mat-flat-button (click)="navigateTo('')">Powrót</button>
-</div>
+<section id="select-line-container">
+    <mat-form-field id="filter-lines">
+        <input matInput placeholder="Wyszukaj linię" (input)="applyFilter($event.target!)">
+    </mat-form-field>
+    
+    <div id="buttons-container">
+        <button *ngFor="let line of filteredLines; trackBy: trackByIndex" class="line-button" mat-stroked-button>{{ line }}</button>
+    </div>
+</section>
