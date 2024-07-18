@@ -32,8 +32,7 @@ export class SideMenuStepsComponent {
     if (component instanceof LineSelectionComponent) {
       if (this.lines.length === 0) {
         this.linesService.getLines().subscribe(response => {
-          console.log("fetch");
-          this.lines = response;
+          this.lines = response.lines;
           component.lines = this.lines;
         });
       } else {

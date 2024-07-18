@@ -9,6 +9,6 @@ export class LinesService {
   constructor(private http: HttpClient) { }
 
   getLines() {
-    return this.http.get<any>('http://localhost:3000/lines');
+    return this.http.get<any>('http://localhost:3000/fake-api');
   }
 }
