@@ -1,0 +1,5 @@
+# Default codeowner for review
+* @pawheb
+
+# Codeowner for web gui
+/templates @twarowskiw

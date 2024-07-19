@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"				# BSD
+django-extensions = "*"		# MIT
+djangorestframework = "*"	# BSD - like
+mysqlclient = "*"		    # GPL2
+whitenoise = "*"			# MIT
+ijson = "*"					# BSD - like
+questionary = "*"			# MIT
+geopy = "*"					# MIT
+scipy = "*"					# BSD - like
+coloredlogs = "*"			# MIT
+py7zr = "==0.20.8"			# LGPL
+pytz = "*"					# MIT
+requests = "*"				# Apache
+pyroutelib3 = "*"			# GPL3 (but this is only used by WarsawGTFS, not by us)
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

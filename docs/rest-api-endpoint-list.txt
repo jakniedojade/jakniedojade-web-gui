@@ -1,0 +1,25 @@
+JAKNIEDOJADE REST API VERSION v1 (REST_API_VERSION_STRING = v1)
+
+ENDPOINTS:
+- /api/{REST_API_VERSION_STRING}/lines
+  RETURNS: List of lines
+- /api/{REST_API_VERSION_STRING}/stops
+  RETURNS: LIST OF STOPS
+- /api/{REST_API_VERSION_STRING}/lines/<str:line>/stops/
+  URL PARAMETERS:
+	- direction (0 or 1) [optional - default is 0]
+  RETURNS: List of stops which the given line has in its timetable for a given direction
+- /api/{REST_API_VERSION_STRING}/stops/<str:stop>/lines/
+  RETURNS:
+	- List of lines which have the given stop in their timetable
+- /api/{REST_API_VERSION_STRING}/lines/<str:line>/latency
+  URL PARAMETERS:
+	- start_stop (string - name of the stop) [required]
+	- end_stop (string - name of the stop) [required]
+	- direction (0 or 1) [required]
+	- whole_range (true or false) [optional - default is true]
+	- start_datetime (string - datetime - %Y-%m-%d %H:%M:%S) [required if whole_range=true, otherwise ignored]
+	- end_datetime (string - datetime - %Y-%m-%d %H:%M:%S) [required if whole_range=true, otherwise ignored]
+  RETURNS:
+	- An object with computed statistical data
+	- A list of points to which a given line follows on a map

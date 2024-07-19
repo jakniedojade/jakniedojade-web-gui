@@ -1,0 +1,10 @@
+# Make the Linux file endings (LF) the default instead of Windows (CRLF) on every system
+* text eol=lf
+
+# Don't touch binary files
+*.png binary
+*.svg binary
+*.ico binary
+*.webp binary
+*.jpg binary
+*.jpeg binary

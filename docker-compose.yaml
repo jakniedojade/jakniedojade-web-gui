@@ -1,0 +1,94 @@
+# This is a container compose file, which runs the whole development setup.
+#
+# Services:
+# web - starts the python interpreter running Django with it's development http server
+# scraper - starts the python interpreter running the Django scrap_api command in real-time mode
+# db - mariadb database with our custom configuration credentials passed through the environment
+#
+# The database credentials can be changed to whatever is more convient to work with.
+# Database data is saved in a volume named `mariadb_data`. This should be probably cleared
+# from time to time when changing the backend code.
+#
+# The API key for api.um.warszawa.pl should be written to a file
+# named `waw_api_key.txt` in the repo root.
+
+
+services:
+  scraper:
+    build:
+      dockerfile: ./Dockerfile
+      target: scraper
+    entrypoint: ["sh", "entrypoint.sh"]
+    environment:
+      - MYSQL_DB=jakniedojade
+      - MYSQL_USER=jakniedojade
+      - MYSQL_PASSWORD=password
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+    volumes:
+      - .:/jakniedojade
+      - warsawgtfs_data:/jakniedojade/WarsawGTFS
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+    secrets:
+      - waw_api_key
+    stop_signal: SIGINT
+
+  web:
+    build:
+      dockerfile: ./Dockerfile
+      target: web
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    environment:
+      - MYSQL_DB=jakniedojade
+      - MYSQL_USER=jakniedojade
+      - MYSQL_PASSWORD=password
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+    volumes:
+      - .:/jakniedojade
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+      scraper:
+        condition: service_started
+    networks:
+      - backend
+    stop_signal: SIGINT
+
+  db:
+    image: mariadb:11.4
+    command: --max_allowed_packet=128M
+    volumes:
+      - mariadb_data:/var/lib/mysql:Z
+    ports:
+      - 3306:3306
+    environment:
+      - MARIADB_DATABASE=jakniedojade
+      - MARIADB_USER=jakniedojade
+      - MARIADB_PASSWORD=password
+      - MARIADB_ROOT_PASSWORD=password
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - backend
+
+volumes:
+  mariadb_data:
+  warsawgtfs_data:
+
+networks:
+  backend:
+
+secrets:
+  waw_api_key:
+    file: waw_api_key.txt
