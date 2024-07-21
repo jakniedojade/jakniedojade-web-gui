@@ -1,0 +1,6 @@
+<!-- Temporary solution - list all stops -->
+@if (line$ | async; as line) {
+    @for (item of line; track $index) {
+        <p>128: {{ item.name }}</p>
+    }
+}
