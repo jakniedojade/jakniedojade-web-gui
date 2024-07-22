@@ -1,6 +1,23 @@
-<!-- Temporary solution - list all stops -->
-@if (line$ | async; as line) {
-    @for (item of line; track $index) {
-        <p>128: {{ item.name }}</p>
-    }
-}
+<div class="stops-container">
+    <h4>Wybór przystanków</h4>
+    <div class="stops-select">
+        @if (line$ | async; as line) {
+            <mat-form-field class="select">
+                <mat-label>Przystanek początkowy</mat-label>
+                <mat-select [formControl]="panelStart">
+                    @for (item of line; track $index) {
+                        <mat-option [value]="item.name">{{item.name}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="select">
+                <mat-label>Przystanek końcowy</mat-label>
+                <mat-select [formControl]="panelEnd">
+                    @for (item of line; track $index) {
+                        <mat-option [value]="item.name">{{item.name}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        }
+    </div>
+</div>
