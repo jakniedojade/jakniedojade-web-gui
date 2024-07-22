@@ -24,8 +24,8 @@ import { FormControl, FormsModule } from '@angular/forms';
 })
 
 export class LineSelectionComponent implements OnInit {
-  lines: Array<string>;
-  filteredLines: Array<string>;
+  lines: string[];
+  filteredLines: string[];
 
   constructor(private router: Router, private linesService: LinesService, private cacheService: CacheService) {
     this.lines = [];
@@ -42,14 +42,14 @@ export class LineSelectionComponent implements OnInit {
       this.linesService.getLines().subscribe((data) => {
         try {
           this.cacheService.set(data);
-          this.lines = data.lines;
+          this.lines = data;
           this.filteredLines = this.lines;
         } catch (error) {
           console.error(error);
         }
       });
     } else {
-      this.lines = this.cacheService.get().lines;
+      this.lines = this.cacheService.get();
       this.filteredLines = this.lines;
     }
   }

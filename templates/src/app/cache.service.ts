@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CacheService {
-  private lines: any;
+  private lines!: string[];
 
-  set(lines: any): void {
+  set(lines: string[]): void {
     this.lines = lines;
   }
 
