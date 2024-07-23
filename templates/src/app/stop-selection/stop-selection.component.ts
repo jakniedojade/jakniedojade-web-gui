@@ -16,15 +16,21 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 })
 export class StopSelectionComponent {
   @Input() line!: string;
-  line$!: Observable<Stops[]>;
-  //TODO use stop name variable in form control
-  panelStart = new FormControl('Szczęśliwice 05')
-  panelEnd = new FormControl('Pl. Piłsudskiego 06')
-
-  constructor(private stopsService: StopsService) {}
-
+  stops$!: Observable<Stops[]>;
+  stops: Stops[];
+  panelStart: FormControl = new FormControl();
+  panelEnd: FormControl = new FormControl();
+  
+  constructor(private stopsService: StopsService) {
+    this.stops = [];
+  }
+  
   ngOnInit(): void {
-    this.line$ = this.stopsService.getStops(this.line);
-    //Currently fetching 128 line by default so line string is undefined
+    this.stops$ = this.stopsService.getStops(this.line);
+    this.stops$.subscribe((response) => {
+      this.stops = response;
+      this.panelStart.setValue(this.stops[0].name);
+      this.panelEnd.setValue(this.stops[this.stops.length - 1].name);
+    })
   }
 }
