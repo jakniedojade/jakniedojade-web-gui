@@ -1,6 +1,7 @@
 .DS_STORE
 
-/dist/
+/dist/jakniedojade/browser
+!/dist/jakniedojade/3rdpartylicenses.txt
 /bazel-out
 /integration/bazel/bazel-*
 *.log
