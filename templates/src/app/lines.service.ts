@@ -10,6 +10,6 @@ export class LinesService {
   constructor(private http: HttpClient) { }
 
   getLines() : Observable<string[]> {
-    return this.http.get<string[]>('http://localhost:3000/fake-api');
+    return this.http.get<string[]>('/api/v1/lines');
   }
 }

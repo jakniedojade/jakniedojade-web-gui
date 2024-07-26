@@ -1,0 +1,7 @@
+{
+    "/api": {
+        "target": "https://jakniedojade.waw.pl",
+        "secure": false,
+        "changeOrigin": true
+    }
+}
