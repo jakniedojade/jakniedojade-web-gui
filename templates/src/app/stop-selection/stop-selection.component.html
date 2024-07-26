@@ -3,18 +3,14 @@
     <div class="stops-select">
         <mat-form-field class="select">
             <mat-label>Przystanek początkowy</mat-label>
-            <mat-select [formControl]="panelStart">
-                @for (item of stops; track $index) {
-                <mat-option [value]="item.name">{{item.name}}</mat-option>
-                }
+            <mat-select [(value)]="startIndex">
+                <mat-option *ngFor="let stop of stops; let i = index" [value]="i" [disabled]="i >= endIndex">{{stop.name}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field class="select">
             <mat-label>Przystanek końcowy</mat-label>
-            <mat-select [formControl]="panelEnd">
-                @for (item of stops; track $index) {
-                <mat-option [value]="item.name">{{item.name}}</mat-option>
-                }
+            <mat-select [(value)]="endIndex">
+                <mat-option *ngFor="let stop of stops; let i = index" [value]="i" [disabled]="i <= startIndex">{{stop.name}}</mat-option>
             </mat-select>
         </mat-form-field>
     </div>

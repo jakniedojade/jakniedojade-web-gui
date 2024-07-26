@@ -5,7 +5,7 @@ import { Stops } from '../stops';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-stop-selection',
@@ -18,8 +18,8 @@ export class StopSelectionComponent {
   @Input() line!: string;
   stops$!: Observable<Stops[]>;
   stops: Stops[];
-  panelStart: FormControl = new FormControl();
-  panelEnd: FormControl = new FormControl();
+  startIndex: number = 0;
+  endIndex!: number;
   
   constructor(private stopsService: StopsService) {
     this.stops = [];
@@ -29,8 +29,7 @@ export class StopSelectionComponent {
     this.stops$ = this.stopsService.getStops(this.line);
     this.stops$.subscribe((response) => {
       this.stops = response;
-      this.panelStart.setValue(this.stops[0].name);
-      this.panelEnd.setValue(this.stops[this.stops.length - 1].name);
+      this.endIndex = this.stops.length - 1;
     })
   }
 }
