@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { LinesService } from '../services/lines.service';
-import { CacheService } from '../services/cache.service';
+import { LinesService } from '../../services/lines.service';
+import { CacheService } from '../../services/cache.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,7 +39,7 @@ export class LineSelectionComponent implements OnInit {
   getData() {
     const cachedData = this.cacheService.get();
     if (!cachedData) {
-      this.linesService.getLines().subscribe((data) => {
+      this.linesService.getLines().subscribe((data: any) => {
         try {
           this.cacheService.set(data);
           this.lines = data;

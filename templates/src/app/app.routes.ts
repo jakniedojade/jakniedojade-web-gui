@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
-import { LineSelectionComponent } from './line-selection/line-selection.component';
-import { SideMenuStepsComponent } from './side-menu-steps/side-menu-steps.component';
-import { StopSelectionComponent } from './stop-selection/stop-selection.component';
+import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
+import { LineSelectionComponent } from './components/line-selection/line-selection.component';
+import { SideMenuStepsComponent } from './components/side-menu-steps/side-menu-steps.component';
+import { StopSelectionComponent } from './components/stop-selection/stop-selection.component';
 
 export const routes: Routes = [
     { path: '', component: WelcomeScreenComponent },

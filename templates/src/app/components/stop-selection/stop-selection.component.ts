@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { StopsService } from '../services/stops.service';
+import { StopsService } from '../../services/stops.service';
 import { Observable } from 'rxjs';
-import { Stops } from '../stops';
+import { Stops } from '../../interfaces/stops';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';

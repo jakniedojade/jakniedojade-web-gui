@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MapComponent } from './map/map.component';
+import { MapComponent } from './components/map/map.component';
 import { RouterOutlet } from '@angular/router';
-import { SideMenuComponent } from "./side-menu/side-menu.component";
+import { SideMenuComponent } from "./components/side-menu/side-menu.component";
 
 
 @Component({
