@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { StopsService } from '../stops.service';
+import { StopsService } from '../services/stops.service';
 import { Observable } from 'rxjs';
 import { Stops } from '../stops';
 import { CommonModule } from '@angular/common';

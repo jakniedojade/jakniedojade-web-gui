@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { LineSelectionComponent } from './line-selection/line-selection.component';
 import { SideMenuStepsComponent } from './side-menu-steps/side-menu-steps.component';
-import { PlaceholderComponent } from './placeholder/placeholder.component';
 import { StopSelectionComponent } from './stop-selection/stop-selection.component';
 
 export const routes: Routes = [
@@ -15,9 +14,9 @@ export const routes: Routes = [
             { path: ':line', component: StopSelectionComponent },
             { 
                 path: 'results', 
-                component: PlaceholderComponent,
+                component: StopSelectionComponent,
                 children: [
-                    { path: ':line', component: PlaceholderComponent },
+                    { path: ':line', component: StopSelectionComponent },
                 ]
             },
         ]
