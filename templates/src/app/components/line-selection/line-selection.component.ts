@@ -6,7 +6,7 @@ import { CacheService } from '../../services/cache.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormControl, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-line-selection',
@@ -55,7 +55,7 @@ export class LineSelectionComponent implements OnInit {
   }
 
   navigateTo(route: string) {
-    this.router.navigate([route]);
+    this.router.navigate([`analyze/${route}`]);
   }
 
   // Add a trackBy function to improve performance when rendering the lines

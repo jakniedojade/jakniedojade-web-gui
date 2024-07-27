@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stop-selection',
@@ -15,14 +16,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './stop-selection.component.scss'
 })
 export class StopSelectionComponent {
-  @Input() line: string = "193"; //check if request works
+  line: string = "";
   stops$!: Observable<Stops>;
   stopsInfo!: StopsInfo[];
   startIndex: number = 0;
   endIndex!: number;
   
-  constructor(private stopsService: StopsService) {
+  constructor(private stopsService: StopsService, route: ActivatedRoute) {
     this.stopsInfo = [];
+    route.params.subscribe((lineParams: any) => {
+      this.line = lineParams.line;
+    })
   }
   
   ngOnInit(): void {
