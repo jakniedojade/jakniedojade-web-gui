@@ -3,5 +3,5 @@
 </mat-form-field>
 
 <div id="buttons-container">
-    <button *ngFor="let line of filteredLines; trackBy: trackByIndex" class="line-button" mat-stroked-button (click)="navigateTo(line)">{{ line }}</button>
+    <button *ngFor="let line of filteredLines; trackBy: trackByIndex" class="line-button" mat-stroked-button (click)="getStops(line)">{{ line }}</button>
 </div>

@@ -10,7 +10,7 @@ export class StopsService {
 
   constructor(private http: HttpClient) { }
 
-  getStops(line: string): Observable<Stops> {
+  fetchStops(line: string): Observable<Stops> {
     return this.http.get<Stops>(`/api/v1/lines/${line}/stops`);
   }
 }

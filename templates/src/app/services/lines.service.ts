@@ -9,7 +9,7 @@ export class LinesService {
 
   constructor(private http: HttpClient) { }
 
-  getLines() : Observable<string[]> {
+  fetchLines() : Observable<string[]> {
     return this.http.get<string[]>('/api/v1/lines');
   }
 }

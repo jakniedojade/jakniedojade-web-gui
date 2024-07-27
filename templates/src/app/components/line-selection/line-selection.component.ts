@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
+import { StopsService } from '../../services/stops.service';
 import { CacheService } from '../../services/cache.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { Stops, StopsInfo } from '../../interfaces/stops';
 
 @Component({
   selector: 'app-line-selection',
@@ -26,31 +28,42 @@ import { FormsModule } from '@angular/forms';
 export class LineSelectionComponent implements OnInit {
   lines: string[];
   filteredLines: string[];
+  stops: StopsInfo[] = [];
 
-  constructor(private router: Router, private linesService: LinesService, private cacheService: CacheService) {
+  constructor(private router: Router, private linesService: LinesService, private stopsService: StopsService, private cacheService: CacheService) {
     this.lines = [];
     this.filteredLines = [];
   }
 
   ngOnInit(): void {
-    this.getData();
+    this.getLines();
   }
 
-  getData() {
-    const cachedData = this.cacheService.get();
-    if (!cachedData) {
-      this.linesService.getLines().subscribe((data: any) => {
-        try {
-          this.cacheService.set(data);
-          this.lines = data;
-          this.filteredLines = this.lines;
-        } catch (error) {
-          console.error(error);
-        }
+  getLines() {
+    const cachedLines = this.cacheService.getCacheLines();
+
+    if (!cachedLines) {
+      this.linesService.fetchLines().subscribe((data: any) => {
+        this.cacheService.setCacheLines(data);
+        this.lines = data;
+        this.filteredLines = this.lines;
       });
     } else {
-      this.lines = this.cacheService.get();
+      this.lines = this.cacheService.getCacheLines();
       this.filteredLines = this.lines;
+    }
+  }
+
+  getStops(line: string) {
+    const cachedStops = this.cacheService.getCacheStops(line);
+
+    if (!cachedStops) {
+      this.stopsService.fetchStops(line).subscribe((data: any) => {
+        this.cacheService.setCacheStops(line, data.stops);
+        this.navigateTo(line);
+      });
+    } else {
+      this.navigateTo(line);
     }
   }
 
