@@ -21,9 +21,9 @@
     "@angular/platform-browser-dynamic": "^18.0.0",
     "@angular/router": "^18.0.0",
     "@types/leaflet": "^1.9.12",
-    "json-server": "^1.0.0-beta.1",
     "leaflet": "^1.9.4",
     "leaflet-active-area": "^1.2.1",
+    "license-report": "^6.5.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
