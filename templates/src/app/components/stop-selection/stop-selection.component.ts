@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-stop-selection',
@@ -19,7 +21,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    MatProgressBarModule],
+    MatProgressBarModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './stop-selection.component.html',
   styleUrl: './stop-selection.component.scss'
 })

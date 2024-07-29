@@ -1,16 +1,20 @@
-.stops-select {
-    width: 80%;
-}
-
+.stops-select,
 .stops-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
+}
+
+.stops-select {
+    width: 80%;
 }
 
 .select {
     width: 100%;
+}
+
+.swap-direction {
+    margin-bottom: 20px;
 }
