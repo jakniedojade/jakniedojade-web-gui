@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "postinstall": "npx license-report --config=license-report-config.json > 3rd_party_licenses.md",
+    "poststart": "npx license-report --config=license-report-config.json > 3rd_party_licenses.md"
   },
   "private": true,
   "dependencies": {

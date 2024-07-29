@@ -1,0 +1,8 @@
+{
+    "output": "markdown",
+    "fields": [
+        "name",
+        "licenseType",
+        "installedVersion"
+    ]
+}
