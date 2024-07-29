@@ -1,6 +1,8 @@
 # Frontend of jakniedojade app
 
-Run `npm run start` for a dev server and fake rest api. If not set otherwise, it will run on `http://localhost:4200/`, and the fake rest api on `http://localhost:3000/`. Remember to run `npm i` before!
+Run `npm run start` for a dev server and licences file update. If not set otherwise, it will run on `http://localhost:4200/`. 
+Remember to run `npm i` before!
+Do not use `ng serve`, as it won't update licences file!
 
 Run `ng generate component component-name` to generate a new component.
 You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
