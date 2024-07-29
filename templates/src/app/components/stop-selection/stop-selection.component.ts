@@ -33,6 +33,7 @@ export class StopSelectionComponent {
   stopsInfo: StopsInfo[] = [];
   startIndex: number = 0;
   endIndex!: number;
+  direction: boolean = true;
   
   constructor(private cacheService: CacheService, private stopsService: StopsService, route: ActivatedRoute) {
     route.params.subscribe((lineParams: any) => {
@@ -46,15 +47,20 @@ export class StopSelectionComponent {
       this.stopsInfo = cachedStops;
       this.endIndex = this.stopsInfo.length - 1;
     } else {
-      this.fetchStopsFromService();
+      this.fetchStopsFromService(this.direction);
     }
   }
 
-  fetchStopsFromService(): void {
-    this.stopsService.fetchStops(this.line).subscribe((data: any) => {
+  fetchStopsFromService(direction: boolean): void {
+    this.stopsService.fetchStops(this.line, direction).subscribe((data: any) => {
       this.cacheService.setCacheStops(this.line, data.stops);
       this.stopsInfo = data.stops;
       this.endIndex = this.stopsInfo.length - 1;
     });
+  }
+
+  swapDirection(): void {
+    this.direction = !this.direction;
+    this.fetchStopsFromService(this.direction);
   }
 }

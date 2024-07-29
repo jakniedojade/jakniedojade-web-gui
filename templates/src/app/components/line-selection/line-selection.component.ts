@@ -29,6 +29,7 @@ export class LineSelectionComponent implements OnInit {
   lines: string[];
   filteredLines: string[];
   stops: StopsInfo[] = [];
+  defaultDirection: boolean = true;
 
   constructor(private router: Router, private linesService: LinesService, private stopsService: StopsService, private cacheService: CacheService) {
     this.lines = [];
@@ -58,7 +59,7 @@ export class LineSelectionComponent implements OnInit {
     const cachedStops = this.cacheService.getCacheStops(line);
 
     if (!cachedStops) {
-      this.stopsService.fetchStops(line).subscribe((data: any) => {
+      this.stopsService.fetchStops(line, this.defaultDirection).subscribe((data: any) => {
         this.cacheService.setCacheStops(line, data.stops);
         this.navigateTo(line);
       });

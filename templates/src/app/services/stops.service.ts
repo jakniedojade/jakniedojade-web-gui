@@ -10,7 +10,8 @@ export class StopsService {
 
   constructor(private http: HttpClient) { }
 
-  fetchStops(line: string): Observable<Stops> {
-    return this.http.get<Stops>(`/api/v1/lines/${line}/stops`);
+  fetchStops(line: string, direction: boolean): Observable<Stops> {
+    const directionNumber: string = direction ? "0" : "1";
+    return this.http.get<Stops>(`/api/v1/lines/${line}/stops/?direction=${directionNumber}`);
   }
 }
