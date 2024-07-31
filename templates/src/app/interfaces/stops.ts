@@ -7,7 +7,7 @@ export interface StopsInfo {
 }
 
 export interface Stops {
-    direction: number,
+    direction: boolean,
     directionBeginning: string,
     directionDestination: string,
     stops: StopsInfo[];
