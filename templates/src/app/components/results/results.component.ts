@@ -9,8 +9,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './results.component.scss'
 })
 export class ResultsComponent implements OnInit{
-  line: string = "";
-  activatedRoute = inject(ActivatedRoute);
+  private activatedRoute = inject(ActivatedRoute);
+
+  public line: string = "";
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {

@@ -26,15 +26,14 @@ import { Stops, StopsInfo } from '../../interfaces/stops';
 })
 
 export class LineSelectionComponent implements OnInit {
-  router = inject(Router);
-  linesService = inject(LinesService);
-  stopsService = inject(StopsService);
-  cacheService = inject(CacheService);
+  private router = inject(Router);
+  private linesService = inject(LinesService);
+  private stopsService = inject(StopsService);
+  private cacheService = inject(CacheService);
 
-  lines: string[] = [];
-  filteredLines: string[] = [];
-  stops: StopsInfo[] = [];
-  defaultDirection: boolean = false;
+  private lines: string[] = [];
+  public filteredLines: string[] = [];
+  private defaultDirection: boolean = false;
 
   ngOnInit(): void {
     this.getLines();

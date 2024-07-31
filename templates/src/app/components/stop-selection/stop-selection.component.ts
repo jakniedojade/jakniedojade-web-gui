@@ -29,16 +29,16 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './stop-selection.component.scss'
 })
 export class StopSelectionComponent {
-  cacheService = inject(CacheService);
-  stopsService = inject(StopsService);
-  router = inject(Router);
-  activatedRoute = inject(ActivatedRoute);
+  private cacheService = inject(CacheService);
+  private stopsService = inject(StopsService);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
 
-  line: string = "";
-  stopsInfo: StopsInfo[] = [];
-  startIndex: number = 0;
-  endIndex!: number;
-  direction: boolean = false;
+  private line: string = "";
+  public stopsInfo: StopsInfo[] = [];
+  public startIndex: number = 0;
+  public endIndex!: number;
+  private direction: boolean = false;
   
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {
