@@ -11,7 +11,7 @@ export class StopsService {
   constructor(private http: HttpClient) { }
 
   fetchStops(line: string, direction: boolean): Observable<Stops> {
-    const directionNumber: string = direction ? "0" : "1";
+    const directionNumber: string = direction ? "1" : "0";
     return this.http.get<Stops>(`/api/v1/lines/${line}/stops/?direction=${directionNumber}`);
   }
 }
