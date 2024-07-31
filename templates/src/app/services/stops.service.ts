@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Stops } from '../interfaces/stops';
 
@@ -7,8 +7,7 @@ import { Stops } from '../interfaces/stops';
   providedIn: 'root'
 })
 export class StopsService {
-
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
 
   fetchStops(line: string, direction: boolean): Observable<Stops> {
     const directionNumber: string = direction ? "1" : "0";

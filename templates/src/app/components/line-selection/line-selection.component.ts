@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
@@ -26,15 +26,15 @@ import { Stops, StopsInfo } from '../../interfaces/stops';
 })
 
 export class LineSelectionComponent implements OnInit {
-  lines: string[];
-  filteredLines: string[];
+  router = inject(Router);
+  linesService = inject(LinesService);
+  stopsService = inject(StopsService);
+  cacheService = inject(CacheService);
+
+  lines: string[] = [];
+  filteredLines: string[] = [];
   stops: StopsInfo[] = [];
   defaultDirection: boolean = false;
-
-  constructor(private router: Router, private linesService: LinesService, private stopsService: StopsService, private cacheService: CacheService) {
-    this.lines = [];
-    this.filteredLines = [];
-  }
 
   ngOnInit(): void {
     this.getLines();

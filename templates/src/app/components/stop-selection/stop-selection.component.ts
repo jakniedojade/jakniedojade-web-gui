@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { StopsService } from '../../services/stops.service';
 import { CacheService } from '../../services/cache.service';
 import { StopsInfo } from '../../interfaces/stops';
@@ -29,19 +29,25 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './stop-selection.component.scss'
 })
 export class StopSelectionComponent {
+  cacheService = inject(CacheService);
+  stopsService = inject(StopsService);
+  router = inject(Router);
+  activatedRoute = inject(ActivatedRoute);
+
   line: string = "";
   stopsInfo: StopsInfo[] = [];
   startIndex: number = 0;
   endIndex!: number;
   direction: boolean = false;
   
-  constructor(private cacheService: CacheService, private stopsService: StopsService, route: ActivatedRoute, private router: Router) {
-    route.params.subscribe((lineParams: any) => {
-      this.line = lineParams.line;
-    })
-  }
-  
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe((lineParams: any) => {
+      this.line = lineParams.line;
+      this.initializeStops();
+    });
+  }
+
+  initializeStops(): void {
     const cachedStops = this.cacheService.getCacheStops(this.line, this.direction);
     if (cachedStops) {
       this.stopsInfo = cachedStops.stops;
