@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,7 +35,7 @@ export class StopSelectionComponent {
   endIndex!: number;
   direction: boolean = false;
   
-  constructor(private cacheService: CacheService, private stopsService: StopsService, route: ActivatedRoute) {
+  constructor(private cacheService: CacheService, private stopsService: StopsService, route: ActivatedRoute, private router: Router) {
     route.params.subscribe((lineParams: any) => {
       this.line = lineParams.line;
     })
@@ -62,5 +62,9 @@ export class StopSelectionComponent {
   swapDirection(): void {
     this.direction = !this.direction;
     this.ngOnInit();
+  }
+
+  navigateToResults() {
+    this.router.navigate([`analyze/results/${this.line}`]);
   }
 }
