@@ -11,29 +11,23 @@ export class CacheService {
   private shapes = new Map<string, Shapes[]>();
 
   setCacheShapes(line: string, direction: boolean, shapes: Shapes[]): void {
-    if (!this.shapes.has(line)) {
-      const key = this.constructKey(line, direction);
-      this.shapes.set(key, shapes);
-    }
+    const key = this.constructKey(line, direction);
+    this.shapes.set(key, shapes);
   }
 
   getCacheShapes(line: string, direction: boolean): Shapes[] | undefined {
-    const key = this.constructKey(line, direction)
-    const data = this.shapes.get(key);
-    return data;
+    const key = this.constructKey(line, direction);
+    return this.shapes.get(key);
   }
 
   setCacheStops(line: string, stops: Stops): void {
-    if (!this.stops.has(line)) {
-      const key = this.constructKey(line, stops.direction);
-      this.stops.set(key, stops);
-    }
+    const key = this.constructKey(line, stops.direction);
+    this.stops.set(key, stops);
   }
 
   getCacheStops(line: string, direction: boolean): Stops | undefined {
     const key = this.constructKey(line, direction)
-    const data = this.stops.get(key);
-    return data;
+    return this.stops.get(key);
   }
 
   private constructKey(line: string, direction: boolean): string {
