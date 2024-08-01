@@ -45,10 +45,15 @@ export class LineSelectionComponent implements OnInit {
     const cachedLines = this.cacheService.getCacheLines();
 
     if (!cachedLines) {
-      this.linesService.fetchLines().subscribe((data: any) => {
-        this.cacheService.setCacheLines(data);
-        this.lines = data;
-        this.filteredLines = this.lines;
+      this.linesService.fetchLines().subscribe({
+        next: (data: any) => {
+          this.cacheService.setCacheLines(data);
+          this.lines = data;
+          this.filteredLines = this.lines;
+        },
+        error: (error) => {
+          this.openDialog(error.message);
+        }
       });
     } else {
       this.lines = this.cacheService.getCacheLines();
