@@ -10,6 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-stop-selection',
@@ -33,6 +35,7 @@ export class StopSelectionComponent {
   private stopsService = inject(StopsService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
+  readonly dialog = inject(MatDialog);
 
   private line: string = "";
   public stopsInfo: StopsInfo[] = [];
@@ -58,10 +61,21 @@ export class StopSelectionComponent {
   }
 
   fetchStopsFromService(direction: boolean): void {
-    this.stopsService.fetchStops(this.line, direction).subscribe((data: any) => {
-      this.cacheService.setCacheStops(this.line, data);
-      this.stopsInfo = data.stops;
-      this.endIndex = this.stopsInfo.length - 1;
+    this.stopsService.fetchStops(this.line, direction).subscribe({
+      next: (data: any) => {
+        this.stopsInfo = data.stops;
+        if (this.stopsInfo.length === 0) {
+          const errorMessage = "Brak przystanków dla wybranego kierunku.";
+          this.openDialog(errorMessage);
+        } else {
+          this.cacheService.setCacheStops(this.line, data);
+          this.endIndex = this.stopsInfo.length - 1;
+        }
+        
+      },
+      error: (error) => {
+        this.openDialog(error.message);
+      }
     });
   }
 
@@ -72,5 +86,11 @@ export class StopSelectionComponent {
 
   navigateToResults() {
     this.router.navigate([`analyze/results/${this.line}`]);
+  }
+
+  openDialog(message: string) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: { errorMessage: message}
+    });
   }
 }

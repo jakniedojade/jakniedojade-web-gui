@@ -8,7 +8,8 @@ import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { Stops, StopsInfo } from '../../interfaces/stops';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-line-selection',
@@ -30,6 +31,7 @@ export class LineSelectionComponent implements OnInit {
   private linesService = inject(LinesService);
   private stopsService = inject(StopsService);
   private cacheService = inject(CacheService);
+  readonly dialog = inject(MatDialog);
 
   private lines: string[] = [];
   public filteredLines: string[] = [];
@@ -58,9 +60,16 @@ export class LineSelectionComponent implements OnInit {
     const cachedStops = this.cacheService.getCacheStops(line, this.defaultDirection);
 
     if (!cachedStops) {
-      this.stopsService.fetchStops(line, this.defaultDirection).subscribe((data: any) => {
-        this.cacheService.setCacheStops(line, data);
-        this.navigateTo(line);
+      this.stopsService.fetchStops(line, this.defaultDirection).subscribe({
+        next: (data: any) => {
+          if (data.stops.length > 0) {
+            this.cacheService.setCacheStops(line, data);
+          }
+          this.navigateTo(line);
+        },
+        error: (error) => {
+          this.openDialog(error.message);
+        }
       });
     } else {
       this.navigateTo(line);
@@ -83,5 +92,11 @@ export class LineSelectionComponent implements OnInit {
     );
     if(this.filteredLines.length == 0)
       this.filteredLines = this.lines;
+  }
+
+  openDialog(message: string) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: { errorMessage: message }
+    });
   }
 }
