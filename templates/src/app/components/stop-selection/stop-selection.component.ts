@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { ShapesService } from '../../services/shapes.service';
 
 @Component({
   selector: 'app-stop-selection',
@@ -33,6 +34,7 @@ import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 export class StopSelectionComponent {
   private cacheService = inject(CacheService);
   private stopsService = inject(StopsService);
+  private shapesService = inject(ShapesService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   readonly dialog = inject(MatDialog);
@@ -85,7 +87,11 @@ export class StopSelectionComponent {
   }
 
   navigateToResults() {
-    this.router.navigate([`analyze/results/${this.line}`]);
+    //TEMPORARY REQUEST FOR FULL ROUTE ONLY (FROM FIRST TO LAST STOP)
+    this.shapesService.fetchShapes(this.line, this.direction, this.stopsInfo[0].name, this.stopsInfo[this.stopsInfo.length - 1].name).subscribe((data: any) => {
+      this.cacheService.setCacheShapes(this.line, this.direction, data.shapes)
+      this.router.navigate([`analyze/results/${this.line}`]);
+    })
   }
 
   openDialog(message: string) {
