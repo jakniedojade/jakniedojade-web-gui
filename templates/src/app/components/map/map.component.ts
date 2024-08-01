@@ -1,10 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Inject, OnInit, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import 'leaflet-active-area';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-map',
@@ -18,6 +19,7 @@ import { debounceTime } from 'rxjs/operators';
 })
 
 export class MapComponent implements OnInit {
+  private mapService = inject(MapService);
   /**
    * Provide access to the DOM element
    */
@@ -29,8 +31,15 @@ export class MapComponent implements OnInit {
    * our own type definitions for needed functions).
    */
   private map!: any;
+  private markersGroup: any;
   // private map!: L.Map;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
+
+  ngOnInit(): void {
+    this.initMap()
+    this.mapService.setMapComponent(this);
+    this.markersGroup = L.layerGroup().addTo(this.map);
+  }
 
   initMap() {
     this.map = L.map('map', {
@@ -63,10 +72,6 @@ export class MapComponent implements OnInit {
     this.map.setZoom(this.map.getZoom() - 1);
   }
 
-  ngOnInit(): void {
-    this.initMap()
-  }
-
   /**
    * When resized, set new active area of the map,
    * but don't recenter, cause it works kind of weird
@@ -95,5 +100,12 @@ export class MapComponent implements OnInit {
           }
         }
       });
+  }
+
+  public drawRoute(coords: L.LatLngExpression[]): void {
+    this.markersGroup.clearLayers();
+    const polyline = L.polyline(coords, { color: 'green' }).addTo(this.map);  //TODO adjust to color palette
+    this.map.fitBounds(polyline.getBounds());
+    this.markersGroup.addLayer(polyline);
   }
 }
