@@ -88,10 +88,15 @@ export class StopSelectionComponent {
 
   navigateToResults() {
     //TEMPORARY REQUEST FOR FULL ROUTE ONLY (FROM FIRST TO LAST STOP)
-    this.shapesService.fetchShapes(this.line, this.direction, this.stopsInfo[0].name, this.stopsInfo[this.stopsInfo.length - 1].name).subscribe((data: any) => {
-      this.cacheService.setCacheShapes(this.line, this.direction, data.shapes)
+    const cachedShapes = this.cacheService.getCacheShapes(this.line, this.direction);
+    if (!cachedShapes) {
+      this.shapesService.fetchShapes(this.line, this.direction, this.stopsInfo[0].name, this.stopsInfo[this.stopsInfo.length - 1].name).subscribe((data: any) => {
+        this.cacheService.setCacheShapes(this.line, this.direction, data.shapes)
+        this.router.navigate([`analyze/results/${this.line}`]);
+      })
+    } else {
       this.router.navigate([`analyze/results/${this.line}`]);
-    })
+    }
   }
 
   openDialog(message: string) {
