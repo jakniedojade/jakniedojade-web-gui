@@ -111,7 +111,7 @@ SHELL_PLUS = "ipython"
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'templates' / 'static',
+    BASE_DIR / 'templates' / 'dist' / 'jakniedojade' / 'browser'
 ]
 
 STATIC_ROOT = BASE_DIR / 'static'
