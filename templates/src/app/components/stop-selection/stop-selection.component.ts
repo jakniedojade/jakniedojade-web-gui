@@ -87,16 +87,34 @@ export class StopSelectionComponent {
   }
 
   navigateToResults() {
-    //TEMPORARY REQUEST FOR FULL ROUTE ONLY (FROM FIRST TO LAST STOP)
+    this.initializeShapes();
+  }
+
+  initializeShapes(): void {
     const cachedShapes = this.cacheService.getCacheShapes(this.line, this.direction);
     if (!cachedShapes) {
-      this.shapesService.fetchShapes(this.line, this.direction, this.stopsInfo[0].name, this.stopsInfo[this.stopsInfo.length - 1].name).subscribe((data: any) => {
-        this.cacheService.setCacheShapes(this.line, this.direction, data.shapes)
-        this.router.navigate([`analyze/results/${this.line}`]);
-      })
+      this.getShapes();
     } else {
       this.router.navigate([`analyze/results/${this.line}`]);
     }
+  }
+  
+  getShapes(): void {
+    //TEMPORARY REQUEST FOR FULL ROUTE ONLY (FROM FIRST TO LAST STOP)
+    this.shapesService.fetchShapes(this.line, this.direction, this.stopsInfo[0].name, this.stopsInfo[this.stopsInfo.length - 1].name).subscribe({
+      next: (data: any) => {
+        if (!data.shapes || data.shapes.length === 0) {
+          const errorMessage = "Brak shapes dla danej linii";
+          this.openDialog(errorMessage)
+        } else {
+          this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
+          this.router.navigate([`analyze/results/${this.line}`]);
+        }
+      },
+      error: (error) => {
+        this.openDialog(error.message);
+      }
+    })
   }
 
   openDialog(message: string) {
