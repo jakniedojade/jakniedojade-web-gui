@@ -38,7 +38,7 @@ export class CacheService {
     this.lines = lines;
   }
 
-  getCacheLines() {
+  getCacheLines(): string[] {
     return this.lines;
   }
 

@@ -58,66 +58,65 @@ export class StopSelectionComponent {
       this.stopsInfo = cachedStops.stops;
       this.endIndex = this.stopsInfo.length - 1;
     } else {
-      this.fetchStopsFromService(this.direction);
+      this.fetchStops();
     }
   }
 
-  fetchStopsFromService(direction: boolean): void {
-    this.stopsService.fetchStops(this.line, direction).subscribe({
+  fetchStops(): void {
+    this.stopsService.getStops(this.line, this.direction).subscribe({
       next: (data: any) => {
         this.stopsInfo = data.stops;
         if (this.stopsInfo.length === 0) {
           const errorMessage = "Brak przystanków dla wybranego kierunku.";
-          this.openDialog(errorMessage);
+          this.openErrorDialog(errorMessage);
         } else {
           this.cacheService.setCacheStops(this.line, data);
           this.endIndex = this.stopsInfo.length - 1;
         }
-        
       },
       error: (error) => {
-        this.openDialog(error.message);
+        this.openErrorDialog(error.message);
       }
     });
   }
 
   swapDirection(): void {
     this.direction = !this.direction;
-    this.ngOnInit();
+    this.initializeStops();
   }
 
-  navigateToResults() {
+  navigateToResults(): void {
     this.initializeShapes();
   }
 
   initializeShapes(): void {
     const cachedShapes = this.cacheService.getCacheShapes(this.line, this.direction);
     if (!cachedShapes) {
-      this.getShapes();
+      this.fetchShapes();
     } else {
       this.router.navigate([`analyze/results/${this.line}/${this.direction}`]);
     }
   }
   
-  getShapes(): void {
+  fetchShapes(): void {
     //TEMPORARY REQUEST FOR FULL ROUTE ONLY (FROM FIRST TO LAST STOP)
-    this.shapesService.fetchShapes(this.line, this.direction, this.stopsInfo[0].name, this.stopsInfo[this.stopsInfo.length - 1].name).subscribe({
+    this.shapesService.getShapes(this.line, this.direction, this.stopsInfo[0].name, this.stopsInfo[this.stopsInfo.length - 1].name).subscribe({
       next: (data: any) => {
         if (!data.shapes || data.shapes.length === 0) {
           const errorMessage = "Brak shapes dla danej linii";
-          this.openDialog(errorMessage)
+          this.openErrorDialog(errorMessage)
         } else {
           this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
           this.router.navigate([`analyze/results/${this.line}/${this.direction}`]);
         }
       },
       error: (error) => {
-        this.openDialog(error.message);
+        this.openErrorDialog(error.message);
       }
     })
   }
 
-  openDialog(message: string) {
+  openErrorDialog(message: string): void {
     this.dialog.open(ErrorDialogComponent, {
       data: { errorMessage: message}
     });

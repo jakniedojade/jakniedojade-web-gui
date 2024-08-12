@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class WelcomeScreenComponent {
   private router = inject(Router);
 
-  navigateTo(route: string) {
+  navigateTo(route: string): void {
     this.router.navigate([route]);
   }
 }

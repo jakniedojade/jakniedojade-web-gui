@@ -23,10 +23,10 @@ export class ResultsComponent implements OnInit{
       this.line = lineParams.line;
       this.direction = lineParams.direction;
     })
-    this.getShapes(this.line, this.direction);
+    this.mapShapes(this.line, this.direction);
   }
 
-  getShapes(line: string, direction: boolean): void {
+  mapShapes(line: string, direction: boolean): void {
     const shapes = this.cacheService.getCacheShapes(line, direction);
 
     if (shapes && shapes.length > 0) {

@@ -38,21 +38,21 @@ export class LineSelectionComponent implements OnInit {
   private defaultDirection: boolean = false;
 
   ngOnInit(): void {
-    this.getLines();
+    this.fetchLines();
   }
 
-  getLines() {
+  fetchLines(): void {
     const cachedLines = this.cacheService.getCacheLines();
 
     if (!cachedLines) {
-      this.linesService.fetchLines().subscribe({
+      this.linesService.getLines().subscribe({
         next: (data: any) => {
           this.cacheService.setCacheLines(data);
           this.lines = data;
           this.filteredLines = this.lines;
         },
         error: (error) => {
-          this.openDialog(error.message);
+          this.openErrorDialog(error.message);
         }
       });
     } else {
@@ -61,37 +61,37 @@ export class LineSelectionComponent implements OnInit {
     }
   }
 
-  getStops(line: string) {
+  fetchStops(line: string): void {
     const cachedStops = this.cacheService.getCacheStops(line, this.defaultDirection);
 
     if (!cachedStops) {
-      this.stopsService.fetchStops(line, this.defaultDirection).subscribe({
+      this.stopsService.getStops(line, this.defaultDirection).subscribe({
         next: (data: any) => {
           if (data.stops.length > 0) {
             this.cacheService.setCacheStops(line, data);
           }
-          this.navigateTo(line);
+          this.navigateToLine(line);
         },
         error: (error) => {
-          this.openDialog(error.message);
+          this.openErrorDialog(error.message);
         }
       });
     } else {
-      this.navigateTo(line);
+      this.navigateToLine(line);
     }
   }
 
-  navigateTo(route: string) {
-    this.router.navigate([`analyze/${route}`]);
+  navigateToLine(lineNumber: string): void {
+    this.router.navigate([`analyze/${lineNumber}`]);
   }
 
   // Add a trackBy function to improve performance when rendering the lines
-  trackByIndex(index: number, item: string) {
+  trackByIndex(index: number, item: string): number {
     return index;
   }
 
   // Filter lines based on input value
-  applyFilter(filterValue: EventTarget) {
+  applyFilter(filterValue: EventTarget): void {
     this.filteredLines = this.lines.filter((line) =>
         line.toLowerCase().includes((filterValue as HTMLInputElement).value.toLowerCase())
     );
@@ -99,7 +99,7 @@ export class LineSelectionComponent implements OnInit {
       this.filteredLines = this.lines;
   }
 
-  openDialog(message: string) {
+  openErrorDialog(message: string): void {
     this.dialog.open(ErrorDialogComponent, {
       data: { errorMessage: message }
     });

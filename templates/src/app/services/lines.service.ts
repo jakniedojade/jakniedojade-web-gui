@@ -8,7 +8,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 export class LinesService {
   private http = inject(HttpClient);
 
-  fetchLines() : Observable<string[]> {
+  getLines() : Observable<string[]> {
     return this.http.get<string[]>('/api/v1/lines')
     .pipe(
       catchError(this.handleError)

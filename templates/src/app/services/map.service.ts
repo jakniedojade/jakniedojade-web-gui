@@ -8,11 +8,11 @@ import { MapComponent } from '../components/map/map.component';
 export class MapService {
   private mapComponent: MapComponent | null = null;
 
-  setMapComponent(mapComponent: MapComponent) {
+  setMapComponent(mapComponent: MapComponent): void {
     this.mapComponent = mapComponent;
   }
 
-  drawRoute(coords: L.LatLngExpression[]) {
+  drawRoute(coords: L.LatLngExpression[]): void {
     if (this.mapComponent) {
       this.mapComponent.drawRoute(coords);
     }
