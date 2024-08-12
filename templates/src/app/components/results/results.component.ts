@@ -16,12 +16,14 @@ export class ResultsComponent implements OnInit{
   private mapService = inject(MapService);
 
   public line: string = "";
+  public direction: boolean = false;
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {
       this.line = lineParams.line;
+      this.direction = lineParams.direction;
     })
-    this.getShapes(this.line, false); //TEMPORARY SET DIRECTION AS FALSE
+    this.getShapes(this.line, this.direction);
   }
 
   getShapes(line: string, direction: boolean): void {

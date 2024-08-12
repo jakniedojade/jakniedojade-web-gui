@@ -13,7 +13,7 @@ export const routes: Routes = [
         children: [
             { path: 'lines', component: LineSelectionComponent },
             { path: ':line', component: StopSelectionComponent },
-            { path: 'results/:line', component: ResultsComponent },
+            { path: 'results/:line/:direction', component: ResultsComponent },
         ]
     },
 ];

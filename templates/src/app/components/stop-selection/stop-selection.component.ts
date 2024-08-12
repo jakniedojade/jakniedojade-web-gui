@@ -95,7 +95,7 @@ export class StopSelectionComponent {
     if (!cachedShapes) {
       this.getShapes();
     } else {
-      this.router.navigate([`analyze/results/${this.line}`]);
+      this.router.navigate([`analyze/results/${this.line}/${this.direction}`]);
     }
   }
   
@@ -108,7 +108,7 @@ export class StopSelectionComponent {
           this.openDialog(errorMessage)
         } else {
           this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
-          this.router.navigate([`analyze/results/${this.line}`]);
+          this.router.navigate([`analyze/results/${this.line}/${this.direction}`]);
         }
       },
       error: (error) => {
