@@ -3,9 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CacheService } from '../../services/cache.service';
 import { MapService } from '../../services/map.service';
 import { ShapesService } from '../../services/shapes.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { Shapes } from '../../interfaces/shapes';
+import { ErrorDialogService } from '../../services/error-dialog.service';
 
 @Component({
   selector: 'app-results',
@@ -19,12 +18,12 @@ export class ResultsComponent implements OnInit{
   private cacheService = inject(CacheService);
   private mapService = inject(MapService);
   private shapesService = inject(ShapesService);
+  private errorDialogService = inject(ErrorDialogService);
 
   public line: string = "";
   private direction!: boolean;
   private startStop: string = "";
   private endStop: string = "";
-  readonly dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {
@@ -51,14 +50,14 @@ export class ResultsComponent implements OnInit{
       next: (data: any) => {
         if (!data.shapes || data.shapes.length === 0) {
           const errorMessage = "Brak shapes dla danej linii";
-          this.openErrorDialog(errorMessage)
+          this.errorDialogService.openErrorDialog(errorMessage);
         } else {
           this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
           this.mapShapes(data.shapes);
         }
       },
       error: (error) => {
-        this.openErrorDialog(error.message);
+        this.errorDialogService.openErrorDialog(error.message);
       }
     });
   }
@@ -73,11 +72,5 @@ export class ResultsComponent implements OnInit{
   
   plotOnMap(latLngArray: { lat: number; lng: number }[]): void {
     this.mapService.drawRoute(latLngArray);
-  }
-
-  openErrorDialog(message: string): void {
-    this.dialog.open(ErrorDialogComponent, {
-      data: { errorMessage: message}
-    });
   }
 }

@@ -2,14 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
-import { StopsService } from '../../services/stops.service';
 import { CacheService } from '../../services/cache.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { ErrorDialogService } from '../../services/error-dialog.service';
 
 @Component({
   selector: 'app-line-selection',
@@ -30,7 +28,7 @@ export class LineSelectionComponent implements OnInit {
   private router = inject(Router);
   private linesService = inject(LinesService);
   private cacheService = inject(CacheService);
-  readonly dialog = inject(MatDialog);
+  private errorDialogService = inject(ErrorDialogService)
 
   private lines: string[] = [];
   public filteredLines: string[] = [];
@@ -50,7 +48,7 @@ export class LineSelectionComponent implements OnInit {
           this.filteredLines = this.lines;
         },
         error: (error) => {
-          this.openErrorDialog(error.message);
+          this.errorDialogService.openErrorDialog(error.message);
         }
       });
     } else {
@@ -75,11 +73,5 @@ export class LineSelectionComponent implements OnInit {
     );
     if(this.filteredLines.length == 0)
       this.filteredLines = this.lines;
-  }
-
-  openErrorDialog(message: string): void {
-    this.dialog.open(ErrorDialogComponent, {
-      data: { errorMessage: message }
-    });
   }
 }

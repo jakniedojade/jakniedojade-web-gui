@@ -10,9 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
-import { ShapesService } from '../../services/shapes.service';
+import { ErrorDialogService } from '../../services/error-dialog.service';
 
 @Component({
   selector: 'app-stop-selection',
@@ -34,9 +32,9 @@ import { ShapesService } from '../../services/shapes.service';
 export class StopSelectionComponent {
   private cacheService = inject(CacheService);
   private stopsService = inject(StopsService);
+  private errorDialogService = inject(ErrorDialogService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-  readonly dialog = inject(MatDialog);
 
   private line: string = "";
   public stopsInfo: StopsInfo[] = [];
@@ -67,14 +65,14 @@ export class StopSelectionComponent {
         this.stopsInfo = data.stops;
         if (this.stopsInfo.length === 0) {
           const errorMessage = "Brak przystanków dla wybranego kierunku.";
-          this.openErrorDialog(errorMessage);
+          this.errorDialogService.openErrorDialog(errorMessage);
         } else {
           this.cacheService.setCacheStops(this.line, data);
           this.endIndex = this.stopsInfo.length - 1;
         }
       },
       error: (error) => {
-        this.openErrorDialog(error.message);
+        this.errorDialogService.openErrorDialog(error.message);
       }
     });
   }
@@ -86,11 +84,5 @@ export class StopSelectionComponent {
 
   navigateToResults(): void {
     this.router.navigate([`analyze/results/${this.line}/${this.direction}/${this.stopsInfo[0].name}/${this.stopsInfo[this.stopsInfo.length - 1].name}`]);
-  }
-
-  openErrorDialog(message: string): void {
-    this.dialog.open(ErrorDialogComponent, {
-      data: { errorMessage: message}
-    });
   }
 }
