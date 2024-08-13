@@ -2,6 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CacheService } from '../../services/cache.service';
 import { MapService } from '../../services/map.service';
+import { ShapesService } from '../../services/shapes.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { Shapes } from '../../interfaces/shapes';
 
 @Component({
   selector: 'app-results',
@@ -14,34 +18,66 @@ export class ResultsComponent implements OnInit{
   private activatedRoute = inject(ActivatedRoute);
   private cacheService = inject(CacheService);
   private mapService = inject(MapService);
+  private shapesService = inject(ShapesService);
 
   public line: string = "";
-  public direction: boolean = false;
+  private direction!: boolean;
+  private startStop: string = "";
+  private endStop: string = "";
+  readonly dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {
       this.line = lineParams.line;
-      this.direction = lineParams.direction;
+      this.direction = lineParams.direction === 'true'; //this makes sure that direction is a boolean
+      this.startStop = lineParams.startStop;
+      this.endStop = lineParams.endStop;
     })
-    this.mapShapes(this.line, this.direction);
+    this.initializeShapes();
   }
 
-  mapShapes(line: string, direction: boolean): void {
-    const shapes = this.cacheService.getCacheShapes(line, direction);
+  initializeShapes(): void {
+    const cachedShapes = this.cacheService.getCacheShapes(this.line, this.direction);
+    if (!cachedShapes) {
+      this.fetchShapes();
+    } else {
+      this.mapShapes(cachedShapes);
+    }
+  }
+  
+  fetchShapes(): void {
+    //TEMPORARY REQUEST FOR FULL ROUTE ONLY (FROM FIRST TO LAST STOP)
+    this.shapesService.getShapes(this.line, this.direction, this.startStop, this.endStop).subscribe({
+      next: (data: any) => {
+        if (!data.shapes || data.shapes.length === 0) {
+          const errorMessage = "Brak shapes dla danej linii";
+          this.openErrorDialog(errorMessage)
+        } else {
+          this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
+          this.mapShapes(data.shapes);
+        }
+      },
+      error: (error) => {
+        this.openErrorDialog(error.message);
+      }
+    });
+  }
 
-    if (shapes && shapes.length > 0) {
-      const latLngArray = shapes.map(shape => ({
+  mapShapes(shapes: Shapes[]): void {
+      const latLngArray = shapes.map((shape: Shapes) => ({
         lat: shape.point_latitude,
         lng: shape.point_longitude
       }));
-  
       this.plotOnMap(latLngArray);
-    } else {
-      console.log('No shapes found for the given line and direction.');
-    }
   }
   
   plotOnMap(latLngArray: { lat: number; lng: number }[]): void {
     this.mapService.drawRoute(latLngArray);
+  }
+
+  openErrorDialog(message: string): void {
+    this.dialog.open(ErrorDialogComponent, {
+      data: { errorMessage: message}
+    });
   }
 }

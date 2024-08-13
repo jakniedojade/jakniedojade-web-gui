@@ -13,7 +13,7 @@ export const routes: Routes = [
         children: [
             { path: 'lines', component: LineSelectionComponent },
             { path: ':line', component: StopSelectionComponent },
-            { path: 'results/:line/:direction', component: ResultsComponent },
+            { path: 'results/:line/:direction/:startStop/:endStop', component: ResultsComponent },  //TODO is there a more elegant way to construct this url parameters?
         ]
     },
 ];

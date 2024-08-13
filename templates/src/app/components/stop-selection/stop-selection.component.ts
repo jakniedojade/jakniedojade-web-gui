@@ -34,7 +34,6 @@ import { ShapesService } from '../../services/shapes.service';
 export class StopSelectionComponent {
   private cacheService = inject(CacheService);
   private stopsService = inject(StopsService);
-  private shapesService = inject(ShapesService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   readonly dialog = inject(MatDialog);
@@ -86,34 +85,7 @@ export class StopSelectionComponent {
   }
 
   navigateToResults(): void {
-    this.initializeShapes();
-  }
-
-  initializeShapes(): void {
-    const cachedShapes = this.cacheService.getCacheShapes(this.line, this.direction);
-    if (!cachedShapes) {
-      this.fetchShapes();
-    } else {
-      this.router.navigate([`analyze/results/${this.line}/${this.direction}`]);
-    }
-  }
-  
-  fetchShapes(): void {
-    //TEMPORARY REQUEST FOR FULL ROUTE ONLY (FROM FIRST TO LAST STOP)
-    this.shapesService.getShapes(this.line, this.direction, this.stopsInfo[0].name, this.stopsInfo[this.stopsInfo.length - 1].name).subscribe({
-      next: (data: any) => {
-        if (!data.shapes || data.shapes.length === 0) {
-          const errorMessage = "Brak shapes dla danej linii";
-          this.openErrorDialog(errorMessage)
-        } else {
-          this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
-          this.router.navigate([`analyze/results/${this.line}/${this.direction}`]);
-        }
-      },
-      error: (error) => {
-        this.openErrorDialog(error.message);
-      }
-    })
+    this.router.navigate([`analyze/results/${this.line}/${this.direction}/${this.stopsInfo[0].name}/${this.stopsInfo[this.stopsInfo.length - 1].name}`]);
   }
 
   openErrorDialog(message: string): void {
