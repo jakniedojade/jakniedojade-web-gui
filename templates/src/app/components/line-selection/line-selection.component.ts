@@ -29,13 +29,11 @@ import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 export class LineSelectionComponent implements OnInit {
   private router = inject(Router);
   private linesService = inject(LinesService);
-  private stopsService = inject(StopsService);
   private cacheService = inject(CacheService);
   readonly dialog = inject(MatDialog);
 
   private lines: string[] = [];
   public filteredLines: string[] = [];
-  private defaultDirection: boolean = false;
 
   ngOnInit(): void {
     this.fetchLines();
@@ -58,26 +56,6 @@ export class LineSelectionComponent implements OnInit {
     } else {
       this.lines = this.cacheService.getCacheLines();
       this.filteredLines = this.lines;
-    }
-  }
-
-  fetchStops(line: string): void {
-    const cachedStops = this.cacheService.getCacheStops(line, this.defaultDirection);
-
-    if (!cachedStops) {
-      this.stopsService.getStops(line, this.defaultDirection).subscribe({
-        next: (data: any) => {
-          if (data.stops.length > 0) {
-            this.cacheService.setCacheStops(line, data);
-          }
-          this.navigateToLine(line);
-        },
-        error: (error) => {
-          this.openErrorDialog(error.message);
-        }
-      });
-    } else {
-      this.navigateToLine(line);
     }
   }
 
