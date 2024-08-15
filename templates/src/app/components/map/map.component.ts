@@ -3,6 +3,7 @@ import * as L from 'leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import 'leaflet-active-area';
+import 'leaflet.polyline.snakeanim';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
@@ -31,6 +32,7 @@ export class MapComponent implements OnInit {
    * our own type definitions for needed functions).
    */
   private map!: any;
+  private polyline!: any;
   private markersGroup: any;
   // private map!: L.Map;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
@@ -102,10 +104,16 @@ export class MapComponent implements OnInit {
       });
   }
 
-  public drawRoute(coords: L.LatLngExpression[]): void {
+  public drawRoute(coords: L.LatLngExpression[], snakingSpeed: number = 1000): void {
     this.markersGroup.clearLayers();
-    const polyline = L.polyline(coords, { color: 'green' }).addTo(this.map);  //TODO adjust to color palette
-    this.map.fitBounds(polyline.getBounds());
-    this.markersGroup.addLayer(polyline);
+
+    this.polyline = new L.Polyline(coords, { 
+        color: 'green', //TODO adjust for color palette
+        snakingSpeed: snakingSpeed
+    } as L.PolylineOptions);
+
+    this.map.fitBounds(this.polyline.getBounds());
+    this.polyline.addTo(this.map).snakeIn();
+    this.markersGroup.addLayer(this.polyline);
   }
 }
