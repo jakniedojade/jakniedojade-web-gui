@@ -7,6 +7,8 @@ import 'leaflet.polyline.snakeanim';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
+import { StopsInfo } from '../../interfaces/stops';
+import { Shapes } from '../../interfaces/shapes';
 
 @Component({
   selector: 'app-map',
@@ -104,10 +106,15 @@ export class MapComponent implements OnInit {
       });
   }
 
-  public drawRoute(coords: L.LatLngExpression[], snakingSpeed: number = 1000): void {
+  public drawRoute(shapes: Shapes[], snakingSpeed: number = 1000): void {
     this.markersGroup.clearLayers();
 
-    this.polyline = new L.Polyline(coords, { 
+    const shapesCoords = shapes.map((shape: Shapes) => ({
+      lat: shape.point_latitude,
+      lng: shape.point_longitude
+    }));
+
+    this.polyline = new L.Polyline(shapesCoords, { 
         color: 'green', //TODO adjust for color palette
         snakingSpeed: snakingSpeed
     } as L.PolylineOptions);
@@ -115,5 +122,26 @@ export class MapComponent implements OnInit {
     this.map.fitBounds(this.polyline.getBounds());
     this.polyline.addTo(this.map).snakeIn();
     this.markersGroup.addLayer(this.polyline);
+  }
+
+  public drawStops(stops: StopsInfo[]): void {
+
+    const stopIcon = L.icon({
+      iconUrl: '/assets/stop_regular.png',
+      iconSize: [20, 20]
+    });
+
+    /* const endIcon = L.icon({
+      iconUrl: '/assets/stop_regular.png',
+      //iconSize: [50, 50], Zmieniono tymczasowo na ikonkę: endTemp
+      iconSize: [35, 37],
+      //iconAnchor: [25, 41], Tak samo
+      iconAnchor: [19, 35],
+    }); */
+
+    stops.forEach((stop) => {
+      const stopMarker = L.marker([stop.latitude, stop.longitude], {icon: stopIcon}).addTo(this.map);
+      this.markersGroup.addLayer(stopMarker);
+    });
   }
 }

@@ -5,6 +5,7 @@ import { MapService } from '../../services/map.service';
 import { ShapesService } from '../../services/shapes.service';
 import { Shapes } from '../../interfaces/shapes';
 import { ErrorDialogService } from '../../services/error-dialog.service';
+import { StopsService } from '../../services/stops.service';
 
 @Component({
   selector: 'app-results',
@@ -19,6 +20,7 @@ export class ResultsComponent implements OnInit{
   private mapService = inject(MapService);
   private shapesService = inject(ShapesService);
   private errorDialogService = inject(ErrorDialogService);
+  private stopsService = inject(StopsService);
 
   public line: string = "";
   private direction!: boolean;
@@ -40,12 +42,11 @@ export class ResultsComponent implements OnInit{
     if (!cachedShapes) {
       this.fetchShapes();
     } else {
-      this.mapShapes(cachedShapes);
+      this.drawRouteAndStops(cachedShapes);
     }
   }
   
   fetchShapes(): void {
-    //TEMPORARY REQUEST FOR FULL ROUTE ONLY (FROM FIRST TO LAST STOP)
     this.shapesService.getShapes(this.line, this.direction, this.startStop, this.endStop).subscribe({
       next: (data: any) => {
         if (!data.shapes || data.shapes.length === 0) {
@@ -53,7 +54,7 @@ export class ResultsComponent implements OnInit{
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
           this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
-          this.mapShapes(data.shapes);
+          this.drawRouteAndStops(data.shapes);
         }
       },
       error: (error) => {
@@ -62,15 +63,16 @@ export class ResultsComponent implements OnInit{
     });
   }
 
-  mapShapes(shapes: Shapes[]): void {
-      const latLngArray = shapes.map((shape: Shapes) => ({
-        lat: shape.point_latitude,
-        lng: shape.point_longitude
-      }));
-      this.plotOnMap(latLngArray);
-  }
-  
-  plotOnMap(latLngArray: { lat: number; lng: number }[]): void {
-    this.mapService.drawRoute(latLngArray);
+  drawRouteAndStops(shapes: Shapes[]): void{
+    const stopsData = this.cacheService.getCacheStops(this.line, this.direction);
+    if (stopsData) {
+      this.mapService.drawRoute(shapes);
+      this.mapService.drawStops(stopsData.stops);
+    } else {
+      this.stopsService.getStops(this.line, this.direction).subscribe((data: any) => {
+        this.mapService.drawRoute(shapes);
+        this.mapService.drawStops(data.stops);
+      });
+    }
   }
 }

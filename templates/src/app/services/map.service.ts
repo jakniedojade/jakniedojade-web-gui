@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet';
 import { MapComponent } from '../components/map/map.component';
+import { StopsInfo } from '../interfaces/stops';
+import { Shapes } from '../interfaces/shapes';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +14,15 @@ export class MapService {
     this.mapComponent = mapComponent;
   }
 
-  drawRoute(coords: L.LatLngExpression[]): void {
+  drawRoute(shapes: Shapes[]): void {
     if (this.mapComponent) {
-      this.mapComponent.drawRoute(coords);
+      this.mapComponent.drawRoute(shapes);
+    }
+  }
+
+  drawStops(stops: StopsInfo[]) {
+    if (this.mapComponent) {
+      this.mapComponent.drawStops(stops);
     }
   }
 }

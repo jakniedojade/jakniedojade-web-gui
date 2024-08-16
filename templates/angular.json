@@ -26,6 +26,7 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/assets/stop_regular.png",
               {
                 "glob": "**/*",
                 "input": "public"
