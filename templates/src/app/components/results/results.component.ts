@@ -40,11 +40,7 @@ export class ResultsComponent implements OnInit{
 
   private initializeShapes(): void {
     const cachedShapes = this.cacheService.getCacheShapes(this.line, this.direction);
-    if (!cachedShapes) {
-      this.fetchShapes();
-    } else {
-      this.prepareStopsForMapping(cachedShapes);
-    }
+    cachedShapes ? this.initializeStops(cachedShapes) : this.fetchShapes();
   }
   
   private fetchShapes(): void {
@@ -55,7 +51,7 @@ export class ResultsComponent implements OnInit{
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
           this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
-          this.prepareStopsForMapping(data.shapes);
+          this.initializeStops(data.shapes);
         }
       },
       error: (error) => {
@@ -64,24 +60,41 @@ export class ResultsComponent implements OnInit{
     });
   }
 
-  private prepareStopsForMapping(shapes: Shapes[]): void {
-    const stopsData = this.cacheService.getCacheStops(this.line, this.direction);
-    if (stopsData) {
-      const slicedStops = this.sliceStops(stopsData);
-      const mappedStops = this.mapStopCoordinatesToShapes(shapes, slicedStops);
-      const sliceedShapes = this.sliceShapes(shapes, mappedStops);
-      this.drawRouteAndStops(sliceedShapes, mappedStops);     
+  private initializeStops(shapes: Shapes[]): void {
+    const cachedStops = this.cacheService.getCacheStops(this.line, this.direction);
+    if (cachedStops) {
+      this.prepareAndDraw(shapes, cachedStops);
     } else {
-      this.stopsService.getStops(this.line, this.direction).subscribe((data: Stops) => {
-        const slicedStops = this.sliceStops(data);
-        const mappedStops = this.mapStopCoordinatesToShapes(shapes, slicedStops);   
-        const sliceedShapes = this.sliceShapes(shapes, mappedStops);   
-        this.drawRouteAndStops(sliceedShapes, mappedStops);
-      });
-    }
+      this.fetchStops(shapes);
+    } 
+  }
+
+  private prepareAndDraw(shapes: Shapes[], stops: Stops): void {
+    const slicedStops = this.sliceStops(stops);
+    const mappedStops = this.mapStopCoordinatesToShapes(shapes, slicedStops);
+    const slicedShapes = this.sliceShapes(shapes, mappedStops);
+    this.drawRouteAndStops(slicedShapes, mappedStops);
+  }
+
+  private fetchStops(shapes: Shapes[]): void {
+    this.stopsService.getStops(this.line, this.direction).subscribe({
+      next: (data: any) => {
+        if (data.stops.length === 0) {
+          const errorMessage = "Brak przystanków dla wybranego kierunku.";
+          this.errorDialogService.openErrorDialog(errorMessage);
+        } else {
+          this.cacheService.setCacheStops(this.line, data);
+          this.prepareAndDraw(shapes, data);
+        }
+      },
+      error: (error) => {
+        this.errorDialogService.openErrorDialog(error.message);
+      }
+    });
   }
   
   private mapStopCoordinatesToShapes(shapes: Shapes[], stopsToMap: StopsInfo[]): StopsInfo[] {
+
     const calculateDistance = (x1: number, y1: number, x2: number, y2: number): number => {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
