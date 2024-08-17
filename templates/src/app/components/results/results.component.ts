@@ -120,7 +120,7 @@ export class ResultsComponent implements OnInit{
 
     const firstSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.point_latitude, coord.point_longitude, firstStopLatitude, firstStopLongitude));
     const lastSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.point_latitude, coord.point_longitude, lastStopLatitude, lastStopLongitude));
-    return shapes.slice(firstSliceIndex, lastSliceIndex);
+    return shapes.slice(firstSliceIndex, lastSliceIndex + 1);
   }
 
   private sliceStops(allStops: Stops): StopsInfo[] {
