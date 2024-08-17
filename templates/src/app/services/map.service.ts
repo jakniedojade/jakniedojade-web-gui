@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MapComponent } from '../components/map/map.component';
-import { Stops } from '../interfaces/stops';
+import { Stops, StopsInfo } from '../interfaces/stops';
 import { Shapes } from '../interfaces/shapes';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class MapService {
     }
   }
 
-  drawStops(stops: Stops) {
+  drawStops(stops: StopsInfo[]) {
     if (this.mapComponent) {
       this.mapComponent.drawStops(stops);
     }

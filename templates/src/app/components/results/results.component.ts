@@ -6,7 +6,7 @@ import { ShapesService } from '../../services/shapes.service';
 import { Shapes } from '../../interfaces/shapes';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { StopsService } from '../../services/stops.service';
-import { Stops } from '../../interfaces/stops';
+import { Stops, StopsInfo } from '../../interfaces/stops';
 
 @Component({
   selector: 'app-results',
@@ -38,7 +38,7 @@ export class ResultsComponent implements OnInit{
     this.initializeShapes();
   }
 
-  initializeShapes(): void {
+  private initializeShapes(): void {
     const cachedShapes = this.cacheService.getCacheShapes(this.line, this.direction);
     if (!cachedShapes) {
       this.fetchShapes();
@@ -47,7 +47,7 @@ export class ResultsComponent implements OnInit{
     }
   }
   
-  fetchShapes(): void {
+  private fetchShapes(): void {
     this.shapesService.getShapes(this.line, this.direction, this.startStop, this.endStop).subscribe({
       next: (data: any) => {
         if (!data.shapes || data.shapes.length === 0) {
@@ -64,25 +64,29 @@ export class ResultsComponent implements OnInit{
     });
   }
 
-  prepareStopsForMapping(shapes: Shapes[]): void {
+  private prepareStopsForMapping(shapes: Shapes[]): void {
     const stopsData = this.cacheService.getCacheStops(this.line, this.direction);
     if (stopsData) {
-      const mappedStops = this.mapStopCoordinatesToShapes(shapes, stopsData);
-      this.drawRouteAndStops(shapes, mappedStops);     
+      const slicedStops = this.sliceStops(stopsData);
+      const mappedStops = this.mapStopCoordinatesToShapes(shapes, slicedStops);
+      const sliceedShapes = this.sliceShapes(shapes, mappedStops);
+      this.drawRouteAndStops(sliceedShapes, mappedStops);     
     } else {
       this.stopsService.getStops(this.line, this.direction).subscribe((data: Stops) => {
-        const mappedStops = this.mapStopCoordinatesToShapes(shapes, data);      
-        this.drawRouteAndStops(shapes, mappedStops);
+        const slicedStops = this.sliceStops(data);
+        const mappedStops = this.mapStopCoordinatesToShapes(shapes, slicedStops);   
+        const sliceedShapes = this.sliceShapes(shapes, mappedStops);   
+        this.drawRouteAndStops(sliceedShapes, mappedStops);
       });
     }
   }
   
-  mapStopCoordinatesToShapes(shapes: Shapes[], stopsToMap: Stops): Stops {
-    const calculateDistance = (x1: any, y1: any, x2: any, y2: any) => {
+  private mapStopCoordinatesToShapes(shapes: Shapes[], stopsToMap: StopsInfo[]): StopsInfo[] {
+    const calculateDistance = (x1: number, y1: number, x2: number, y2: number): number => {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
     
-    stopsToMap.stops.forEach(stopToMap => {
+    stopsToMap.forEach(stopToMap => {
       let closestCoord = shapes[0];
       let minDistance = calculateDistance(stopToMap.latitude, stopToMap.longitude, shapes[0].point_latitude, shapes[0].point_longitude);
   
@@ -100,10 +104,34 @@ export class ResultsComponent implements OnInit{
 
     const mappedStops = stopsToMap;
     return mappedStops;
-  }  
+  }
 
-  private drawRouteAndStops(shapes: Shapes[], mappedStops: Stops): void{
+  private sliceShapes(shapes: Shapes[], mappedStops: StopsInfo[]): Shapes[] {
+    const checkIfCoordinatesEqual = (x1: number, y1: number, x2: number, y2: number): boolean => {
+      return x1 === x2 && y1 === y2;
+    }
+    const firstStopIndex = mappedStops.findIndex(stop => stop.name === this.startStop);
+    const lastStopIndex = mappedStops.findIndex(stop => stop.name === this.endStop);
+
+    const firstStopLatitude = mappedStops[firstStopIndex].latitude;
+    const firstStopLongitude = mappedStops[firstStopIndex].longitude;
+    const lastStopLatitude = mappedStops[lastStopIndex].latitude;
+    const lastStopLongitude = mappedStops[lastStopIndex].longitude;
+
+    const firstSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.point_latitude, coord.point_longitude, firstStopLatitude, firstStopLongitude));
+    const lastSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.point_latitude, coord.point_longitude, lastStopLatitude, lastStopLongitude));
+    return shapes.slice(firstSliceIndex, lastSliceIndex);
+  }
+
+  private sliceStops(allStops: Stops): StopsInfo[] {
+    const firstStopIndex = allStops.stops.findIndex(stop => stop.name === this.startStop);
+    const lastStopIndex = allStops.stops.findIndex(stop => stop.name === this.endStop);
+
+    return allStops.stops.slice(firstStopIndex, lastStopIndex + 1);
+  }
+
+  private drawRouteAndStops(shapes: Shapes[], stops: StopsInfo[]): void {
     this.mapService.drawRoute(shapes);
-    this.mapService.drawStops(mappedStops);
+    this.mapService.drawStops(stops);
   }
 }
