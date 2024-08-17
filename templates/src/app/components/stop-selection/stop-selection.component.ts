@@ -83,6 +83,6 @@ export class StopSelectionComponent {
   }
 
   navigateToResults(): void {
-    this.router.navigate([`analyze/results/${this.line}/${this.direction}/${this.stopsInfo[0].name}/${this.stopsInfo[this.stopsInfo.length - 1].name}`]);
+    this.router.navigate([`analyze/results/${this.line}/${this.direction}/${this.stopsInfo[this.startIndex].name}/${this.stopsInfo[this.endIndex].name}`]);
   }
 }
