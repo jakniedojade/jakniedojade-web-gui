@@ -7,7 +7,7 @@ import 'leaflet.polyline.snakeanim';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
-import { StopsInfo } from '../../interfaces/stops';
+import { Stops } from '../../interfaces/stops';
 import { Shapes } from '../../interfaces/shapes';
 
 @Component({
@@ -124,7 +124,7 @@ export class MapComponent implements OnInit {
     this.markersGroup.addLayer(this.polyline);
   }
 
-  public drawStops(stops: StopsInfo[]): void {
+  public drawStops(stopsToDraw: Stops): void {
 
     const stopIcon = L.icon({
       iconUrl: '/assets/stop_regular.png',
@@ -139,7 +139,9 @@ export class MapComponent implements OnInit {
       iconAnchor: [19, 35],
     }); */
 
-    stops.forEach((stop) => {
+    const stopsData = stopsToDraw.stops;
+
+    stopsData.forEach((stop) => {
       const stopMarker = L.marker([stop.latitude, stop.longitude], {icon: stopIcon}).addTo(this.map);
       this.markersGroup.addLayer(stopMarker);
     });

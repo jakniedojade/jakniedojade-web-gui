@@ -6,6 +6,7 @@ import { ShapesService } from '../../services/shapes.service';
 import { Shapes } from '../../interfaces/shapes';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { StopsService } from '../../services/stops.service';
+import { Stops } from '../../interfaces/stops';
 
 @Component({
   selector: 'app-results',
@@ -42,7 +43,7 @@ export class ResultsComponent implements OnInit{
     if (!cachedShapes) {
       this.fetchShapes();
     } else {
-      this.drawRouteAndStops(cachedShapes);
+      this.prepareStopsForMapping(cachedShapes);
     }
   }
   
@@ -54,7 +55,7 @@ export class ResultsComponent implements OnInit{
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
           this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
-          this.drawRouteAndStops(data.shapes);
+          this.prepareStopsForMapping(data.shapes);
         }
       },
       error: (error) => {
@@ -63,16 +64,46 @@ export class ResultsComponent implements OnInit{
     });
   }
 
-  drawRouteAndStops(shapes: Shapes[]): void{
+  prepareStopsForMapping(shapes: Shapes[]): void {
     const stopsData = this.cacheService.getCacheStops(this.line, this.direction);
     if (stopsData) {
-      this.mapService.drawRoute(shapes);
-      this.mapService.drawStops(stopsData.stops);
+      const mappedStops = this.mapStopCoordinatesToShapes(shapes, stopsData);
+      this.drawRouteAndStops(shapes, mappedStops);     
     } else {
-      this.stopsService.getStops(this.line, this.direction).subscribe((data: any) => {
-        this.mapService.drawRoute(shapes);
-        this.mapService.drawStops(data.stops);
+      this.stopsService.getStops(this.line, this.direction).subscribe((data: Stops) => {
+        const mappedStops = this.mapStopCoordinatesToShapes(shapes, data);      
+        this.drawRouteAndStops(shapes, mappedStops);
       });
     }
+  }
+  
+  mapStopCoordinatesToShapes(shapes: Shapes[], stopsToMap: Stops): Stops {
+    const calculateDistance = (x1: any, y1: any, x2: any, y2: any) => {
+      return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+    
+    stopsToMap.stops.forEach(stopToMap => {
+      let closestCoord = shapes[0];
+      let minDistance = calculateDistance(stopToMap.latitude, stopToMap.longitude, shapes[0].point_latitude, shapes[0].point_longitude);
+  
+      shapes.forEach(shape => {
+        const distance = calculateDistance(stopToMap.latitude, stopToMap.longitude, shape.point_latitude, shape.point_longitude);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestCoord = shape;
+        }
+      });
+  
+      stopToMap.latitude = closestCoord.point_latitude;
+      stopToMap.longitude = closestCoord.point_longitude;
+    });
+
+    const mappedStops = stopsToMap;
+    return mappedStops;
+  }  
+
+  private drawRouteAndStops(shapes: Shapes[], mappedStops: Stops): void{
+    this.mapService.drawRoute(shapes);
+    this.mapService.drawStops(mappedStops);
   }
 }
