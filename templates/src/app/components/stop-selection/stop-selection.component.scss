@@ -6,12 +6,15 @@
     margin: 0 auto;
 }
 
-.select {
-    width: 100%;
+.stops-select, .time-select {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
 }
 
-.stops-select, .time-select {
-    width: 80%;
+.select {
+    width: 100%;
 }
 
 .swap-direction {
