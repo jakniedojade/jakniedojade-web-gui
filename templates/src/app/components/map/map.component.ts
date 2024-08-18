@@ -119,7 +119,8 @@ export class MapComponent implements OnInit {
         snakingSpeed: snakingSpeed
     } as L.PolylineOptions);
 
-    this.map.fitBounds(this.polyline.getBounds());
+    const routeBounds = this.polyline.getBounds().pad(0.1);
+    this.map.fitBounds(routeBounds);
     this.polyline.addTo(this.map).snakeIn();
     this.markersGroup.addLayer(this.polyline);
   }
