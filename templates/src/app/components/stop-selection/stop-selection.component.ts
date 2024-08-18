@@ -11,6 +11,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ErrorDialogService } from '../../services/error-dialog.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-stop-selection',
@@ -24,10 +26,12 @@ import { ErrorDialogService } from '../../services/error-dialog.service';
     ReactiveFormsModule,
     MatProgressBarModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDatepickerModule
   ],
   templateUrl: './stop-selection.component.html',
-  styleUrl: './stop-selection.component.scss'
+  styleUrl: './stop-selection.component.scss',
+  providers: [provideNativeDateAdapter()]
 })
 export class StopSelectionComponent {
   private cacheService = inject(CacheService);

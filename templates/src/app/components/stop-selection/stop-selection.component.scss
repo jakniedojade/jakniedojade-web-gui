@@ -1,4 +1,3 @@
-.stops-select,
 .stops-container {
     display: flex;
     flex-direction: column;
@@ -7,12 +6,12 @@
     margin: 0 auto;
 }
 
-.stops-select {
-    width: 80%;
-}
-
 .select {
     width: 100%;
+}
+
+.stops-select, .time-select {
+    width: 80%;
 }
 
 .swap-direction {
