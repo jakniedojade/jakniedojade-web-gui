@@ -19,7 +19,7 @@ export class MapService {
     }
   }
 
-  drawStops(stops: StopsInfo[]) {
+  drawStops(stops: StopsInfo[]): void {
     if (this.mapComponent) {
       this.mapComponent.drawStops(stops);
     }

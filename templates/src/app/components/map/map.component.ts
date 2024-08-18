@@ -140,7 +140,8 @@ export class MapComponent implements OnInit {
     }); */
 
     stopsToDraw.forEach((stop) => {
-      const stopMarker = L.marker([stop.latitude, stop.longitude], {icon: stopIcon}).addTo(this.map);
+      const stopMarker = L.marker([stop.latitude, stop.longitude], {icon: stopIcon}).bindPopup(stop.name);  //TODO adjust popup style and font
+      stopMarker.addTo(this.map);
       this.markersGroup.addLayer(stopMarker);
     });
   }
