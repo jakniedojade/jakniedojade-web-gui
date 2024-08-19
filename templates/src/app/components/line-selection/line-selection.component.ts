@@ -30,8 +30,25 @@ export class LineSelectionComponent implements OnInit {
   private cacheService = inject(CacheService);
   private errorDialogService = inject(ErrorDialogService)
 
-  private lines: string[] = [];
+  public lines: any[] = [];
   public filteredLines: string[] = [];
+  public categories: string[] = [];
+
+  public categoryMapping: any = {
+    cementary_lines: 'Linie cmentarne',
+    express_lines: 'Linie ekspresowe',
+    fast_lines: 'Linie przyspieszone',
+    fast_temporary_lines: 'Linie przyspieszone okresowe',
+    local_lines: 'Linie lokalne',
+    night_lines: 'Linie nocne',
+    regular_lines: 'Linie zwykłe',
+    regular_temporary_lines: 'Linie okresowe',
+    special_lines: 'Linie specjalne',
+    substitute_lines: 'Linie zastępcze',
+    zone_lines: 'Linie strefowe',
+    zone_temporary_lines: 'Linie strefowe okresowe'
+  };
+
 
   ngOnInit(): void {
     this.fetchLines();
@@ -44,17 +61,21 @@ export class LineSelectionComponent implements OnInit {
       this.linesService.getLines().subscribe({
         next: (data: any) => {
           this.cacheService.setCacheLines(data);
-          this.lines = data;
-          this.filteredLines = this.lines;
+          this.lines = Object.entries(data);
+          this.filteredLines = this.lines[1];
         },
         error: (error) => {
           this.errorDialogService.openErrorDialog(error.message);
         }
       });
     } else {
-      this.lines = this.cacheService.getCacheLines();
+      this.lines = Object.entries(cachedLines);
       this.filteredLines = this.lines;
     }
+  }
+
+  getCategoryName(category: string): string {
+    return this.categoryMapping[category] || category;
   }
 
   navigateToLine(lineNumber: string): void {

@@ -3,5 +3,12 @@
 </mat-form-field>
 
 <div id="buttons-container">
-    <button *ngFor="let line of filteredLines; trackBy: trackByIndex" class="line-button" mat-stroked-button (click)="navigateToLine(line)">{{ line }}</button>
+    @for (line of lines; track $index) {
+        @if (line[1].length > 0) {
+            <h4 id="category">{{ getCategoryName(line[0])}}</h4> <!-- category[0] is the original category name -->
+            @for (item of line[1]; track $index) {  
+                <button class="line-button" mat-stroked-button (click)="navigateToLine(item)">{{ item }}</button>
+            }
+        }
+    }
 </div>
