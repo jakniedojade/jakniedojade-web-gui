@@ -1,15 +1,15 @@
 <mat-form-field id="filter-lines">
-    <input matInput placeholder="Wyszukaj linię" (input)="applyFilter($event)">
-  </mat-form-field>
-  
-  <div id="buttons-container">
-    <div *ngFor="let line of filteredLines; trackBy: trackByIndex">
-      <h4 *ngIf="line[1].length > 0" id="category">{{ getCategoryName(line[0]) }}</h4>
-      <div class="lines-container">
-        <button *ngFor="let item of line[1]" class="line-button" mat-stroked-button (click)="navigateToLine(item)">
-          {{ item }}
-        </button>
-      </div>
-    </div>
-  </div>
-  
+  <input matInput placeholder="Wyszukaj linię" (input)="applyFilter($event.target!)">
+</mat-form-field>
+
+<div id="buttons-container">
+  @for (category of filteredLines.keys(); track $index) {
+    @if (filteredLines.get(category)!.length > 0) {
+      <h4 id="category">{{translateCategory(category)}}</h4>
+    }
+    @for (line of filteredLines.get(category); track $index) {
+      <button class="line-button" mat-stroked-button (click)="navigateToLine(line)">{{line}}</button>
+    }
+  }
+</div>
+

@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { ErrorDialogService } from '../../services/error-dialog.service';
+import { Lines } from '../../interfaces/lines';
 
 @Component({
   selector: 'app-line-selection',
@@ -30,10 +31,10 @@ export class LineSelectionComponent implements OnInit {
   private cacheService = inject(CacheService);
   private errorDialogService = inject(ErrorDialogService);
 
-  public lines: any[] = [];
-  public filteredLines: any[] = [];
+  private lines = new Map<string, string[]>();
+  public filteredLines = new Map<string, string[]>();
 
-  public categoryMapping: any = {
+  private categoryMapping: any = {
     cementary_lines: 'Linie cmentarne',
     express_lines: 'Linie ekspresowe',
     fast_lines: 'Linie przyspieszone',
@@ -49,30 +50,34 @@ export class LineSelectionComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.fetchLines();
+    this.initializeLines();
   }
 
-  fetchLines(): void {
+  private initializeLines() {
     const cachedLines = this.cacheService.getCacheLines();
-
-    if (!cachedLines) {
-      this.linesService.getLines().subscribe({
-        next: (data: any) => {
-          this.cacheService.setCacheLines(data);
-          this.lines = Object.entries(data);
-          this.filteredLines = this.lines;
-        },
-        error: (error) => {
-          this.errorDialogService.openErrorDialog(error.message);
-        }
-      });
-    } else {
-      this.lines = Object.entries(cachedLines);
-      this.filteredLines = this.lines;
-    }
+    cachedLines ? this.processResponse(cachedLines) : this.fetchLines();
   }
 
-  getCategoryName(category: string): string {
+  private fetchLines(): void {
+    this.linesService.getLines().subscribe({
+      next: (data: Lines) => {
+        this.cacheService.setCacheLines(data);
+        this.processResponse(data);
+      },
+      error: (error) => {
+        this.errorDialogService.openErrorDialog(error.message);
+      }
+    });
+  }
+
+  private processResponse(responseLines: Lines) {
+    for (const [key, lines] of Object.entries(responseLines)) {
+      this.lines.set(key, lines);
+    }
+    this.filteredLines = new Map<string, string[]>(this.lines);
+  }
+
+  translateCategory(category: string): string {
     return this.categoryMapping[category] || category;
   }
 
@@ -80,19 +85,18 @@ export class LineSelectionComponent implements OnInit {
     this.router.navigate([`analyze/${lineNumber}`]);
   }
 
+  //TODO i think we need to adjust trackby for maps
   trackByIndex(index: number, item: string): number {
     return index;
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
-
-    this.filteredLines = this.lines.map(([category, items]) => {
-      const filteredItems = items.filter((item: string) =>
-        item.toLowerCase().includes(filterValue)
+  applyFilter(filterValue: EventTarget): void {
+    this.lines.forEach((lines, category) => {
+      const filteredItems = lines.filter((line: string) =>
+        line.toLowerCase().includes((filterValue as HTMLInputElement).value.toLowerCase())
       );
-      return [category, filteredItems];
-    }).filter(([, items]) => items.length > 0);
+      this.filteredLines.set(category, filteredItems);
+    });
   }
 }
 
