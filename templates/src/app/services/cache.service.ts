@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Stops } from '../interfaces/stops';
 import { Shapes } from '../interfaces/shapes';
+import { Lines } from '../interfaces/lines';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CacheService {
-  private lines!: string[];
+  private lines!: Lines;
   private stops = new Map<string, Stops>();
   private shapes = new Map<string, Shapes[]>();
 
@@ -34,11 +35,11 @@ export class CacheService {
     return `${line}-${direction}`; 
   }
 
-  setCacheLines(lines: string[]): void {
+  setCacheLines(lines: Lines): void {
     this.lines = lines;
   }
 
-  getCacheLines(): string[] {
+  getCacheLines(): Lines {
     return this.lines;
   }
 

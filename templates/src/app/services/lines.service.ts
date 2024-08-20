@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
+import { Lines } from '../interfaces/lines';
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +9,8 @@ import { catchError, Observable, throwError } from 'rxjs';
 export class LinesService {
   private http = inject(HttpClient);
 
-  getLines() : Observable<string[]> {
-    return this.http.get<string[]>('/api/v1/lines')
+  getLines() : Observable<Lines> {
+    return this.http.get<Lines>('/api/v1/lines')
     .pipe(
       catchError(this.handleError)
     );
