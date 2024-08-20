@@ -28,11 +28,10 @@ export class LineSelectionComponent implements OnInit {
   private router = inject(Router);
   private linesService = inject(LinesService);
   private cacheService = inject(CacheService);
-  private errorDialogService = inject(ErrorDialogService)
+  private errorDialogService = inject(ErrorDialogService);
 
   public lines: any[] = [];
-  public filteredLines: string[] = [];
-  public categories: string[] = [];
+  public filteredLines: any[] = [];
 
   public categoryMapping: any = {
     cementary_lines: 'Linie cmentarne',
@@ -49,7 +48,6 @@ export class LineSelectionComponent implements OnInit {
     zone_temporary_lines: 'Linie strefowe okresowe'
   };
 
-
   ngOnInit(): void {
     this.fetchLines();
   }
@@ -62,7 +60,7 @@ export class LineSelectionComponent implements OnInit {
         next: (data: any) => {
           this.cacheService.setCacheLines(data);
           this.lines = Object.entries(data);
-          this.filteredLines = this.lines[1];
+          this.filteredLines = this.lines;
         },
         error: (error) => {
           this.errorDialogService.openErrorDialog(error.message);
@@ -82,17 +80,19 @@ export class LineSelectionComponent implements OnInit {
     this.router.navigate([`analyze/${lineNumber}`]);
   }
 
-  // Add a trackBy function to improve performance when rendering the lines
   trackByIndex(index: number, item: string): number {
     return index;
   }
 
-  // Filter lines based on input value
-  applyFilter(filterValue: EventTarget): void {
-    this.filteredLines = this.lines.filter((line) =>
-        line.toLowerCase().includes((filterValue as HTMLInputElement).value.toLowerCase())
-    );
-    if(this.filteredLines.length == 0)
-      this.filteredLines = this.lines;
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+
+    this.filteredLines = this.lines.map(([category, items]) => {
+      const filteredItems = items.filter((item: string) =>
+        item.toLowerCase().includes(filterValue)
+      );
+      return [category, filteredItems];
+    }).filter(([, items]) => items.length > 0);
   }
 }
+
