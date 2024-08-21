@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { StopsService } from '../../services/stops.service';
-import { CacheService } from '../../services/cache.service';
 import { StopsInfo } from '../../interfaces/stops';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
@@ -34,7 +33,6 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   providers: [provideNativeDateAdapter()]
 })
 export class StopSelectionComponent {
-  private cacheService = inject(CacheService);
   private stopsService = inject(StopsService);
   private errorDialogService = inject(ErrorDialogService);
   private router = inject(Router);
@@ -49,18 +47,8 @@ export class StopSelectionComponent {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {
       this.line = lineParams.line;
-      this.initializeStops();
-    });
-  }
-
-  initializeStops(): void {
-    const cachedStops = this.cacheService.getCacheStops(this.line, this.direction);
-    if (cachedStops) {
-      this.stopsInfo = cachedStops.stops;
-      this.endIndex = this.stopsInfo.length - 1;
-    } else {
       this.fetchStops();
-    }
+    });
   }
 
   fetchStops(): void {
@@ -71,7 +59,6 @@ export class StopSelectionComponent {
           const errorMessage = "Brak przystanków dla wybranego kierunku.";
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
-          this.cacheService.setCacheStops(this.line, data);
           this.endIndex = this.stopsInfo.length - 1;
         }
       },
@@ -83,7 +70,7 @@ export class StopSelectionComponent {
 
   swapDirection(): void {
     this.direction = !this.direction;
-    this.initializeStops();
+    this.fetchStops();
   }
 
   navigateToResults(): void {

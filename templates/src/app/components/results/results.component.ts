@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CacheService } from '../../services/cache.service';
 import { MapService } from '../../services/map.service';
 import { ShapesService } from '../../services/shapes.service';
 import { Shapes } from '../../interfaces/shapes';
@@ -17,7 +16,6 @@ import { Stops, StopsInfo } from '../../interfaces/stops';
 })
 export class ResultsComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
-  private cacheService = inject(CacheService);
   private mapService = inject(MapService);
   private shapesService = inject(ShapesService);
   private errorDialogService = inject(ErrorDialogService);
@@ -30,7 +28,7 @@ export class ResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadRouteParams();
-    this.initializeShapes();
+    this.fetchShapes();
   }
 
   private loadRouteParams(): void {
@@ -41,11 +39,6 @@ export class ResultsComponent implements OnInit {
       this.endStop = lineParams.endStop;
     })
   }
-
-  private initializeShapes(): void {
-    const cachedShapes = this.cacheService.getCacheShapes(this.line, this.direction);
-    cachedShapes ? this.initializeStops(cachedShapes) : this.fetchShapes();
-  }
   
   private fetchShapes(): void {
     this.shapesService.getShapes(this.line, this.direction, this.startStop, this.endStop).subscribe({
@@ -54,19 +47,13 @@ export class ResultsComponent implements OnInit {
           const errorMessage = "Brak shapes dla danej linii";
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
-          this.cacheService.setCacheShapes(this.line, this.direction, data.shapes);
-          this.initializeStops(data.shapes);
+          this.fetchStops(data.shapes);
         }
       },
       error: (error) => {
         this.errorDialogService.openErrorDialog(error.message);
       }
     });
-  }
-
-  private initializeStops(shapes: Shapes[]): void {
-    const cachedStops = this.cacheService.getCacheStops(this.line, this.direction);
-    cachedStops ? this.prepareAndDraw(shapes, cachedStops) : this.fetchStops(shapes);
   }
 
   private fetchStops(shapes: Shapes[]): void {
@@ -76,7 +63,6 @@ export class ResultsComponent implements OnInit {
           const errorMessage = "Brak przystanków dla wybranego kierunku.";
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
-          this.cacheService.setCacheStops(this.line, data);
           this.prepareAndDraw(shapes, data);
         }
       },
