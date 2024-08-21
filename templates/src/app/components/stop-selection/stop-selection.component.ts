@@ -47,8 +47,8 @@ export class StopSelectionComponent {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {
       this.line = lineParams.line;
-      this.fetchStops();
     });
+    this.fetchStops();
   }
 
   private fetchStops(): void {
