@@ -51,7 +51,7 @@ export class StopSelectionComponent {
     });
   }
 
-  fetchStops(): void {
+  private fetchStops(): void {
     this.stopsService.getStops(this.line, this.direction).subscribe({
       next: (data: any) => {
         this.stopsInfo = data.stops;
