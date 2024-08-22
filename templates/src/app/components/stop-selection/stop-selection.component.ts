@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 @Component({
   selector: 'app-stop-selection',
@@ -27,7 +29,8 @@ import { provideNativeDateAdapter } from '@angular/material/core';
     MatProgressBarModule,
     MatIconModule,
     MatButtonModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatTooltipModule
   ],
   templateUrl: './stop-selection.component.html',
   styleUrl: './stop-selection.component.scss',
