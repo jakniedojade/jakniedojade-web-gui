@@ -32,7 +32,7 @@ export class ShapesService {
       console.error(
         `Backend returned code ${error.status}`);
     }
-    return throwError(() => new Error(`Wystąpił błąd przy pobieraniu shapes`));
+    return throwError(() => new Error(`An error occurred while fetching shapes`));
   }
 
   private constructKey(line: string, directionSwapped: boolean): string {

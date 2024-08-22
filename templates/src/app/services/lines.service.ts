@@ -29,6 +29,6 @@ export class LinesService {
       console.error(
         `Backend returned code ${error.status}`);
     }
-    return throwError(() => new Error(`Wystąpił błąd przy pobieraniu linii`));
+    return throwError(() => new Error(`An error occurred while fetching lines`));
   }
 }

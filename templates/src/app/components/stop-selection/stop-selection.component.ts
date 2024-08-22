@@ -56,7 +56,7 @@ export class StopSelectionComponent {
       next: (data: any) => {
         this.stopsInfo = data.stops;
         if (this.stopsInfo.length === 0) {
-          const errorMessage = "Brak przystanków dla wybranego kierunku.";
+          const errorMessage = "No stops found for selected direction";
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
           this.endIndex = this.stopsInfo.length - 1;

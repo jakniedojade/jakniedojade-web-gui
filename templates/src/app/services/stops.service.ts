@@ -31,7 +31,7 @@ export class StopsService {
       console.error(
         `Backend returned code ${error.status}`);
     }
-    return throwError(() => new Error(`Wystąpił błąd przy pobieraniu przystanków`));
+    return throwError(() => new Error(`An error occurred while fetching stops`));
   }
 
   private constructKey(line: string, directionSwapped: boolean): string {

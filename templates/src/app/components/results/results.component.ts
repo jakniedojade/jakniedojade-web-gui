@@ -44,7 +44,7 @@ export class ResultsComponent implements OnInit {
     this.shapesService.getShapes(this.line, this.directionSwapped, this.startStop, this.endStop).subscribe({
       next: (data: any) => {
         if (!data.shapes || data.shapes.length === 0) {
-          const errorMessage = "Brak shapes dla danej linii";
+          const errorMessage = "No shapes found for selected line";
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
           this.fetchStops(data.shapes);
@@ -60,7 +60,7 @@ export class ResultsComponent implements OnInit {
     this.stopsService.getStops(this.line, this.directionSwapped).subscribe({
       next: (data: any) => {
         if (data.stops.length === 0) {
-          const errorMessage = "Brak przystanków dla wybranego kierunku.";
+          const errorMessage = "No stops found for selected direction";
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
           this.prepareAndDraw(shapes, data);
