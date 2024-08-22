@@ -22,7 +22,7 @@ export class ResultsComponent implements OnInit {
   private stopsService = inject(StopsService);
 
   public line: string = "";
-  private direction!: boolean;
+  private directionSwapped!: boolean;
   private startStop: string = "";
   private endStop: string = "";
 
@@ -34,14 +34,14 @@ export class ResultsComponent implements OnInit {
   private loadRouteParams(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {
       this.line = lineParams.line;
-      this.direction = lineParams.direction === 'true'; //this makes sure that direction is a boolean
+      this.directionSwapped = lineParams.directionSwapped === 'true'; //this makes sure that directionSwapped is a boolean
       this.startStop = lineParams.startStop;
       this.endStop = lineParams.endStop;
     })
   }
   
   private fetchShapes(): void {
-    this.shapesService.getShapes(this.line, this.direction, this.startStop, this.endStop).subscribe({
+    this.shapesService.getShapes(this.line, this.directionSwapped, this.startStop, this.endStop).subscribe({
       next: (data: any) => {
         if (!data.shapes || data.shapes.length === 0) {
           const errorMessage = "Brak shapes dla danej linii";
@@ -57,7 +57,7 @@ export class ResultsComponent implements OnInit {
   }
 
   private fetchStops(shapes: Shapes[]): void {
-    this.stopsService.getStops(this.line, this.direction).subscribe({
+    this.stopsService.getStops(this.line, this.directionSwapped).subscribe({
       next: (data: any) => {
         if (data.stops.length === 0) {
           const errorMessage = "Brak przystanków dla wybranego kierunku.";

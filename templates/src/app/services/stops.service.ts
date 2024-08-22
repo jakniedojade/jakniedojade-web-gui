@@ -10,10 +10,10 @@ export class StopsService {
   private http = inject(HttpClient);
   private readonly stopsData = new Map<string, Observable<Stops>>();
 
-  getStops(line: string, direction: boolean): Observable<Stops> {
-    const directionNumber: string = direction ? "1" : "0";
+  getStops(line: string, directionSwapped: boolean): Observable<Stops> {
+    const directionNumber: string = directionSwapped ? "1" : "0";
     const url = `/api/v1/lines/${line}/stops/?direction=${directionNumber}`;
-    const key = this.constructKey(line, direction);
+    const key = this.constructKey(line, directionSwapped);
     if (!this.stopsData.has(key)) {
       this.stopsData.set(key, this.http.get<Stops>(url)
       .pipe(
@@ -34,7 +34,7 @@ export class StopsService {
     return throwError(() => new Error(`Wystąpił błąd przy pobieraniu przystanków`));
   }
 
-  private constructKey(line: string, direction: boolean): string {
-    return `${line}-${direction}`; 
+  private constructKey(line: string, directionSwapped: boolean): string {
+    return `${line}-${directionSwapped}`; 
   }
 }

@@ -10,11 +10,11 @@ export class ShapesService {
   private http = inject(HttpClient);
   private readonly shapesData = new Map<string, Observable<Shapes[]>>();
 
-  getShapes(line: string, direction: boolean, startStop: string, endStop: string): Observable<Shapes[]> {
-    const directionNumber: string = direction ? "1" : "0";
+  getShapes(line: string, directionSwapped: boolean, startStop: string, endStop: string): Observable<Shapes[]> {
+    const directionNumber: string = directionSwapped ? "1" : "0";
     //TEMPORARY REQUEST WITH WHOLE RANGE ONLY
     const url = `/api/v1/lines/${line}/latency?start_stop=${startStop}&end_stop=${endStop}&whole_range=${true}&direction=${directionNumber}`;
-    const key = this.constructKey(line, direction);
+    const key = this.constructKey(line, directionSwapped);
     if (!this.shapesData.has(key)) {
       this.shapesData.set(key, this.http.get<Shapes[]>(url) 
       .pipe(
@@ -35,7 +35,7 @@ export class ShapesService {
     return throwError(() => new Error(`Wystąpił błąd przy pobieraniu shapes`));
   }
 
-  private constructKey(line: string, direction: boolean): string {
-    return `${line}-${direction}`; 
+  private constructKey(line: string, directionSwapped: boolean): string {
+    return `${line}-${directionSwapped}`; 
   }
 }

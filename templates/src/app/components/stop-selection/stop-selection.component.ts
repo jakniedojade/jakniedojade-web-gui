@@ -42,7 +42,7 @@ export class StopSelectionComponent {
   public stopsInfo: StopsInfo[] = [];
   public startIndex: number = 0;
   public endIndex!: number;
-  private direction: boolean = false;
+  private directionSwapped: boolean = false;
   
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {
@@ -52,7 +52,7 @@ export class StopSelectionComponent {
   }
 
   private fetchStops(): void {
-    this.stopsService.getStops(this.line, this.direction).subscribe({
+    this.stopsService.getStops(this.line, this.directionSwapped).subscribe({
       next: (data: any) => {
         this.stopsInfo = data.stops;
         if (this.stopsInfo.length === 0) {
@@ -69,11 +69,11 @@ export class StopSelectionComponent {
   }
 
   swapDirection(): void {
-    this.direction = !this.direction;
+    this.directionSwapped = !this.directionSwapped;
     this.fetchStops();
   }
 
   navigateToResults(): void {
-    this.router.navigate([`analyze/results/${this.line}/${this.direction}/${this.stopsInfo[this.startIndex].name}/${this.stopsInfo[this.endIndex].name}`]);
+    this.router.navigate([`analyze/results/${this.line}/${this.directionSwapped}/${this.stopsInfo[this.startIndex].name}/${this.stopsInfo[this.endIndex].name}`]);
   }
 }
