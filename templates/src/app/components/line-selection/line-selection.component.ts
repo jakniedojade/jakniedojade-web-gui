@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
-import { CacheService } from '../../services/cache.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,7 +27,6 @@ import { Lines } from '../../interfaces/lines';
 export class LineSelectionComponent implements OnInit {
   private router = inject(Router);
   private linesService = inject(LinesService);
-  private cacheService = inject(CacheService);
   private errorDialogService = inject(ErrorDialogService);
 
   private lines = new Map<string, string[]>();
@@ -50,18 +48,12 @@ export class LineSelectionComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.initializeLines();
-  }
-
-  private initializeLines() {
-    const cachedLines = this.cacheService.getCacheLines();
-    cachedLines ? this.processResponse(cachedLines) : this.fetchLines();
+    this.fetchLines();
   }
 
   private fetchLines(): void {
     this.linesService.getLines().subscribe({
       next: (data: Lines) => {
-        this.cacheService.setCacheLines(data);
         this.processResponse(data);
       },
       error: (error) => {

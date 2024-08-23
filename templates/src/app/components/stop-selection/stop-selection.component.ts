@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { StopsService } from '../../services/stops.service';
-import { CacheService } from '../../services/cache.service';
 import { StopsInfo } from '../../interfaces/stops';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
@@ -37,7 +36,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   providers: [provideNativeDateAdapter()]
 })
 export class StopSelectionComponent {
-  private cacheService = inject(CacheService);
   private stopsService = inject(StopsService);
   private errorDialogService = inject(ErrorDialogService);
   private router = inject(Router);
@@ -47,34 +45,23 @@ export class StopSelectionComponent {
   public stopsInfo: StopsInfo[] = [];
   public startIndex: number = 0;
   public endIndex!: number;
-  private direction: boolean = false;
+  private directionSwapped: boolean = false;
   
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((lineParams: any) => {
       this.line = lineParams.line;
-      this.initializeStops();
     });
+    this.fetchStops();
   }
 
-  initializeStops(): void {
-    const cachedStops = this.cacheService.getCacheStops(this.line, this.direction);
-    if (cachedStops) {
-      this.stopsInfo = cachedStops.stops;
-      this.endIndex = this.stopsInfo.length - 1;
-    } else {
-      this.fetchStops();
-    }
-  }
-
-  fetchStops(): void {
-    this.stopsService.getStops(this.line, this.direction).subscribe({
+  private fetchStops(): void {
+    this.stopsService.getStops(this.line, this.directionSwapped).subscribe({
       next: (data: any) => {
         this.stopsInfo = data.stops;
         if (this.stopsInfo.length === 0) {
-          const errorMessage = "Brak przystanków dla wybranego kierunku.";
+          const errorMessage = "No stops found for selected direction";
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
-          this.cacheService.setCacheStops(this.line, data);
           this.endIndex = this.stopsInfo.length - 1;
         }
       },
@@ -85,11 +72,11 @@ export class StopSelectionComponent {
   }
 
   swapDirection(): void {
-    this.direction = !this.direction;
-    this.initializeStops();
+    this.directionSwapped = !this.directionSwapped;
+    this.fetchStops();
   }
 
   navigateToResults(): void {
-    this.router.navigate([`analyze/results/${this.line}/${this.direction}/${this.stopsInfo[this.startIndex].name}/${this.stopsInfo[this.endIndex].name}`]);
+    this.router.navigate([`analyze/results/${this.line}/${this.directionSwapped}/${this.stopsInfo[this.startIndex].name}/${this.stopsInfo[this.endIndex].name}`]);
   }
 }
