@@ -8,10 +8,10 @@ import { Lines } from '../interfaces/lines';
 })
 export class LinesService {
   private http = inject(HttpClient);
-  private linesData: Observable<Lines>;
+  private linesData$: Observable<Lines>;
 
   constructor() {
-    this.linesData = this.http.get<Lines>('/api/v1/lines')
+    this.linesData$ = this.http.get<Lines>('/api/v1/lines/')
     .pipe(
       shareReplay(),
       catchError(this.handleError)
@@ -19,7 +19,7 @@ export class LinesService {
   }
 
   getLines() : Observable<Lines> {
-    return this.linesData;
+    return this.linesData$;
   }
 
   private handleError(error: HttpErrorResponse) {
