@@ -33,18 +33,18 @@ export class LineSelectionComponent implements OnInit {
   public filteredLines = new Map<string, string[]>();
 
   private categoryMapping: any = {
-    cementary_lines: 'Linie cmentarne',
-    express_lines: 'Linie ekspresowe',
-    fast_lines: 'Linie przyspieszone',
-    fast_temporary_lines: 'Linie przyspieszone okresowe',
-    local_lines: 'Linie lokalne',
-    night_lines: 'Linie nocne',
-    regular_lines: 'Linie zwykłe',
-    regular_temporary_lines: 'Linie okresowe',
-    special_lines: 'Linie specjalne',
-    substitute_lines: 'Linie zastępcze',
-    zone_lines: 'Linie strefowe',
-    zone_temporary_lines: 'Linie strefowe okresowe'
+    cementaryLines: 'Linie cmentarne',
+    expressLines: 'Linie ekspresowe',
+    fastLines: 'Linie przyspieszone',
+    fastTemporaryLines: 'Linie przyspieszone okresowe',
+    localLines: 'Linie lokalne',
+    nightLines: 'Linie nocne',
+    regularLines: 'Linie zwykłe',
+    regularTemporaryLines: 'Linie okresowe',
+    specialLines: 'Linie specjalne',
+    substituteLines: 'Linie zastępcze',
+    zoneLines: 'Linie strefowe',
+    zoneTemporaryLines: 'Linie strefowe okresowe'
   };
 
   ngOnInit(): void {
