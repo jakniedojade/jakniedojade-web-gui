@@ -7,8 +7,7 @@ import 'leaflet.polyline.snakeanim';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
-import { Stops, StopsInfo } from '../../interfaces/stops';
-import { Shapes } from '../../interfaces/shapes';
+import { PolesDetails, Shapes } from '../../interfaces/line-data';
 
 @Component({
   selector: 'app-map',
@@ -110,8 +109,8 @@ export class MapComponent implements OnInit {
     this.markersGroup.clearLayers();
 
     const shapesCoords = shapes.map((shape: Shapes) => ({
-      lat: shape.point_latitude,
-      lng: shape.point_longitude
+      lat: shape.latitude,
+      lng: shape.longitude
     }));
 
     this.polyline = new L.Polyline(shapesCoords, { 
@@ -125,7 +124,7 @@ export class MapComponent implements OnInit {
     this.markersGroup.addLayer(this.polyline);
   }
 
-  public drawStops(stopsToDraw: StopsInfo[]): void {
+  public drawPoles(polesToDraw: PolesDetails[]): void {
 
     const stopIcon = L.icon({
       iconUrl: '/assets/stop_regular.png',
@@ -145,9 +144,9 @@ export class MapComponent implements OnInit {
       iconAnchor: [19, 35],
     }); */
 
-    stopsToDraw.forEach((stop) => {
+    polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
-      const stopMarker = L.marker([stop.latitude, stop.longitude], {icon: stop.on_demand ? stopOnRequestIcon : stopIcon}).bindPopup(stop.name);
+      const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
       stopMarker.addTo(this.map);
       this.markersGroup.addLayer(stopMarker);
     });

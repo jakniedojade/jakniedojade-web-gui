@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { StopsService } from '../../services/stops.service';
-import { StopsInfo } from '../../interfaces/stops';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,6 +12,7 @@ import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PolesDetails } from '../../interfaces/line-data';
 
 
 @Component({
@@ -42,7 +42,7 @@ export class StopSelectionComponent {
   private activatedRoute = inject(ActivatedRoute);
 
   private line: string = "";
-  public stopsInfo: StopsInfo[] = [];
+  public poles: PolesDetails[] = [];
   public startIndex: number = 0;
   public endIndex!: number;
   private directionSwapped: boolean = false;
@@ -51,18 +51,18 @@ export class StopSelectionComponent {
     this.activatedRoute.params.subscribe((lineParams: any) => {
       this.line = lineParams.line;
     });
-    this.fetchStops();
+    this.fetchLineData();
   }
 
-  private fetchStops(): void {
-    this.stopsService.getStops(this.line, this.directionSwapped).subscribe({
+  private fetchLineData(): void {
+    this.stopsService.getLineData(this.line, this.directionSwapped).subscribe({
       next: (data: any) => {
-        this.stopsInfo = data.stops;
-        if (this.stopsInfo.length === 0) {
+        this.poles = data.poles;
+        if (this.poles.length === 0) {
           const errorMessage = "No stops found for selected direction";
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
-          this.endIndex = this.stopsInfo.length - 1;
+          this.endIndex = this.poles.length - 1;
         }
       },
       error: (error) => {
@@ -73,10 +73,10 @@ export class StopSelectionComponent {
 
   swapDirection(): void {
     this.directionSwapped = !this.directionSwapped;
-    this.fetchStops();
+    this.fetchLineData();
   }
 
   navigateToResults(): void {
-    this.router.navigate([`analyze/results/${this.line}/${this.directionSwapped}/${this.stopsInfo[this.startIndex].name}/${this.stopsInfo[this.endIndex].name}`]);
+    this.router.navigate([`analyze/results/${this.line}/${this.directionSwapped}/${this.poles[this.startIndex].name}/${this.poles[this.endIndex].name}`]);
   }
 }

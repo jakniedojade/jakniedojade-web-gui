@@ -1,11 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MapService } from '../../services/map.service';
-import { ShapesService } from '../../services/shapes.service';
-import { Shapes } from '../../interfaces/shapes';
+import { PolesDetails, Shapes } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { StopsService } from '../../services/stops.service';
-import { Stops, StopsInfo } from '../../interfaces/stops';
 
 @Component({
   selector: 'app-results',
@@ -17,7 +15,6 @@ import { Stops, StopsInfo } from '../../interfaces/stops';
 export class ResultsComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private mapService = inject(MapService);
-  private shapesService = inject(ShapesService);
   private errorDialogService = inject(ErrorDialogService);
   private stopsService = inject(StopsService);
 
@@ -28,7 +25,7 @@ export class ResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadRouteParams();
-    this.fetchShapes();
+    this.fetchLineData();
   }
 
   private loadRouteParams(): void {
@@ -39,31 +36,15 @@ export class ResultsComponent implements OnInit {
       this.endStop = lineParams.endStop;
     })
   }
-  
-  private fetchShapes(): void {
-    this.shapesService.getShapes(this.line, this.directionSwapped, this.startStop, this.endStop).subscribe({
-      next: (data: any) => {
-        if (!data.shapes || data.shapes.length === 0) {
-          const errorMessage = "No shapes found for selected line";
-          this.errorDialogService.openErrorDialog(errorMessage);
-        } else {
-          this.fetchStops(data.shapes);
-        }
-      },
-      error: (error) => {
-        this.errorDialogService.openErrorDialog(error.message);
-      }
-    });
-  }
 
-  private fetchStops(shapes: Shapes[]): void {
-    this.stopsService.getStops(this.line, this.directionSwapped).subscribe({
+  private fetchLineData(): void {
+    this.stopsService.getLineData(this.line, this.directionSwapped).subscribe({
       next: (data: any) => {
-        if (data.stops.length === 0) {
+        if (data.poles.length === 0) {
           const errorMessage = "No stops found for selected direction";
           this.errorDialogService.openErrorDialog(errorMessage);
         } else {
-          this.prepareAndDraw(shapes, data);
+          this.prepareAndDraw(data.shapes, data.poles);
         }
       },
       error: (error) => {
@@ -72,65 +53,65 @@ export class ResultsComponent implements OnInit {
     });
   }
 
-  private prepareAndDraw(shapes: Shapes[], stops: Stops): void {
-    const slicedStops = this.sliceStops(stops);
-    const mappedStops = this.mapStopCoordinatesToShapes(shapes, slicedStops);
-    const slicedShapes = this.sliceShapes(shapes, mappedStops);
-    this.drawRouteAndStops(slicedShapes, mappedStops);
+  private prepareAndDraw(shapes: Shapes[], poles: PolesDetails[]): void {
+    const slicedPoles = this.slicePoles(poles);
+    const mappedPoles = this.mapPoleCoordinatesToShapes(shapes, slicedPoles);
+    const slicedShapes = this.sliceShapes(shapes, mappedPoles);
+    this.drawRouteAndPoles(slicedShapes, mappedPoles);
   }
   
-  private sliceStops(allStops: Stops): StopsInfo[] {
-    const firstStopIndex = allStops.stops.findIndex(stop => stop.name === this.startStop);
-    const lastStopIndex = allStops.stops.findIndex(stop => stop.name === this.endStop);
+  private slicePoles(allPoles: PolesDetails[]): PolesDetails[] {
+    const firstPoleIndex = allPoles.findIndex((pole: PolesDetails)  => pole.name === this.startStop);
+    const lastPoleIndex = allPoles.findIndex((pole: PolesDetails) => pole.name === this.endStop);
 
-    return allStops.stops.slice(firstStopIndex, lastStopIndex + 1);
+    return allPoles.slice(firstPoleIndex, lastPoleIndex + 1);
   }
 
-  private mapStopCoordinatesToShapes(shapes: Shapes[], stopsToMap: StopsInfo[]): StopsInfo[] {
+  private mapPoleCoordinatesToShapes(shapes: Shapes[], polesToMap: PolesDetails[]): PolesDetails[] {
     const calculateDistance = (x1: number, y1: number, x2: number, y2: number): number => {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
     
-    stopsToMap.forEach(stopToMap => {
+    polesToMap.forEach(poleToMap => {
       let closestCoord = shapes[0];
       let minDistance = Infinity;
   
       shapes.forEach(shape => {
-        const distance = calculateDistance(stopToMap.latitude, stopToMap.longitude, shape.point_latitude, shape.point_longitude);
+        const distance = calculateDistance(poleToMap.latitude, poleToMap.longitude, shape.latitude, shape.longitude);
         if (distance < minDistance) {
           minDistance = distance;
           closestCoord = shape;
         }
       });
   
-      stopToMap.latitude = closestCoord.point_latitude;
-      stopToMap.longitude = closestCoord.point_longitude;
+      poleToMap.latitude = closestCoord.latitude;
+      poleToMap.longitude = closestCoord.longitude;
     });
 
-    const mappedStops = stopsToMap;
-    return mappedStops;
+    const mappedPoles = polesToMap;
+    return mappedPoles;
   }
 
-  private sliceShapes(shapes: Shapes[], mappedStops: StopsInfo[]): Shapes[] {
+  private sliceShapes(shapes: Shapes[], mappedPoles: PolesDetails[]): Shapes[] {
     const checkIfCoordinatesEqual = (x1: number, y1: number, x2: number, y2: number): boolean => {
       return x1 === x2 && y1 === y2;
     }
 
-    const firstStopIndex = mappedStops.findIndex(stop => stop.name === this.startStop);
-    const lastStopIndex = mappedStops.findIndex(stop => stop.name === this.endStop);
+    const firstPoleIndex = mappedPoles.findIndex(pole => pole.name === this.startStop);
+    const lastPoleIndex = mappedPoles.findIndex(pole => pole.name === this.endStop);
 
-    const firstStopLatitude = mappedStops[firstStopIndex].latitude;
-    const firstStopLongitude = mappedStops[firstStopIndex].longitude;
-    const lastStopLatitude = mappedStops[lastStopIndex].latitude;
-    const lastStopLongitude = mappedStops[lastStopIndex].longitude;
+    const firstPoleLatitude = mappedPoles[firstPoleIndex].latitude;
+    const firstPoleLongitude = mappedPoles[firstPoleIndex].longitude;
+    const lastPoleLatitude = mappedPoles[lastPoleIndex].latitude;
+    const lastPoleLongitude = mappedPoles[lastPoleIndex].longitude;
 
-    const firstSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.point_latitude, coord.point_longitude, firstStopLatitude, firstStopLongitude));
-    const lastSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.point_latitude, coord.point_longitude, lastStopLatitude, lastStopLongitude));
+    const firstSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.latitude, coord.longitude, firstPoleLatitude, firstPoleLongitude));
+    const lastSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.latitude, coord.longitude, lastPoleLatitude, lastPoleLongitude));
     return shapes.slice(firstSliceIndex, lastSliceIndex + 1);
   }
 
-  private drawRouteAndStops(shapes: Shapes[], stops: StopsInfo[]): void {
+  private drawRouteAndPoles(shapes: Shapes[], poles: PolesDetails[]): void {
     this.mapService.drawRoute(shapes);
-    this.mapService.drawStops(stops);
+    this.mapService.drawPoles(poles);
   }
 }

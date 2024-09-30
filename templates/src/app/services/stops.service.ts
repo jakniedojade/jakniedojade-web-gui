@@ -1,27 +1,27 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, of, shareReplay, throwError } from 'rxjs';
-import { Stops } from '../interfaces/stops';
+import { LineData } from '../interfaces/line-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StopsService {
   private http = inject(HttpClient);
-  private readonly stopsData = new Map<string, Observable<Stops>>();
+  private readonly lineData = new Map<string, Observable<LineData>>();
 
-  getStops(line: string, directionSwapped: boolean): Observable<Stops> {
+  getLineData(line: string, directionSwapped: boolean): Observable<LineData> {
     const directionNumber: string = directionSwapped ? "1" : "0";
-    const url = `/api/v1/lines/${line}/stops/?direction=${directionNumber}`;
+    const url = `/api/v1/lines/${line}/poles/?direction=${directionNumber}`;
     const key = this.constructKey(line, directionSwapped);
-    if (!this.stopsData.has(key)) {
-      this.stopsData.set(key, this.http.get<Stops>(url)
+    if (!this.lineData.has(key)) {
+      this.lineData.set(key, this.http.get<LineData>(url)
       .pipe(
         shareReplay(),
         catchError(this.handleError)
       ));
     }
-    return this.stopsData.get(key) ?? of();
+    return this.lineData.get(key) ?? of();
   }
 
   private handleError(error: HttpErrorResponse) {

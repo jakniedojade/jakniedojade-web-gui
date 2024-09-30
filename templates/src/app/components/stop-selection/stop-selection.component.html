@@ -4,7 +4,7 @@
         <mat-form-field class="select">
             <mat-label>Przystanek początkowy</mat-label>
             <mat-select [(value)]="startIndex">
-                <mat-option *ngFor="let stop of stopsInfo; let i = index" [value]="i" [disabled]="i >= endIndex">{{stop.name}}</mat-option>
+                <mat-option *ngFor="let pole of poles; let i = index" [value]="i" [disabled]="i >= endIndex">{{pole.name}}</mat-option>
             </mat-select>
         </mat-form-field>
         <button mat-icon-button matTooltip="Odwróć kierunek" (click)="swapDirection()" class="swap-direction">
@@ -13,7 +13,7 @@
         <mat-form-field class="select">
             <mat-label>Przystanek końcowy</mat-label>
             <mat-select [(value)]="endIndex">
-                <mat-option *ngFor="let stop of stopsInfo; let i = index" [value]="i" [disabled]="i <= startIndex">{{stop.name}}</mat-option>
+                <mat-option *ngFor="let pole of poles; let i = index" [value]="i" [disabled]="i <= startIndex">{{pole.name}}</mat-option>
             </mat-select>
         </mat-form-field>
     </div>
