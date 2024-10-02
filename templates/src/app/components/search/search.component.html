@@ -2,21 +2,28 @@
   <mat-form-field id="filter-lines">
     <input matInput placeholder="Wyszukaj linię" (input)="applyFilter($event.target!)">
   </mat-form-field>
-  <div id="buttons-container">
-    @for (category of filteredLines.keys(); track $index) {
-      @if (filteredLines.get(category)!.length > 0) {
-        <h4 id="category">{{translateCategory(category)}}</h4>
-      }
-      @for (line of filteredLines.get(category); track $index) {
-        <button
-          class="line-button"
-          mat-stroked-button
-          [class.selected]="line === selectedLine"
-          (click)="selectLine(line)">{{line}}
-        </button>
-      }
-    }
-  </div>
+  <mat-tab-group>
+    <mat-tab label="linie">
+      <div class="buttons-container">
+        @for (category of filteredLines.keys(); track $index) {
+          @if (filteredLines.get(category)!.length > 0) {
+            <h4 id="category">{{translateCategory(category)}}</h4>
+          }
+          @for (line of filteredLines.get(category); track $index) {
+            <button
+              class="line-button"
+              mat-stroked-button
+              [class.selected]="line === selectedLine"
+              (click)="selectLine(line)">{{line}}
+            </button>
+          }
+        }
+      </div>
+    </mat-tab>
+    <mat-tab label="przystanki">
+      <div class="buttons-container"></div>
+    </mat-tab>
+  </mat-tab-group>
   <div class="navigation-buttons-container">
     <app-navigation-buttons
       [nextDisabled]="nextButtonDisabled"

@@ -12,6 +12,7 @@ import { NavigationButtonsComponent } from "../navigation-buttons/navigation-but
 import { StopsService } from '../../services/stops.service';
 import { forkJoin } from 'rxjs';
 import { Stops } from '../../interfaces/stops';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-search',
@@ -22,7 +23,8 @@ import { Stops } from '../../interfaces/stops';
     MatInputModule,
     CommonModule,
     FormsModule,
-    NavigationButtonsComponent
+    NavigationButtonsComponent,
+    MatTabsModule,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
