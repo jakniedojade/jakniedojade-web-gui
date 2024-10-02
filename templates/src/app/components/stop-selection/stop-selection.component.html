@@ -28,5 +28,8 @@
             <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
     </div>
-    <button mat-raised-button (click)="navigateToResults()">Dalej</button>
 </div>
+<app-navigation-buttons
+  (next)="navigateToResults()"
+  (previous)="navigateToLineSelection()">
+</app-navigation-buttons>

@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PolesDetails } from '../../interfaces/line-data';
+import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 
 
 @Component({
@@ -29,7 +30,8 @@ import { PolesDetails } from '../../interfaces/line-data';
     MatIconModule,
     MatButtonModule,
     MatDatepickerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NavigationButtonsComponent
   ],
   templateUrl: './stop-selection.component.html',
   styleUrl: './stop-selection.component.scss',
@@ -78,5 +80,9 @@ export class StopSelectionComponent {
 
   navigateToResults(): void {
     this.router.navigate([`analyze/results/${this.line}/${this.directionSwapped}/${this.poles[this.startIndex].name}/${this.poles[this.endIndex].name}`]);
+  }
+
+  navigateToLineSelection(): void {
+    this.router.navigate(["analyze/lines"]);
   }
 }

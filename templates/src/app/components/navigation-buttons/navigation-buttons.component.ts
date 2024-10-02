@@ -9,7 +9,7 @@ import { MatButton } from '@angular/material/button';
   styleUrl: './navigation-buttons.component.scss'
 })
 export class NavigationButtonsComponent {
-  @Input() nextDisabled: boolean = true;
+  @Input() nextDisabled: boolean = false;
 
   @Output() previous = new EventEmitter<void>();
   @Output() next = new EventEmitter<void>();
