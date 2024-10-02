@@ -10,6 +10,7 @@ import { MatButton } from '@angular/material/button';
 })
 export class NavigationButtonsComponent {
   @Input() nextDisabled: boolean = false;
+  @Input() nextButtonLabel: string = "Dalej";
 
   @Output() previous = new EventEmitter<void>();
   @Output() next = new EventEmitter<void>();
