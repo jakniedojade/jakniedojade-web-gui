@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MapService } from '../../services/map.service';
 import { PolesDetails, Shapes } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
-import { StopsService } from '../../services/stops.service';
+import { LineDataService } from '../../services/line-data.service';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 
 @Component({
@@ -17,7 +17,7 @@ export class ResultsComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private mapService = inject(MapService);
   private errorDialogService = inject(ErrorDialogService);
-  private stopsService = inject(StopsService);
+  private lineDataService = inject(LineDataService);
   private router = inject(Router);
 
   public line: string = "";
@@ -40,7 +40,7 @@ export class ResultsComponent implements OnInit {
   }
 
   private fetchLineData(): void {
-    this.stopsService.getLineData(this.line, this.directionSwapped).subscribe({
+    this.lineDataService.getLineData(this.line, this.directionSwapped).subscribe({
       next: (data: any) => {
         if (data.poles.length === 0) {
           const errorMessage = "No stops found for selected direction";

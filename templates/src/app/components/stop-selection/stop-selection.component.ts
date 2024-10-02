@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { StopsService } from '../../services/stops.service';
+import { LineDataService } from '../../services/line-data.service';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -38,7 +38,7 @@ import { NavigationButtonsComponent } from "../navigation-buttons/navigation-but
   providers: [provideNativeDateAdapter()]
 })
 export class StopSelectionComponent {
-  private stopsService = inject(StopsService);
+  private lineDataService = inject(LineDataService);
   private errorDialogService = inject(ErrorDialogService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
@@ -57,7 +57,7 @@ export class StopSelectionComponent {
   }
 
   private fetchLineData(): void {
-    this.stopsService.getLineData(this.line, this.directionSwapped).subscribe({
+    this.lineDataService.getLineData(this.line, this.directionSwapped).subscribe({
       next: (data: any) => {
         this.poles = data.poles;
         if (this.poles.length === 0) {

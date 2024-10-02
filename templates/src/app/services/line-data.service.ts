@@ -6,7 +6,7 @@ import { LineData } from '../interfaces/line-data';
 @Injectable({
   providedIn: 'root'
 })
-export class StopsService {
+export class LineDataService {
   private http = inject(HttpClient);
   private readonly lineData = new Map<string, Observable<LineData>>();
 

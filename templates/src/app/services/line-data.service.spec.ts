@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { StopsService } from './stops.service';
+import { LineDataService } from './line-data.service';
 
-describe('StopsService', () => {
-  let service: StopsService;
+describe('LineDataService', () => {
+  let service: LineDataService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(StopsService);
+    service = TestBed.inject(LineDataService);
   });
 
   it('should be created', () => {
