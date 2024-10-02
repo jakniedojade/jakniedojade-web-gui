@@ -11,7 +11,7 @@ import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 
 @Component({
-  selector: 'app-line-selection',
+  selector: 'app-search',
   standalone: true,
   imports: [
     MatButtonModule,
@@ -21,12 +21,12 @@ import { NavigationButtonsComponent } from "../navigation-buttons/navigation-but
     FormsModule,
     NavigationButtonsComponent
   ],
-  templateUrl: './line-selection.component.html',
-  styleUrl: './line-selection.component.scss',
+  templateUrl: './search.component.html',
+  styleUrl: './search.component.scss',
   providers: []
 })
 
-export class LineSelectionComponent implements OnInit {
+export class SearchComponent implements OnInit {
   private router = inject(Router);
   private linesService = inject(LinesService);
   private errorDialogService = inject(ErrorDialogService);
