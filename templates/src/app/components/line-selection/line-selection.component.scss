@@ -51,7 +51,6 @@
 }
 
 #filter-lines {
-    margin-top: 30px;
     margin-bottom: 0;
     display: block;
     max-width: 450px;
@@ -66,4 +65,15 @@
     text-align: left;
     margin-left:10px;
     margin-bottom: 20px;
+}
+
+.line-selection-component {
+    position: relative;
+    height: 100%;
+}
+
+.navigation-buttons-container {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
 }

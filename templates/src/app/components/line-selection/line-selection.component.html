@@ -1,25 +1,28 @@
-<mat-form-field id="filter-lines">
-  <input matInput placeholder="Wyszukaj linię" (input)="applyFilter($event.target!)">
-</mat-form-field>
-
-<div id="buttons-container">
-  @for (category of filteredLines.keys(); track $index) {
-    @if (filteredLines.get(category)!.length > 0) {
-      <h4 id="category">{{translateCategory(category)}}</h4>
+<div class="line-selection-component">
+  <mat-form-field id="filter-lines">
+    <input matInput placeholder="Wyszukaj linię" (input)="applyFilter($event.target!)">
+  </mat-form-field>
+  <div id="buttons-container">
+    @for (category of filteredLines.keys(); track $index) {
+      @if (filteredLines.get(category)!.length > 0) {
+        <h4 id="category">{{translateCategory(category)}}</h4>
+      }
+      @for (line of filteredLines.get(category); track $index) {
+        <button
+          class="line-button"
+          mat-stroked-button
+          [class.selected]="line === selectedLine"
+          (click)="selectLine(line)">{{line}}
+        </button>
+      }
     }
-    @for (line of filteredLines.get(category); track $index) {
-      <button
-        class="line-button"
-        mat-stroked-button
-        [class.selected]="line === selectedLine"
-        (click)="selectLine(line)">{{line}}
-      </button>
-    }
-  }
+  </div>
+  <div class="navigation-buttons-container">
+    <app-navigation-buttons
+      [nextDisabled]="nextButtonDisabled"
+      (next)="navigateToLine(this.selectedLine)"
+      (previous)="navigateToWelcomeScreen()">
+    </app-navigation-buttons>
+  </div>
 </div>
-<app-navigation-buttons
-  [nextDisabled]="nextButtonDisabled"
-  (next)="navigateToLine(this.selectedLine)"
-  (previous)="navigateToWelcomeScreen()">
-</app-navigation-buttons>
 
