@@ -8,17 +8,17 @@ import { Stops } from '../interfaces/stops';
 })
 export class StopsService {
   private http = inject(HttpClient);
-  private stopsData$: Observable<Stops>;
+  private stopsData$: Observable<Stops[]>;
 
   constructor() {
-    this.stopsData$ = this.http.get<Stops>('/api/v1/stops/')
+    this.stopsData$ = this.http.get<Stops[]>('/api/v1/stops/')
     .pipe(
       shareReplay(),
       catchError(this.handleError)
     );
   }
 
-  getStops() : Observable<Stops> {
+  getStops() : Observable<Stops[]> {
     return this.stopsData$;
   }
 

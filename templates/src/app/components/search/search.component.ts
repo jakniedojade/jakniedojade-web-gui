@@ -9,6 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
+import { StopsService } from '../../services/stops.service';
+import { forkJoin } from 'rxjs';
+import { Stops } from '../../interfaces/stops';
 
 @Component({
   selector: 'app-search',
@@ -29,12 +32,14 @@ import { NavigationButtonsComponent } from "../navigation-buttons/navigation-but
 export class SearchComponent implements OnInit {
   private router = inject(Router);
   private linesService = inject(LinesService);
+  private stopsService = inject(StopsService);
   private errorDialogService = inject(ErrorDialogService);
 
   private lines = new Map<string, string[]>();
   public nextButtonDisabled: boolean = true;
   public selectedLine: string = "";
   public filteredLines = new Map<string, string[]>();
+  public stops: Stops[] = [];
 
   private categoryMapping: any = {
     cementaryLines: 'Linie cmentarne',
@@ -52,7 +57,7 @@ export class SearchComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.fetchLines();
+    this.fetchLinesAndStops();
   }
 
   selectLine(line: string): void {
@@ -60,13 +65,17 @@ export class SearchComponent implements OnInit {
     this.nextButtonDisabled = false;
   }
 
-  private fetchLines(): void {
-    this.linesService.getLines().subscribe({
-      next: (data: Lines) => {
-        this.processResponse(data);
+  private fetchLinesAndStops(): void {
+    forkJoin<[Lines, Stops[]]>([
+      this.linesService.getLines(),
+      this.stopsService.getStops(),
+    ]).subscribe({
+      next: ([lines, stops]) => {
+        this.processResponse(lines);
+        this.stops = stops;
       },
-      error: (error) => {
-        this.errorDialogService.openErrorDialog(error.message);
+      error: (err) => {
+        this.errorDialogService.openErrorDialog(err.message);
       }
     });
   }
