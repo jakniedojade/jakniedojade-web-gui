@@ -30,6 +30,7 @@ export class LineSelectionComponent implements OnInit {
   private errorDialogService = inject(ErrorDialogService);
 
   private lines = new Map<string, string[]>();
+  public selectedLine: string = "";
   public filteredLines = new Map<string, string[]>();
 
   private categoryMapping: any = {
@@ -49,6 +50,10 @@ export class LineSelectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchLines();
+  }
+
+  selectLine(line: string): void {
+    this.selectedLine = line;
   }
 
   private fetchLines(): void {

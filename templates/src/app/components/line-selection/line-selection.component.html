@@ -8,7 +8,12 @@
       <h4 id="category">{{translateCategory(category)}}</h4>
     }
     @for (line of filteredLines.get(category); track $index) {
-      <button class="line-button" mat-stroked-button (click)="navigateToLine(line)">{{line}}</button>
+      <button
+        class="line-button"
+        mat-stroked-button
+        [class.selected]="line === selectedLine"
+        (click)="selectLine(line)">{{line}}
+      </button>
     }
   }
 </div>

@@ -1,3 +1,7 @@
+@use '@angular/material' as mat;
+@include mat.core();
+@import '../../../styles.scss';
+
 #buttons-container {
     display: flex;
     flex-wrap: wrap;
@@ -34,6 +38,11 @@
         font-size: 16px;
         width: 70px;
         padding: 23px 0;
+    }
+
+    &.selected {
+        background-color: mat.get-theme-color($_palettes,primary, 40);
+        color: white;
     }
 }
 
