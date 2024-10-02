@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@use '../../styles/shared-styles.scss' as *;
 @include mat.core();
 @import '../../../styles.scss';
 
@@ -68,12 +69,9 @@
 }
 
 .line-selection-component {
-    position: relative;
-    height: 100%;
+    @extend %full-height-component;
 }
 
 .navigation-buttons-container {
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
+    @extend %navigation-buttons;
 }

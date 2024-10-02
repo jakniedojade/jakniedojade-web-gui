@@ -1,3 +1,5 @@
+@use '../../styles/shared-styles.scss' as *;
+
 .stops-container {
     display: flex;
     flex-direction: column;
@@ -22,12 +24,9 @@
 }
 
 .stop-selection-component {
-    position: relative;
-    height: 100%;
+    @extend %full-height-component;
 }
 
 .navigation-buttons {
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
+    @extend %navigation-buttons;
 }

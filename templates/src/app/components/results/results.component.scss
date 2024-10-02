@@ -1,12 +1,11 @@
+@use '../../styles/shared-styles.scss' as *;
+
 .results-component {
-    position: relative;
-    height: 100%;
+    @extend %full-height-component;
 }
 
 .navigation-buttons {
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
+    @extend %navigation-buttons;
 }
 
 .results {
