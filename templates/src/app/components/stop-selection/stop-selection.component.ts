@@ -83,6 +83,6 @@ export class StopSelectionComponent {
   }
 
   navigateToLineSelection(): void {
-    this.router.navigate(["analyze/lines"]);
+    this.router.navigate(["analyze/search"]);
   }
 }

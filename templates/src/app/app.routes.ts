@@ -9,7 +9,7 @@ export const routes: Routes = [
     {
         path: 'analyze',
         children: [
-            { path: 'lines', component: SearchComponent },
+            { path: 'search', component: SearchComponent },
             { path: ':line', component: StopSelectionComponent },
             { path: 'results/:line/:directionSwapped/:startStop/:endStop', component: ResultsComponent },  //TODO is there a more elegant way to construct this url parameters?
         ]
