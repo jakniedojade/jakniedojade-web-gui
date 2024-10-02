@@ -17,4 +17,9 @@
     }
   }
 </div>
+<app-navigation-buttons
+  [nextDisabled]="nextButtonDisabled"
+  (next)="navigateToLine(this.selectedLine)"
+  (previous)="navigateToWelcomeScreen()">
+</app-navigation-buttons>
 
