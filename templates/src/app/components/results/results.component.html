@@ -1,1 +1,12 @@
-<p>Wyniki dla linii {{line}}</p>
+<div class="results-component">
+    <div class="results">
+        <p>Wyniki dla linii {{line}}</p>
+    </div>
+    <div class="navigation-buttons">
+        <app-navigation-buttons
+          (next)="navigateToLineSelection()"
+          (previous)="navigateToLine()"
+          [nextButtonLabel]="'Od Nowa'">
+        </app-navigation-buttons>
+    </div>
+</div>

@@ -1,14 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MapService } from '../../services/map.service';
 import { PolesDetails, Shapes } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { StopsService } from '../../services/stops.service';
+import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 
 @Component({
   selector: 'app-results',
   standalone: true,
-  imports: [],
+  imports: [NavigationButtonsComponent],
   templateUrl: './results.component.html',
   styleUrl: './results.component.scss'
 })
@@ -17,6 +18,7 @@ export class ResultsComponent implements OnInit {
   private mapService = inject(MapService);
   private errorDialogService = inject(ErrorDialogService);
   private stopsService = inject(StopsService);
+  private router = inject(Router);
 
   public line: string = "";
   private directionSwapped!: boolean;
@@ -113,5 +115,13 @@ export class ResultsComponent implements OnInit {
   private drawRouteAndPoles(shapes: Shapes[], poles: PolesDetails[]): void {
     this.mapService.drawRoute(shapes);
     this.mapService.drawPoles(poles);
+  }
+
+  navigateToLineSelection(): void {
+    this.router.navigate(["analyze/lines"]);
+  }
+
+  navigateToLine(): void {
+    this.router.navigate([`analyze/${this.line}`])
   }
 }

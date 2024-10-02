@@ -1,0 +1,13 @@
+@use '../../styles/shared-styles.scss' as *;
+
+.results-component {
+    @extend %full-height-component;
+}
+
+.navigation-buttons {
+    @extend %navigation-buttons;
+}
+
+.results {
+    display: flex;
+}

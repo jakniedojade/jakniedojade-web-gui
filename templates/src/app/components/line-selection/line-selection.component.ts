@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { Lines } from '../../interfaces/lines';
+import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 
 @Component({
   selector: 'app-line-selection',
@@ -18,6 +19,7 @@ import { Lines } from '../../interfaces/lines';
     MatInputModule,
     CommonModule,
     FormsModule,
+    NavigationButtonsComponent
   ],
   templateUrl: './line-selection.component.html',
   styleUrl: './line-selection.component.scss',
@@ -30,6 +32,8 @@ export class LineSelectionComponent implements OnInit {
   private errorDialogService = inject(ErrorDialogService);
 
   private lines = new Map<string, string[]>();
+  public nextButtonDisabled: boolean = true;
+  public selectedLine: string = "";
   public filteredLines = new Map<string, string[]>();
 
   private categoryMapping: any = {
@@ -49,6 +53,11 @@ export class LineSelectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchLines();
+  }
+
+  selectLine(line: string): void {
+    this.selectedLine = line;
+    this.nextButtonDisabled = false;
   }
 
   private fetchLines(): void {
@@ -73,10 +82,6 @@ export class LineSelectionComponent implements OnInit {
     return this.categoryMapping[category] || category;
   }
 
-  navigateToLine(lineNumber: string): void {
-    this.router.navigate([`analyze/${lineNumber}`]);
-  }
-
   //TODO i think we need to adjust trackby for maps
   trackByIndex(index: number, item: string): number {
     return index;
@@ -89,6 +94,14 @@ export class LineSelectionComponent implements OnInit {
       );
       this.filteredLines.set(category, filteredItems);
     });
+  }
+
+  navigateToLine(lineNumber: string): void {
+    this.router.navigate([`analyze/${lineNumber}`]);
+  }
+
+  navigateToWelcomeScreen(): void {
+    this.router.navigate(["/"]);
   }
 }
 

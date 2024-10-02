@@ -1,3 +1,8 @@
+@use '@angular/material' as mat;
+@use '../../styles/shared-styles.scss' as *;
+@include mat.core();
+@import '../../../styles.scss';
+
 #buttons-container {
     display: flex;
     flex-wrap: wrap;
@@ -35,6 +40,11 @@
         width: 70px;
         padding: 23px 0;
     }
+
+    &.selected {
+        background-color: mat.get-theme-color($_palettes,primary, 40);
+        color: white;
+    }
 }
 
 .controls {
@@ -42,7 +52,6 @@
 }
 
 #filter-lines {
-    margin-top: 30px;
     margin-bottom: 0;
     display: block;
     max-width: 450px;
@@ -57,4 +66,12 @@
     text-align: left;
     margin-left:10px;
     margin-bottom: 20px;
+}
+
+.line-selection-component {
+    @extend %full-height-component;
+}
+
+.navigation-buttons-container {
+    @extend %navigation-buttons;
 }

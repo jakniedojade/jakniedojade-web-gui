@@ -1,3 +1,5 @@
+@use '../../styles/shared-styles.scss' as *;
+
 .stops-container {
     display: flex;
     flex-direction: column;
@@ -19,4 +21,12 @@
 
 .swap-direction {
     margin-bottom: 20px;
+}
+
+.stop-selection-component {
+    @extend %full-height-component;
+}
+
+.navigation-buttons {
+    @extend %navigation-buttons;
 }
