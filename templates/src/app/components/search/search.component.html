@@ -4,14 +4,14 @@
   </mat-form-field>
   <mat-tab-group>
     <mat-tab label="linie">
-      <div class="buttons-container">
+      <div class="line-buttons-container">
         @for (category of filteredLines.keys(); track $index) {
           @if (filteredLines.get(category)!.length > 0) {
             <h4 id="category">{{translateCategory(category)}}</h4>
           }
           @for (line of filteredLines.get(category); track $index) {
             <button
-              class="line-button"
+              class="stop-line-button"
               mat-stroked-button
               [class.selected]="line === selectedLine"
               (click)="selectLine(line)">{{line}}
@@ -21,7 +21,11 @@
       </div>
     </mat-tab>
     <mat-tab label="przystanki">
-      <div class="buttons-container"></div>
+      <div class="stop-buttons-container">
+        @for (popularStop of popularStopsNames; track $index) {
+          <button class="stop-line-button" mat-stroked-button>{{popularStop.name}}</button>
+        }
+      </div>
     </mat-tab>
   </mat-tab-group>
   <div class="navigation-buttons-container">
