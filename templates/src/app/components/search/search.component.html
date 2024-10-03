@@ -6,15 +6,14 @@
     <mat-tab label="linie">
       <div class="line-buttons-container">
         @for (category of filteredLines.keys(); track $index) {
-          @if (filteredLines.get(category)!.length > 0) {
-            <h4 id="category">{{translateCategory(category)}}</h4>
-          }
           @for (line of filteredLines.get(category); track $index) {
             <button
               class="stop-line-button"
               mat-stroked-button
               [class.selected]="line === selectedLine"
-              (click)="selectLine(line)">{{line}}
+              (click)="selectLine(line)">
+              <mat-icon>{{categoryIconsMapping[category]}}</mat-icon>
+              {{line}}
             </button>
           }
         }

@@ -13,6 +13,7 @@ import { StopsService } from '../../services/stops.service';
 import { forkJoin } from 'rxjs';
 import { Stops } from '../../interfaces/stops';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-search',
@@ -25,6 +26,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     FormsModule,
     NavigationButtonsComponent,
     MatTabsModule,
+    MatIcon
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -43,20 +45,20 @@ export class SearchComponent implements OnInit {
   public filteredLines = new Map<string, string[]>();
   public stops: Stops[] = [];
 
-  private categoryMapping: any = {
-    cementaryLines: 'Linie cmentarne',
-    expressLines: 'Linie ekspresowe',
-    fastLines: 'Linie przyspieszone',
-    fastTemporaryLines: 'Linie przyspieszone okresowe',
-    localLines: 'Linie lokalne',
-    nightLines: 'Linie nocne',
-    regularLines: 'Linie zwykłe',
-    regularTemporaryLines: 'Linie okresowe',
-    specialLines: 'Linie specjalne',
-    substituteLines: 'Linie zastępcze',
-    zoneLines: 'Linie strefowe',
-    zoneTemporaryLines: 'Linie strefowe okresowe'
-  };
+  public categoryIconsMapping: any = {
+    cementaryLines: 'delete',
+    expressLines: 'favorite',
+    fastLines: 'menu',
+    fastTemporaryLines: 'check',
+    localLines: 'umbrella',
+    nightLines: 'sunny',
+    regularLines: 'home',
+    regularTemporaryLines: 'curtains',
+    specialLines: 'flare',
+    substituteLines: 'undo',
+    zoneLines: 'reply',
+    zoneTemporaryLines: 'apps'
+  };  //TODO that's just placeholders - change to our liking
 
   public popularStopsNames: Stops[] = [
     { id: 701300, name: "Centrum" },
@@ -98,10 +100,6 @@ export class SearchComponent implements OnInit {
       this.lines.set(key, lines);
     }
     this.filteredLines = new Map<string, string[]>(this.lines);
-  }
-
-  translateCategory(category: string): string {
-    return this.categoryMapping[category] || category;
   }
 
   //TODO i think we need to adjust trackby for maps
