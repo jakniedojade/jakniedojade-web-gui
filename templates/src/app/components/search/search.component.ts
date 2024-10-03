@@ -40,7 +40,7 @@ export class SearchComponent implements OnInit {
   private errorDialogService = inject(ErrorDialogService);
 
   private lines = new Map<string, string[]>();
-  public selectedLine: string = "";
+  public selectedStopOrLine: string = "";
   public filteredLines = new Map<string, string[]>();
   private stops: Stops[] = [];
   public filteredStops: Stops[] = [];
@@ -79,8 +79,8 @@ export class SearchComponent implements OnInit {
     this.fetchLinesAndStops();
   }
 
-  selectLine(line: string): void {
-    this.selectedLine = line;
+  selectStopOrLine(stopOrLine: string): void {
+    this.selectedStopOrLine = stopOrLine;
     this.nextButtonDisabled = false;
   }
 
@@ -143,8 +143,8 @@ export class SearchComponent implements OnInit {
     return false;
   }
 
-  navigateToLine(lineNumber: string): void {
-    this.router.navigate([`analyze/${lineNumber}`]);
+  navigateToLineOrStop(selectedStopOrLine: string): void {
+    this.router.navigate([`analyze/${selectedStopOrLine}`]);
   }
 
   navigateToWelcomeScreen(): void {

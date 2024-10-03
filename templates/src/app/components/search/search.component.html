@@ -10,8 +10,8 @@
             <button
               class="stop-line-button"
               mat-stroked-button
-              [class.selected]="line === selectedLine"
-              (click)="selectLine(line)">
+              [class.selected]="line === selectedStopOrLine"
+              (click)="selectStopOrLine(line)">
               <mat-icon>{{categoryIconsMapping[category]}}</mat-icon>
               {{line}}
             </button>
@@ -23,7 +23,13 @@
       <div class="stop-buttons-container">
         @if (filterText.length > 1) { <!-- start showing stops when more than 1 letter is typed because it lags a bit -->
           @for (stop of filteredStops; track $index) {
-            <button class="stop-line-button" mat-stroked-button>{{stop.name}}</button>
+            <button
+              class="stop-line-button"
+              mat-stroked-button
+              [class.selected]="stop.name === selectedStopOrLine"
+              (click)="selectStopOrLine(stop.name)">
+              {{stop.name}}
+            </button>
           }
         }
         @else {
@@ -32,7 +38,13 @@
             <h4>lub wybierz z listy najpopularniejszych przystanków</h4>
           </div>
           @for (popularStop of popularStopsNames; track $index) {
-            <button class="stop-line-button" mat-stroked-button>{{popularStop.name}}</button>
+            <button
+              class="stop-line-button"
+              mat-stroked-button
+              [class.selected]="popularStop.name === selectedStopOrLine"
+              (click)="selectStopOrLine(popularStop.name)">
+              {{popularStop.name}}
+            </button>
           }
         }
       </div>
@@ -41,7 +53,7 @@
   <div class="navigation-buttons-container">
     <app-navigation-buttons
       [nextDisabled]="nextButtonDisabled"
-      (next)="navigateToLine(this.selectedLine)"
+      (next)="navigateToLineOrStop(this.selectedStopOrLine)"
       (previous)="navigateToWelcomeScreen()">
     </app-navigation-buttons>
   </div>
