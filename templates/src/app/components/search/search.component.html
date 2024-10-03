@@ -1,8 +1,8 @@
 <div class="line-selection-component">
   <mat-form-field id="filter-lines">
-    <input matInput placeholder="Wyszukaj linię" (input)="applyFilter($event.target!)">
+    <input matInput placeholder="Wyszukaj linię lub przystanek" (input)="applyFilter($event.target!)">
   </mat-form-field>
-  <mat-tab-group>
+  <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedIndexChange)="selectedTabIndex = ($event)">
     <mat-tab label="linie">
       <div class="line-buttons-container">
         @for (category of filteredLines.keys(); track $index) {
@@ -21,8 +21,19 @@
     </mat-tab>
     <mat-tab label="przystanki">
       <div class="stop-buttons-container">
-        @for (popularStop of popularStopsNames; track $index) {
-          <button class="stop-line-button" mat-stroked-button>{{popularStop.name}}</button>
+        @if (filterText.length > 1) { <!-- start showing stops when more than 1 letter is typed because it lags a bit -->
+          @for (stop of filteredStops; track $index) {
+            <button class="stop-line-button" mat-stroked-button>{{stop.name}}</button>
+          }
+        }
+        @else {
+          <div id="popular-stops-title">
+            <h2>Użyj wyszukiwarki, aby wybrać przystanek,</h2>
+            <h4>lub wybierz z listy najpopularniejszych przystanków</h4>
+          </div>
+          @for (popularStop of popularStopsNames; track $index) {
+            <button class="stop-line-button" mat-stroked-button>{{popularStop.name}}</button>
+          }
         }
       </div>
     </mat-tab>

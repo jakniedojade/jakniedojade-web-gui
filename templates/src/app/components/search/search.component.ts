@@ -40,10 +40,14 @@ export class SearchComponent implements OnInit {
   private errorDialogService = inject(ErrorDialogService);
 
   private lines = new Map<string, string[]>();
-  public nextButtonDisabled: boolean = true;
   public selectedLine: string = "";
   public filteredLines = new Map<string, string[]>();
-  public stops: Stops[] = [];
+  private stops: Stops[] = [];
+  public filteredStops: Stops[] = [];
+  
+  public nextButtonDisabled: boolean = true;
+  public filterText: string = "";
+  public selectedTabIndex: number = 0;
 
   public categoryIconsMapping: any = {
     cementaryLines: 'delete',
@@ -108,12 +112,35 @@ export class SearchComponent implements OnInit {
   }
 
   applyFilter(filterValue: EventTarget): void {
+    this.filterText = (filterValue as HTMLInputElement).value.toLowerCase();
+
     this.lines.forEach((lines, category) => {
       const filteredItems = lines.filter((line: string) =>
-        line.toLowerCase().includes((filterValue as HTMLInputElement).value.toLowerCase())
+        line.toLowerCase().includes(this.filterText)
       );
       this.filteredLines.set(category, filteredItems);
     });
+
+    this.filteredStops = this.stops.filter((stop: Stops) =>
+      stop.name.toLowerCase().includes(this.filterText)
+    );
+
+    //switch tabs accordingly
+    if (this.checkIfMapHasValues(this.filteredLines) && this.filteredStops.length === 0) {
+      this.selectedTabIndex = 0;
+    }
+    if (this.filteredStops.length > 0 && !this.checkIfMapHasValues(this.filteredLines)) {
+      this.selectedTabIndex = 1;
+    }
+  }
+
+  private checkIfMapHasValues(map: Map<string, string[]>): boolean {
+    for (const value of map.values()) {
+      if (value.length > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   navigateToLine(lineNumber: string): void {

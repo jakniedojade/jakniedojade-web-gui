@@ -33,9 +33,12 @@
 }
 
 .stop-buttons-container {
-    height: calc(100vh - 320px); 
     //it's probably a bad approach but without it height of stops tab is to small
     //and it clips when switching
+    height: calc(100vh - 320px); 
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
 }
 
 #category {
@@ -60,6 +63,10 @@
         background-color: mat.get-theme-color($_palettes,primary, 40);
         color: white;
     }
+}
+
+#popular-stops-title {
+    width: 100%;
 }
 
 .navigation-buttons-container {
