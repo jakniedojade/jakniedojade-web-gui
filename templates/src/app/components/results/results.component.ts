@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MapService } from '../../services/map.service';
-import { PolesDetails, Shapes } from '../../interfaces/line-data';
+import { LineData, PolesDetails, Shapes } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { LineDataService } from '../../services/line-data.service';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
@@ -41,7 +41,7 @@ export class ResultsComponent implements OnInit {
 
   private fetchLineData(): void {
     this.lineDataService.getLineData(this.line, this.directionSwapped).subscribe({
-      next: (data: any) => {
+      next: (data: LineData) => {
         if (data.poles.length === 0) {
           const errorMessage = "No stops found for selected direction";
           this.errorDialogService.openErrorDialog(errorMessage);

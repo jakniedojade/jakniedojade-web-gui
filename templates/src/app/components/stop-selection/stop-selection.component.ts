@@ -12,7 +12,7 @@ import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { PolesDetails } from '../../interfaces/line-data';
+import { LineData, PolesDetails } from '../../interfaces/line-data';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 
 
@@ -58,7 +58,7 @@ export class StopSelectionComponent {
 
   private fetchLineData(): void {
     this.lineDataService.getLineData(this.line, this.directionSwapped).subscribe({
-      next: (data: any) => {
+      next: (data: LineData) => {
         this.poles = data.poles;
         if (this.poles.length === 0) {
           const errorMessage = "No stops found for selected direction";
