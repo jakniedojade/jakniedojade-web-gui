@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import 'leaflet-active-area';
-import 'leaflet.polyline.snakeanim';
+import 'leaflet.motion/dist/leaflet.motion.js'
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
@@ -33,7 +33,6 @@ export class MapComponent implements OnInit {
    * our own type definitions for needed functions).
    */
   private map!: any;
-  private polyline!: any;
   private markersGroup: any;
   // private map!: L.Map;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
@@ -105,23 +104,27 @@ export class MapComponent implements OnInit {
       });
   }
 
-  public drawRoute(shapes: Shapes[], snakingSpeed: number = 1000): void {
+  public drawRoute(shapes: Shapes[]): void {
     this.markersGroup.clearLayers();
 
     const shapesCoords = shapes.map((shape: Shapes) => ({
       lat: shape.latitude,
       lng: shape.longitude
     }));
-
-    this.polyline = new L.Polyline(shapesCoords, { 
-        color: 'green', //TODO adjust for color palette
-        snakingSpeed: snakingSpeed
-    } as L.PolylineOptions);
-
-    const routeBounds = this.polyline.getBounds().pad(0.1);
+    
+    const polyline = new L.Polyline(shapesCoords)
+    
+    const routeBounds = polyline.getBounds().pad(0.1);
     this.map.fitBounds(routeBounds);
-    this.polyline.addTo(this.map).snakeIn();
-    this.markersGroup.addLayer(this.polyline);
+
+    const animatedLine = (L as any).motion.polyline([shapesCoords], {
+      color: "green"  //TODO adjust for color palette
+    }, {
+      auto: true,
+      duration: 1500,
+      easing: (L as any).Motion.Ease.easeInOutQuart
+    }).addTo(this.map);
+    this.markersGroup.addLayer(animatedLine);
   }
 
   public drawPoles(polesToDraw: PolesDetails[]): void {
