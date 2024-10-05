@@ -1,1 +1,18 @@
-<p>pole-selection works!</p>
+<div class="pole-selection-component">
+    @for (pole of poles; track $index) {
+        <button
+            class="stop-line-button"
+            mat-stroked-button
+            (click)="selectPole(pole)"
+            [class.selected]="pole.name === selectedPole?.name">
+            {{pole.name}}
+        </button>
+    }
+    <div class="navigation-buttons">
+        <app-navigation-buttons
+            [nextDisabled]="nextButtonDisabled"
+            (next)="navigateToPoleAnalysisOptions()"
+            (previous)="navigateToLineSelection()">
+        </app-navigation-buttons>
+    </div>
+</div>
