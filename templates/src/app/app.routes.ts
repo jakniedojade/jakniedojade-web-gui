@@ -3,6 +3,7 @@ import { WelcomeScreenComponent } from './components/welcome-screen/welcome-scre
 import { SearchComponent } from './components/search/search.component';
 import { ResultsComponent } from './components/results/results.component';
 import { DirectionSelectionComponent } from './components/direction-selection/direction-selection.component';
+import { PoleSelectionComponent } from './components/pole-selection/pole-selection.component';
 
 export const routes: Routes = [
     { path: '', component: WelcomeScreenComponent },
@@ -40,7 +41,7 @@ export const routes: Routes = [
             ]
     },
     {
-        path: 'stop/:stopName', redirectTo: '', //component: futurecomponent
+        path: 'stop/:stopName/:stopId', component: PoleSelectionComponent,
             children: [
                 {
                     path: ':poleNumber', redirectTo: '', //component: futurecomponent
