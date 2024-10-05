@@ -9,6 +9,11 @@ import { FormsModule } from '@angular/forms';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
+import { StopsService } from '../../services/stops.service';
+import { forkJoin } from 'rxjs';
+import { Stops } from '../../interfaces/stops';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-search',
@@ -19,7 +24,9 @@ import { NavigationButtonsComponent } from "../navigation-buttons/navigation-but
     MatInputModule,
     CommonModule,
     FormsModule,
-    NavigationButtonsComponent
+    NavigationButtonsComponent,
+    MatTabsModule,
+    MatIcon
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -29,44 +36,65 @@ import { NavigationButtonsComponent } from "../navigation-buttons/navigation-but
 export class SearchComponent implements OnInit {
   private router = inject(Router);
   private linesService = inject(LinesService);
+  private stopsService = inject(StopsService);
   private errorDialogService = inject(ErrorDialogService);
 
   private lines = new Map<string, string[]>();
-  public nextButtonDisabled: boolean = true;
-  public selectedLine: string = "";
+  public selectedStopOrLine: string = "";
   public filteredLines = new Map<string, string[]>();
+  private stops: Stops[] = [];
+  public filteredStops: Stops[] = [];
+  
+  public nextButtonDisabled: boolean = true;
+  public filterText: string = "";
+  public selectedTabIndex: number = 0;
 
-  private categoryMapping: any = {
-    cementaryLines: 'Linie cmentarne',
-    expressLines: 'Linie ekspresowe',
-    fastLines: 'Linie przyspieszone',
-    fastTemporaryLines: 'Linie przyspieszone okresowe',
-    localLines: 'Linie lokalne',
-    nightLines: 'Linie nocne',
-    regularLines: 'Linie zwykłe',
-    regularTemporaryLines: 'Linie okresowe',
-    specialLines: 'Linie specjalne',
-    substituteLines: 'Linie zastępcze',
-    zoneLines: 'Linie strefowe',
-    zoneTemporaryLines: 'Linie strefowe okresowe'
-  };
+  public categoryIconsMapping: any = {
+    cementaryLines: 'delete',
+    expressLines: 'favorite',
+    fastLines: 'menu',
+    fastTemporaryLines: 'check',
+    localLines: 'umbrella',
+    nightLines: 'sunny',
+    regularLines: 'home',
+    regularTemporaryLines: 'curtains',
+    specialLines: 'flare',
+    substituteLines: 'undo',
+    zoneLines: 'reply',
+    zoneTemporaryLines: 'apps'
+  };  //TODO that's just placeholders - change to our liking
+
+  public popularStopsNames: Stops[] = [
+    { id: 701300, name: "Centrum" },
+    { id: 200800, name: "Wiatraczna" },
+    { id: 700900, name: "Marszałkowska" },
+    { id: 700600, name: "Metro Politechnika" },
+    { id: 505500, name: "Stare Bemowo" },
+    { id: 214000, name: "Stacja Krwiodawstwa" },
+    { id: 209700, name: "Saska" },
+    { id: 700200, name: "Dw. Centralny" },
+  ];
 
   ngOnInit(): void {
-    this.fetchLines();
+    this.fetchLinesAndStops();
   }
 
-  selectLine(line: string): void {
-    this.selectedLine = line;
+  selectStopOrLine(stopOrLine: string): void {
+    this.selectedStopOrLine = stopOrLine;
     this.nextButtonDisabled = false;
   }
 
-  private fetchLines(): void {
-    this.linesService.getLines().subscribe({
-      next: (data: Lines) => {
-        this.processResponse(data);
+  private fetchLinesAndStops(): void {
+    forkJoin<[Lines, Stops[]]>([
+      this.linesService.getLines(),
+      this.stopsService.getStops(),
+    ]).subscribe({
+      next: ([lines, stops]) => {
+        this.processResponse(lines);
+        this.stops = stops;
       },
-      error: (error) => {
-        this.errorDialogService.openErrorDialog(error.message);
+      error: (err) => {
+        this.errorDialogService.openErrorDialog(err.message);
       }
     });
   }
@@ -78,26 +106,45 @@ export class SearchComponent implements OnInit {
     this.filteredLines = new Map<string, string[]>(this.lines);
   }
 
-  translateCategory(category: string): string {
-    return this.categoryMapping[category] || category;
-  }
-
   //TODO i think we need to adjust trackby for maps
   trackByIndex(index: number, item: string): number {
     return index;
   }
 
   applyFilter(filterValue: EventTarget): void {
+    this.filterText = (filterValue as HTMLInputElement).value.toLowerCase();
+
     this.lines.forEach((lines, category) => {
       const filteredItems = lines.filter((line: string) =>
-        line.toLowerCase().includes((filterValue as HTMLInputElement).value.toLowerCase())
+        line.toLowerCase().includes(this.filterText)
       );
       this.filteredLines.set(category, filteredItems);
     });
+
+    this.filteredStops = this.stops.filter((stop: Stops) =>
+      stop.name.toLowerCase().includes(this.filterText)
+    );
+
+    //switch tabs accordingly
+    if (this.checkIfMapHasValues(this.filteredLines) && this.filteredStops.length === 0) {
+      this.selectedTabIndex = 0;
+    }
+    if (this.filteredStops.length > 0 && !this.checkIfMapHasValues(this.filteredLines)) {
+      this.selectedTabIndex = 1;
+    }
   }
 
-  navigateToLine(lineNumber: string): void {
-    this.router.navigate([`analyze/${lineNumber}`]);
+  private checkIfMapHasValues(map: Map<string, string[]>): boolean {
+    for (const value of map.values()) {
+      if (value.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  navigateToLineOrStop(selectedStopOrLine: string): void {
+    this.router.navigate([`analyze/${selectedStopOrLine}`]);
   }
 
   navigateToWelcomeScreen(): void {

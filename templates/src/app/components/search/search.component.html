@@ -1,26 +1,59 @@
 <div class="line-selection-component">
   <mat-form-field id="filter-lines">
-    <input matInput placeholder="Wyszukaj linię" (input)="applyFilter($event.target!)">
+    <input matInput placeholder="Wyszukaj linię lub przystanek" (input)="applyFilter($event.target!)">
   </mat-form-field>
-  <div id="buttons-container">
-    @for (category of filteredLines.keys(); track $index) {
-      @if (filteredLines.get(category)!.length > 0) {
-        <h4 id="category">{{translateCategory(category)}}</h4>
-      }
-      @for (line of filteredLines.get(category); track $index) {
-        <button
-          class="line-button"
-          mat-stroked-button
-          [class.selected]="line === selectedLine"
-          (click)="selectLine(line)">{{line}}
-        </button>
-      }
-    }
-  </div>
+  <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedIndexChange)="selectedTabIndex = ($event)">
+    <mat-tab label="linie">
+      <div class="line-buttons-container">
+        @for (category of filteredLines.keys(); track $index) {
+          @for (line of filteredLines.get(category); track $index) {
+            <button
+              class="stop-line-button"
+              mat-stroked-button
+              [class.selected]="line === selectedStopOrLine"
+              (click)="selectStopOrLine(line)">
+              <mat-icon>{{categoryIconsMapping[category]}}</mat-icon>
+              {{line}}
+            </button>
+          }
+        }
+      </div>
+    </mat-tab>
+    <mat-tab label="przystanki">
+      <div class="stop-buttons-container">
+        @if (filterText.length > 1) { <!-- start showing stops when more than 1 letter is typed because it lags a bit -->
+          @for (stop of filteredStops; track $index) {
+            <button
+              class="stop-line-button"
+              mat-stroked-button
+              [class.selected]="stop.name === selectedStopOrLine"
+              (click)="selectStopOrLine(stop.name)">
+              {{stop.name}}
+            </button>
+          }
+        }
+        @else {
+          <div id="popular-stops-title">
+            <h2>Użyj wyszukiwarki, aby wybrać przystanek,</h2>
+            <h4>lub wybierz z listy najpopularniejszych przystanków</h4>
+          </div>
+          @for (popularStop of popularStopsNames; track $index) {
+            <button
+              class="stop-line-button"
+              mat-stroked-button
+              [class.selected]="popularStop.name === selectedStopOrLine"
+              (click)="selectStopOrLine(popularStop.name)">
+              {{popularStop.name}}
+            </button>
+          }
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
   <div class="navigation-buttons-container">
     <app-navigation-buttons
       [nextDisabled]="nextButtonDisabled"
-      (next)="navigateToLine(this.selectedLine)"
+      (next)="navigateToLineOrStop(this.selectedStopOrLine)"
       (previous)="navigateToWelcomeScreen()">
     </app-navigation-buttons>
   </div>
