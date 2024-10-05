@@ -33,8 +33,9 @@
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "./node_modules/leaflet/dist/leaflet.css",
-              "src/styles.scss"
+              "src/app/styles/root.css"
             ],
             "scripts": []
           },
@@ -94,9 +95,6 @@
                 "glob": "**/*",
                 "input": "public"
               }
-            ],
-            "styles": [
-              "src/styles.scss"
             ],
             "scripts": []
           }
