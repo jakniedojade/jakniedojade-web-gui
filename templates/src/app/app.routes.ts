@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
 import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
 import { SearchComponent } from './components/search/search.component';
-import { StopSelectionComponent } from './components/stop-selection/stop-selection.component';
 import { ResultsComponent } from './components/results/results.component';
+import { DirectionSelectionComponent } from './components/direction-selection/direction-selection.component';
 
 export const routes: Routes = [
     { path: '', component: WelcomeScreenComponent },
     { path: 'search', component: SearchComponent },
     {
-        path: 'line/:line', component: StopSelectionComponent,
+        path: 'line/:line', component: DirectionSelectionComponent,
             children: [
                 {
                     path: ':direction', redirectTo: '', //component: futurecomponent
