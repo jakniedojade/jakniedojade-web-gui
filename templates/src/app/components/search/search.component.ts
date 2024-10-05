@@ -99,20 +99,14 @@ export class SearchComponent implements OnInit {
       this.stopsService.getStops(),
     ]).subscribe({
       next: ([lines, stops]) => {
-        this.processResponse(lines);
+        this.lines = new Map(Object.entries(lines));
+        this.filteredLines = new Map(this.lines);
         this.stops = stops;
       },
       error: (err) => {
         this.errorDialogService.openErrorDialog(err.message);
       }
     });
-  }
-
-  private processResponse(responseLines: Lines) {
-    for (const [key, lines] of Object.entries(responseLines)) {
-      this.lines.set(key, lines);
-    }
-    this.filteredLines = new Map<string, string[]>(this.lines);
   }
 
   //TODO i think we need to adjust trackby for maps
