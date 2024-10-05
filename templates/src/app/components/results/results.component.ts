@@ -118,10 +118,10 @@ export class ResultsComponent implements OnInit {
   }
 
   navigateToLineSelection(): void {
-    this.router.navigate(["analyze/search"]);
+    this.router.navigate(["search"]);
   }
 
   navigateToLine(): void {
-    this.router.navigate([`analyze/${this.line}`])
+    this.router.navigate([`line/${this.line}`])
   }
 }
