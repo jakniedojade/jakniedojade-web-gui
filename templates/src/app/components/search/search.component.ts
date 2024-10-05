@@ -144,7 +144,7 @@ export class SearchComponent implements OnInit {
   }
 
   navigateToLineOrStop(selectedStopOrLine: string): void {
-    this.router.navigate([`analyze/${selectedStopOrLine}`]);
+    this.router.navigate([`line/${selectedStopOrLine}`]);
   }
 
   navigateToWelcomeScreen(): void {

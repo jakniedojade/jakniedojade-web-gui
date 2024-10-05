@@ -79,10 +79,10 @@ export class StopSelectionComponent {
   }
 
   navigateToResults(): void {
-    this.router.navigate([`analyze/results/${this.line}/${this.directionSwapped}/${this.poles[this.startIndex].name}/${this.poles[this.endIndex].name}`]);
+    this.router.navigate([`results/${this.line}/${this.directionSwapped}/${this.poles[this.startIndex].name}/${this.poles[this.endIndex].name}`]);
   }
 
   navigateToLineSelection(): void {
-    this.router.navigate(["analyze/search"]);
+    this.router.navigate(["search"]);
   }
 }
