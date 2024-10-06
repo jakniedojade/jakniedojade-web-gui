@@ -6,7 +6,7 @@ import { MatButton } from '@angular/material/button';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MapService } from '../../services/map.service';
 import { PolesOnStopService } from '../../services/poles-on-stop.service';
-import { Stops } from '../../interfaces/stops';
+import { Stop } from '../../interfaces/stop';
 
 @Component({
   selector: 'app-direction-selection',
@@ -23,7 +23,7 @@ export class PoleSelectionComponent implements OnInit {
   private polesOnStopService = inject(PolesOnStopService)
   
   public poles: PolesDetails[] = [];
-  public stop: Stops | null = null;
+  public stop: Stop | null = null;
   public selectedPole: PolesDetails | null = null;
 
   public nextButtonDisabled = true;
