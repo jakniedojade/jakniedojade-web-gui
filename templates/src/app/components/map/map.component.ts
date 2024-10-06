@@ -36,6 +36,7 @@ export class MapComponent implements OnInit {
   private markersGroup: any;
   // private map!: L.Map;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
+  private poleMarkers: L.Marker[] = [];
 
   ngOnInit(): void {
     this.initMap()
@@ -156,9 +157,22 @@ export class MapComponent implements OnInit {
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
       const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
+      stopMarker.on('click', () => {
+        this.mapService.selectPole(pole);
+      });;
+      this.poleMarkers.push(stopMarker);
       stopMarker.addTo(this.map);
       this.markersGroup.addLayer(stopMarker);
     });
     this.map.fitBounds(bounds.pad(0.2));
+  }
+
+  public openPolePopup(poleName: string) {
+    this.poleMarkers.forEach(marker => {
+      const popupContent = marker.getPopup()?.getContent();
+      if (popupContent === poleName) {
+        marker.openPopup();
+      }
+    });
   }
 }

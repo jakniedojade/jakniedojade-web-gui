@@ -6,7 +6,6 @@ import { MatButton } from '@angular/material/button';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MapService } from '../../services/map.service';
 import { PolesOnStopService } from '../../services/poles-on-stop.service';
-import { Stop } from '../../interfaces/stop';
 
 @Component({
   selector: 'app-direction-selection',
@@ -17,7 +16,7 @@ import { Stop } from '../../interfaces/stop';
 })
 export class PoleSelectionComponent implements OnInit {
   private errorDialogService = inject(ErrorDialogService);
-  private mapService = inject(MapService);
+  public mapService = inject(MapService);
   private router = inject(Router);
   private polesOnStopService = inject(PolesOnStopService)
   
@@ -25,9 +24,6 @@ export class PoleSelectionComponent implements OnInit {
   @Input() routeStopName!: string;
 
   public poles: PoleDetails[] = [];
-  public selectedPole: PoleDetails | null = null;
-
-  public nextButtonDisabled = true;
 
   ngOnInit(): void {
     this.fetchPolesOnStop();
@@ -44,11 +40,6 @@ export class PoleSelectionComponent implements OnInit {
         this.errorDialogService.openErrorDialog(error.message);
       }
     });
-  }
-
-  selectPole(pole: PoleDetails) {
-    this.selectedPole = pole;
-    this.nextButtonDisabled = false;
   }
 
   navigateToPoleAnalysisOptions(): void {
