@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LineDataService } from '../../services/line-data.service';
 import { forkJoin } from 'rxjs';
 import { LineData, PoleDetails, Shape } from '../../interfaces/line-data';
@@ -16,13 +16,12 @@ import { MapService } from '../../services/map.service';
   styleUrl: './direction-selection.component.scss'
 })
 export class DirectionSelectionComponent implements OnInit {
-  private activatedRoute = inject(ActivatedRoute);
   private lineDataService = inject(LineDataService);
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
   private router = inject(Router);
   
-  public line: string = "";
+  @Input() line!: string;
   public selectedDirectionStopName: string = "";
   public firstDirectionData: LineData | null = null;
   public secondDirectionData: LineData | null = null;
@@ -30,9 +29,6 @@ export class DirectionSelectionComponent implements OnInit {
   public nextButtonDisabled = true;
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe((lineParams: any) => {
-      this.line = lineParams.line;
-    });
     this.fetchLineData();
   }
 

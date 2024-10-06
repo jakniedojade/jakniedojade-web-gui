@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { PoleDetails } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MatButton } from '@angular/material/button';
@@ -16,12 +16,14 @@ import { Stop } from '../../interfaces/stop';
   styleUrl: './pole-selection.component.scss'
 })
 export class PoleSelectionComponent implements OnInit {
-  private activatedRoute = inject(ActivatedRoute);
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
   private router = inject(Router);
   private polesOnStopService = inject(PolesOnStopService)
   
+  @Input() stopId!: number;
+  @Input() stopName!: string;
+
   public poles: PoleDetails[] = [];
   public stop: Stop | null = null;
   public selectedPole: PoleDetails | null = null;
@@ -29,12 +31,10 @@ export class PoleSelectionComponent implements OnInit {
   public nextButtonDisabled = true;
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe((lineParams: any) => {
-      this.stop = {
-        id: lineParams.stopId,
-        name: lineParams.stopName
-      }
-    });
+    this.stop = {
+      id: this.stopId,
+      name: this.stopName
+    }
     this.fetchPolesOnStop();
   }
 
