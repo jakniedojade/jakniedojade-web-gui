@@ -1,18 +1,18 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, shareReplay, throwError } from 'rxjs';
-import { PolesDetails } from '../interfaces/line-data';
+import { PoleDetails } from '../interfaces/line-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PolesOnStopService {
   private http = inject(HttpClient);
-  private readonly polesData: { [key: number]: Observable<PolesDetails[]> } = {}; 
+  private readonly polesData: { [key: number]: Observable<PoleDetails[]> } = {}; 
 
-  getPolesOnStop(stopId: number): Observable<PolesDetails[]> {
+  getPolesOnStop(stopId: number): Observable<PoleDetails[]> {
     if (!this.polesData[stopId]) {
-      this.polesData[stopId] = this.http.get<PolesDetails[]>(`/api/v1/stops/${stopId}/poles/`)
+      this.polesData[stopId] = this.http.get<PoleDetails[]>(`/api/v1/stops/${stopId}/poles/`)
         .pipe(
           shareReplay(),
           catchError(this.handleError)

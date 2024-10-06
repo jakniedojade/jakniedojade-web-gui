@@ -11,7 +11,7 @@ import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
 import { forkJoin } from 'rxjs';
-import { Stops } from '../../interfaces/stops';
+import { Stop } from '../../interfaces/stop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
 
@@ -40,10 +40,10 @@ export class SearchComponent implements OnInit {
   private errorDialogService = inject(ErrorDialogService);
 
   private lines = new Map<string, string[]>();
-  private stops: Stops[] = [];
-  public filteredStops: Stops[] = [];
+  private stops: Stop[] = [];
+  public filteredStops: Stop[] = [];
 
-  public selectedStop: Stops | null = null;
+  public selectedStop: Stop | null = null;
   public selectedLine: string = "";
   public filteredLines = new Map<string, string[]>();
   
@@ -66,7 +66,7 @@ export class SearchComponent implements OnInit {
     zoneTemporaryLines: 'apps'
   };  //TODO that's just placeholders - change to our liking
 
-  public popularStopsNames: Stops[] = [
+  public popularStopsNames: Stop[] = [
     { id: 701300, name: "Centrum" },
     { id: 200800, name: "Wiatraczna" },
     { id: 700900, name: "Marszałkowska" },
@@ -80,21 +80,9 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.fetchLinesAndStops();
   }
-
-  selectLine(line: string): void {
-    this.selectedStop = null;
-    this.selectedLine = line;
-    this.nextButtonDisabled = false;
-  }
-
-  selectStop(stop: Stops): void {
-    this.selectedLine = "";
-    this.selectedStop = stop;
-    this.nextButtonDisabled = false;
-  }
-
+  
   private fetchLinesAndStops(): void {
-    forkJoin<[Lines, Stops[]]>([
+    forkJoin<[Lines, Stop[]]>([
       this.linesService.getLines(),
       this.stopsService.getStops(),
     ]).subscribe({
@@ -107,6 +95,18 @@ export class SearchComponent implements OnInit {
         this.errorDialogService.openErrorDialog(err.message);
       }
     });
+  }
+
+  selectLine(line: string): void {
+    this.selectedStop = null;
+    this.selectedLine = line;
+    this.nextButtonDisabled = false;
+  }
+
+  selectStop(stop: Stop): void {
+    this.selectedLine = "";
+    this.selectedStop = stop;
+    this.nextButtonDisabled = false;
   }
 
   //TODO i think we need to adjust trackby for maps
@@ -124,7 +124,7 @@ export class SearchComponent implements OnInit {
       this.filteredLines.set(category, filteredItems);
     });
 
-    this.filteredStops = this.stops.filter((stop: Stops) =>
+    this.filteredStops = this.stops.filter((stop: Stop) =>
       stop.name.toLowerCase().includes(this.filterText)
     );
 

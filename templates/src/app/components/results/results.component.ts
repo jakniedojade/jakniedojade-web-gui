@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MapService } from '../../services/map.service';
-import { LineData, PolesDetails, Shapes } from '../../interfaces/line-data';
+import { LineData, PoleDetails, Shape } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { LineDataService } from '../../services/line-data.service';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
@@ -55,21 +55,21 @@ export class ResultsComponent implements OnInit {
     });
   }
 
-  private prepareAndDraw(shapes: Shapes[], poles: PolesDetails[]): void {
+  private prepareAndDraw(shapes: Shape[], poles: PoleDetails[]): void {
     const slicedPoles = this.slicePoles(poles);
     const mappedPoles = this.mapPoleCoordinatesToShapes(shapes, slicedPoles);
     const slicedShapes = this.sliceShapes(shapes, mappedPoles);
     this.drawRouteAndPoles(slicedShapes, mappedPoles);
   }
   
-  private slicePoles(allPoles: PolesDetails[]): PolesDetails[] {
-    const firstPoleIndex = allPoles.findIndex((pole: PolesDetails)  => pole.name === this.startStop);
-    const lastPoleIndex = allPoles.findIndex((pole: PolesDetails) => pole.name === this.endStop);
+  private slicePoles(allPoles: PoleDetails[]): PoleDetails[] {
+    const firstPoleIndex = allPoles.findIndex((pole: PoleDetails)  => pole.name === this.startStop);
+    const lastPoleIndex = allPoles.findIndex((pole: PoleDetails) => pole.name === this.endStop);
 
     return allPoles.slice(firstPoleIndex, lastPoleIndex + 1);
   }
 
-  private mapPoleCoordinatesToShapes(shapes: Shapes[], polesToMap: PolesDetails[]): PolesDetails[] {
+  private mapPoleCoordinatesToShapes(shapes: Shape[], polesToMap: PoleDetails[]): PoleDetails[] {
     const calculateDistance = (x1: number, y1: number, x2: number, y2: number): number => {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
@@ -94,7 +94,7 @@ export class ResultsComponent implements OnInit {
     return mappedPoles;
   }
 
-  private sliceShapes(shapes: Shapes[], mappedPoles: PolesDetails[]): Shapes[] {
+  private sliceShapes(shapes: Shape[], mappedPoles: PoleDetails[]): Shape[] {
     const checkIfCoordinatesEqual = (x1: number, y1: number, x2: number, y2: number): boolean => {
       return x1 === x2 && y1 === y2;
     }
@@ -112,7 +112,7 @@ export class ResultsComponent implements OnInit {
     return shapes.slice(firstSliceIndex, lastSliceIndex + 1);
   }
 
-  private drawRouteAndPoles(shapes: Shapes[], poles: PolesDetails[]): void {
+  private drawRouteAndPoles(shapes: Shape[], poles: PoleDetails[]): void {
     this.mapService.drawRoute(shapes);
     this.mapService.drawPoles(poles);
   }

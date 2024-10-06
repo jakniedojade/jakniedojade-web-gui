@@ -1,24 +1,24 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, shareReplay, throwError } from 'rxjs';
-import { Stops } from '../interfaces/stops';
+import { Stop } from '../interfaces/stop';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StopsService {
   private http = inject(HttpClient);
-  private stopsData$: Observable<Stops[]>;
+  private stopsData$: Observable<Stop[]>;
 
   constructor() {
-    this.stopsData$ = this.http.get<Stops[]>('/api/v1/stops/')
+    this.stopsData$ = this.http.get<Stop[]>('/api/v1/stops/')
     .pipe(
       shareReplay(),
       catchError(this.handleError)
     );
   }
 
-  getStops() : Observable<Stops[]> {
+  getStops() : Observable<Stop[]> {
     return this.stopsData$;
   }
 

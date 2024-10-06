@@ -9,7 +9,7 @@ export const routes: Routes = [
     { path: '', component: WelcomeScreenComponent },
     { path: 'search', component: SearchComponent },
     {
-        path: 'line/:line', component: DirectionSelectionComponent,
+        path: 'line/:routeLine', component: DirectionSelectionComponent,
             children: [
                 {
                     path: ':direction', redirectTo: '', //component: futurecomponent
@@ -41,7 +41,7 @@ export const routes: Routes = [
             ]
     },
     {
-        path: 'stop/:stopName/:stopId', component: PoleSelectionComponent,
+        path: 'stop/:routeStopName/:routeStopId', component: PoleSelectionComponent,
             children: [
                 {
                     path: ':poleNumber', redirectTo: '', //component: futurecomponent

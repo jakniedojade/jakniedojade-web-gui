@@ -1,4 +1,4 @@
-export interface Stops {
+export interface Stop {
     id: number;
     name: string;
 }

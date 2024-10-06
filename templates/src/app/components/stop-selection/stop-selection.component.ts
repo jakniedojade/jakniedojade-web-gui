@@ -12,7 +12,7 @@ import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { LineData, PolesDetails } from '../../interfaces/line-data';
+import { LineData, PoleDetails } from '../../interfaces/line-data';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 
 
@@ -44,7 +44,7 @@ export class StopSelectionComponent {
   private activatedRoute = inject(ActivatedRoute);
 
   private line: string = "";
-  public poles: PolesDetails[] = [];
+  public poles: PoleDetails[] = [];
   public startIndex: number = 0;
   public endIndex!: number;
   private directionSwapped: boolean = false;

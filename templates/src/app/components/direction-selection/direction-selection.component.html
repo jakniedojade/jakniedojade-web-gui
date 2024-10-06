@@ -5,14 +5,14 @@
             mat-stroked-button
             (click)="selectDirection(firstDirectionData)"
             [class.selected]="firstDirectionData.endStopName === selectedDirectionStopName">
-            {{line}} {{firstDirectionData.endStopName}}
+            {{routeLine}} {{firstDirectionData.endStopName}}
         </button>
         <button
             class="stop-line-button"
             mat-stroked-button
             (click)="selectDirection(secondDirectionData)"
             [class.selected]="secondDirectionData.endStopName === selectedDirectionStopName">
-            {{line}} {{secondDirectionData.endStopName}}
+            {{routeLine}} {{secondDirectionData.endStopName}}
         </button>
     }
     <div class="navigation-buttons">
