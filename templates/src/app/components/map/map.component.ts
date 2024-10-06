@@ -49,6 +49,10 @@ export class MapComponent implements OnInit {
       zoomControl: false,
       center: this.centroid,
       zoom: 13,
+      minZoom: 13,
+      maxZoom: 18,
+      maxBounds: L.latLngBounds([[51.944439, 20.554547], [52.521551, 21.475631]])
+      //i just picked some bounds from google maps, modify to our liking
     });
 
     this.map.setActiveArea({
