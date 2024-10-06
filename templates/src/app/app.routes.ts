@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
 import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
 import { SearchComponent } from './components/search/search.component';
-import { StopSelectionComponent } from './components/stop-selection/stop-selection.component';
 import { ResultsComponent } from './components/results/results.component';
+import { DirectionSelectionComponent } from './components/direction-selection/direction-selection.component';
+import { PoleSelectionComponent } from './components/pole-selection/pole-selection.component';
 
 export const routes: Routes = [
     { path: '', component: WelcomeScreenComponent },
     { path: 'search', component: SearchComponent },
     {
-        path: 'line/:line', component: StopSelectionComponent,
+        path: 'line/:line', component: DirectionSelectionComponent,
             children: [
                 {
                     path: ':direction', redirectTo: '', //component: futurecomponent
@@ -40,7 +41,7 @@ export const routes: Routes = [
             ]
     },
     {
-        path: 'stop/:stopName', redirectTo: '', //component: futurecomponent
+        path: 'stop/:stopName/:stopId', component: PoleSelectionComponent,
             children: [
                 {
                     path: ':poleNumber', redirectTo: '', //component: futurecomponent
