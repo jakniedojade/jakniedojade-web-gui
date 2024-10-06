@@ -27,6 +27,7 @@ export class PoleSelectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchPolesOnStop();
+    this.mapService.selectPole(null);
   }
 
   private fetchPolesOnStop(): void {

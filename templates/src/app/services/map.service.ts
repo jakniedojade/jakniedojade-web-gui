@@ -25,9 +25,11 @@ export class MapService {
     this.mapComponent!.drawPoles(poles);
   }
 
-  selectPole(pole: PoleDetails): void {
+  selectPole(pole: PoleDetails | null): void {
     this.selectedPole = pole;
-    this.mapComponent!.openPolePopup(pole.name);
+    if (pole) {
+      this.mapComponent!.openPolePopup(pole.name);
+    }
   }
 
   getSelectedPole(): PoleDetails | null {
