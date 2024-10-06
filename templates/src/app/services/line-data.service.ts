@@ -21,7 +21,7 @@ export class LineDataService {
         catchError(this.handleError)
       ));
     }
-    return this.lineData.get(key) ?? of();
+    return this.lineData.get(key) as Observable<LineData>;
   }
 
   private handleError(error: HttpErrorResponse) {
