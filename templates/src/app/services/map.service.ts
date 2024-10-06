@@ -14,28 +14,20 @@ export class MapService {
   }
 
   clearLayers(): void {
-    if (this.mapComponent) {
-      this.mapComponent.clearMapLayers()
-    }
+    this.mapComponent!.clearMapLayers()
   }
 
   drawRoute(shapes: Shape[]): void {
-    if (this.mapComponent) {
-      this.mapComponent.drawRoute(shapes);
-    }
+    this.mapComponent!.drawRoute(shapes);
   }
 
   drawPoles(poles: PoleDetails[]): void {
-    if (this.mapComponent) {
-      this.mapComponent.drawPoles(poles);
-    }
+    this.mapComponent!.drawPoles(poles);
   }
 
   selectPole(pole: PoleDetails): void {
-    if (this.mapComponent) {
-      this.selectedPole = pole;
-      this.mapComponent.openPolePopup(pole.name);
-    }
+    this.selectedPole = pole;
+    this.mapComponent!.openPolePopup(pole.name);
   }
 
   getSelectedPole(): PoleDetails | null {
