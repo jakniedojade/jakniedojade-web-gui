@@ -150,13 +150,24 @@ export class MapComponent implements OnInit {
       return [poleToDraw.latitude, poleToDraw.longitude]; 
     }));
 
+    let poleClicked = false;
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
       const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
       stopMarker.on({
-        click: () => this.mapService.selectPole(pole),
-        mouseover: () => stopMarker.openPopup(),
-        mouseout: () => stopMarker.closePopup()
+        click: () => {
+          this.mapService.selectPole(pole);
+          poleClicked = true;
+        },
+        mouseover: () => {
+          stopMarker.openPopup();
+          poleClicked = false;
+        },
+        mouseout: () => {
+          if (!poleClicked) {
+            stopMarker.closePopup();
+          }
+        }
       });
       this.poleMarkers.push(stopMarker);
       stopMarker.addTo(this.map);
