@@ -11,7 +11,7 @@ export interface PoleDetails {
     name: string;
     latitude: number;
     longitude: number;
-    onDemand: boolean;
+    onDemand?: boolean;
 }
 
 export interface Shape {
