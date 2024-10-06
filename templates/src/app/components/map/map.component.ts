@@ -104,9 +104,12 @@ export class MapComponent implements OnInit {
       });
   }
 
-  public drawRoute(shapes: Shape[]): void {
+  public clearMapLayers() {
     this.markersGroup.clearLayers();
+  }
 
+  public drawRoute(shapes: Shape[]): void {
+    this.clearMapLayers();
     const shapesCoords = shapes.map((shape: Shape) => ({
       lat: shape.latitude,
       lng: shape.longitude
@@ -128,7 +131,6 @@ export class MapComponent implements OnInit {
   }
 
   public drawPoles(polesToDraw: PoleDetails[]): void {
-
     const stopIcon = L.icon({
       iconUrl: '/assets/stop_regular.png',
       iconSize: [20, 20]

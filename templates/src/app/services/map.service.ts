@@ -12,6 +12,12 @@ export class MapService {
     this.mapComponent = mapComponent;
   }
 
+  clearLayers(): void {
+    if (this.mapComponent) {
+      this.mapComponent.clearMapLayers()
+    }
+  }
+
   drawRoute(shapes: Shape[]): void {
     if (this.mapComponent) {
       this.mapComponent.drawRoute(shapes);
