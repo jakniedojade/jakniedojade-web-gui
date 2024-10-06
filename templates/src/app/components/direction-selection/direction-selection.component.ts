@@ -21,7 +21,7 @@ export class DirectionSelectionComponent implements OnInit {
   private mapService = inject(MapService);
   private router = inject(Router);
   
-  @Input() line!: string;
+  @Input() routeLine!: string;
   public selectedDirectionStopName: string = "";
   public firstDirectionData: LineData | null = null;
   public secondDirectionData: LineData | null = null;
@@ -34,8 +34,8 @@ export class DirectionSelectionComponent implements OnInit {
 
   private fetchLineData(): void {
     forkJoin<[LineData, LineData]>([
-      this.lineDataService.getLineData(this.line, false),
-      this.lineDataService.getLineData(this.line, true),
+      this.lineDataService.getLineData(this.routeLine, false),
+      this.lineDataService.getLineData(this.routeLine, true),
     ]).subscribe({
       next: ([firstDirectionData, secondDirectionData]) => {
         this.firstDirectionData = firstDirectionData;

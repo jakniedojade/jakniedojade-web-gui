@@ -21,8 +21,8 @@ export class PoleSelectionComponent implements OnInit {
   private router = inject(Router);
   private polesOnStopService = inject(PolesOnStopService)
   
-  @Input() stopId!: number;
-  @Input() stopName!: string;
+  @Input() routeStopId!: number;
+  @Input() routeStopName!: string;
 
   public poles: PoleDetails[] = [];
   public stop: Stop | null = null;
@@ -32,8 +32,8 @@ export class PoleSelectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.stop = {
-      id: this.stopId,
-      name: this.stopName
+      id: this.routeStopId,
+      name: this.routeStopName
     }
     this.fetchPolesOnStop();
   }
