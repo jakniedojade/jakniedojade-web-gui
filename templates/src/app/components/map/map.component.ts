@@ -149,11 +149,16 @@ export class MapComponent implements OnInit {
       iconAnchor: [19, 35],
     }); */
 
+    const bounds = L.latLngBounds(polesToDraw.map((poleToDraw) => { 
+      return [poleToDraw.latitude, poleToDraw.longitude]; 
+    }));
+
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
       const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
       stopMarker.addTo(this.map);
       this.markersGroup.addLayer(stopMarker);
     });
+    this.map.fitBounds(bounds.pad(0.2));
   }
 }

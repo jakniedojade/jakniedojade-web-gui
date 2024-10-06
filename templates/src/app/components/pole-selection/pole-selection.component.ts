@@ -37,7 +37,8 @@ export class PoleSelectionComponent implements OnInit {
     this.polesOnStopService.getPolesOnStop(this.routeStopId).subscribe({
       next: (poles: PoleDetails[]) => {
         this.poles = poles;
-        //this.mapService.drawPoles(this.poles);
+        this.mapService.clearLayers();
+        this.mapService.drawPoles(this.poles);
       },
       error: (error) => {
         this.errorDialogService.openErrorDialog(error.message);
