@@ -25,31 +25,24 @@ export class PoleSelectionComponent implements OnInit {
   @Input() routeStopName!: string;
 
   public poles: PoleDetails[] = [];
-  public stop: Stop | null = null;
   public selectedPole: PoleDetails | null = null;
 
   public nextButtonDisabled = true;
 
   ngOnInit(): void {
-    this.stop = {
-      id: this.routeStopId,
-      name: this.routeStopName
-    }
     this.fetchPolesOnStop();
   }
 
   private fetchPolesOnStop(): void {
-    if (this.stop) {
-      this.polesOnStopService.getPolesOnStop(this.stop.id).subscribe({
-        next: (poles: PoleDetails[]) => {
-          this.poles = poles;
-          //this.mapService.drawPoles(this.poles);
-        },
-        error: (error) => {
-          this.errorDialogService.openErrorDialog(error.message);
-        }
-      });
-    }
+    this.polesOnStopService.getPolesOnStop(this.routeStopId).subscribe({
+      next: (poles: PoleDetails[]) => {
+        this.poles = poles;
+        //this.mapService.drawPoles(this.poles);
+      },
+      error: (error) => {
+        this.errorDialogService.openErrorDialog(error.message);
+      }
+    });
   }
 
   selectPole(pole: PoleDetails) {
