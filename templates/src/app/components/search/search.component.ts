@@ -80,19 +80,7 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.fetchLinesAndStops();
   }
-
-  selectLine(line: string): void {
-    this.selectedStop = null;
-    this.selectedLine = line;
-    this.nextButtonDisabled = false;
-  }
-
-  selectStop(stop: Stop): void {
-    this.selectedLine = "";
-    this.selectedStop = stop;
-    this.nextButtonDisabled = false;
-  }
-
+  
   private fetchLinesAndStops(): void {
     forkJoin<[Lines, Stop[]]>([
       this.linesService.getLines(),
@@ -107,6 +95,18 @@ export class SearchComponent implements OnInit {
         this.errorDialogService.openErrorDialog(err.message);
       }
     });
+  }
+
+  selectLine(line: string): void {
+    this.selectedStop = null;
+    this.selectedLine = line;
+    this.nextButtonDisabled = false;
+  }
+
+  selectStop(stop: Stop): void {
+    this.selectedLine = "";
+    this.selectedStop = stop;
+    this.nextButtonDisabled = false;
   }
 
   //TODO i think we need to adjust trackby for maps
