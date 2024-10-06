@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LineDataService } from '../../services/line-data.service';
 import { forkJoin } from 'rxjs';
-import { LineData, PolesDetails, Shapes } from '../../interfaces/line-data';
+import { LineData, PoleDetails, Shapes } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MatButton } from '@angular/material/button';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
@@ -57,7 +57,7 @@ export class DirectionSelectionComponent implements OnInit {
     this.drawRouteAndPoles(lineData.shapes, lineData.poles)
   }
 
-  private drawRouteAndPoles(shapes: Shapes[], poles: PolesDetails[]): void {
+  private drawRouteAndPoles(shapes: Shapes[], poles: PoleDetails[]): void {
     this.mapService.drawRoute(shapes);
     this.mapService.drawPoles(poles);
   }

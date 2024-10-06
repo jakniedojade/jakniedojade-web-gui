@@ -1,12 +1,12 @@
 export interface LineData {
-    poles: PolesDetails[];
+    poles: PoleDetails[];
     direction: boolean;
     startStopName: string;
     endStopName: string;
     shapes: Shapes[];
 }
 
-export interface PolesDetails {
+export interface PoleDetails {
     id: number;
     name: string;
     latitude: number;

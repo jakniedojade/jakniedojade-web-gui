@@ -7,7 +7,7 @@ import 'leaflet.motion/dist/leaflet.motion.js'
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
-import { PolesDetails, Shapes } from '../../interfaces/line-data';
+import { PoleDetails, Shapes } from '../../interfaces/line-data';
 
 @Component({
   selector: 'app-map',
@@ -127,7 +127,7 @@ export class MapComponent implements OnInit {
     this.markersGroup.addLayer(animatedLine);
   }
 
-  public drawPoles(polesToDraw: PolesDetails[]): void {
+  public drawPoles(polesToDraw: PoleDetails[]): void {
 
     const stopIcon = L.icon({
       iconUrl: '/assets/stop_regular.png',

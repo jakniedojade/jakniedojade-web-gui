@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PolesDetails } from '../../interfaces/line-data';
+import { PoleDetails } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MatButton } from '@angular/material/button';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
@@ -22,9 +22,9 @@ export class PoleSelectionComponent implements OnInit {
   private router = inject(Router);
   private polesOnStopService = inject(PolesOnStopService)
   
-  public poles: PolesDetails[] = [];
+  public poles: PoleDetails[] = [];
   public stop: Stop | null = null;
-  public selectedPole: PolesDetails | null = null;
+  public selectedPole: PoleDetails | null = null;
 
   public nextButtonDisabled = true;
 
@@ -41,7 +41,7 @@ export class PoleSelectionComponent implements OnInit {
   private fetchPolesOnStop(): void {
     if (this.stop) {
       this.polesOnStopService.getPolesOnStop(this.stop.id).subscribe({
-        next: (poles: PolesDetails[]) => {
+        next: (poles: PoleDetails[]) => {
           this.poles = poles;
           //this.mapService.drawPoles(this.poles);
         },
@@ -52,7 +52,7 @@ export class PoleSelectionComponent implements OnInit {
     }
   }
 
-  selectPole(pole: PolesDetails) {
+  selectPole(pole: PoleDetails) {
     this.selectedPole = pole;
     this.nextButtonDisabled = false;
   }
