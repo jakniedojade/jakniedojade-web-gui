@@ -3,7 +3,7 @@ export interface LineData {
     direction: boolean;
     startStopName: string;
     endStopName: string;
-    shapes: Shapes[];
+    shapes: Shape[];
 }
 
 export interface PoleDetails {
@@ -14,7 +14,7 @@ export interface PoleDetails {
     onDemand: boolean;
 }
 
-export interface Shapes {
+export interface Shape {
     distanceTraveled: number;
     latitude: number;
     longitude: number;

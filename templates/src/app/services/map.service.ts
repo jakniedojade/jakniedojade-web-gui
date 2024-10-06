@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MapComponent } from '../components/map/map.component';
-import { PoleDetails, Shapes } from '../interfaces/line-data';
+import { PoleDetails, Shape } from '../interfaces/line-data';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class MapService {
     this.mapComponent = mapComponent;
   }
 
-  drawRoute(shapes: Shapes[]): void {
+  drawRoute(shapes: Shape[]): void {
     if (this.mapComponent) {
       this.mapComponent.drawRoute(shapes);
     }
