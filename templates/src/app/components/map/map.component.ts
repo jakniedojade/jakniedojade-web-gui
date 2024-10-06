@@ -146,14 +146,6 @@ export class MapComponent implements OnInit {
       iconSize: [20, 20]
     });
 
-    /* const endIcon = L.icon({
-      iconUrl: '/assets/stop_regular.png',
-      //iconSize: [50, 50], Zmieniono tymczasowo na ikonkę: endTemp
-      iconSize: [35, 37],
-      //iconAnchor: [25, 41], Tak samo
-      iconAnchor: [19, 35],
-    }); */
-
     const bounds = L.latLngBounds(polesToDraw.map((poleToDraw) => { 
       return [poleToDraw.latitude, poleToDraw.longitude]; 
     }));
@@ -161,9 +153,11 @@ export class MapComponent implements OnInit {
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
       const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
-      stopMarker.on('click', () => {
-        this.mapService.selectPole(pole);
-      });;
+      stopMarker.on({
+        click: () => this.mapService.selectPole(pole),
+        mouseover: () => stopMarker.openPopup(),
+        mouseout: () => stopMarker.closePopup()
+      });
       this.poleMarkers.push(stopMarker);
       stopMarker.addTo(this.map);
       this.markersGroup.addLayer(stopMarker);
