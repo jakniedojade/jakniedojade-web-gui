@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoleDetails } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
@@ -14,7 +14,7 @@ import { PolesOnStopService } from '../../services/poles-on-stop.service';
   templateUrl: './pole-selection.component.html',
   styleUrl: './pole-selection.component.scss'
 })
-export class PoleSelectionComponent implements OnInit {
+export class PoleSelectionComponent implements OnInit, OnDestroy {
   private errorDialogService = inject(ErrorDialogService);
   public mapService = inject(MapService);
   private router = inject(Router);
@@ -28,6 +28,11 @@ export class PoleSelectionComponent implements OnInit {
   ngOnInit(): void {
     this.fetchPolesOnStop();
     this.mapService.selectPole(null);
+  }
+
+  ngOnDestroy(): void {
+    this.mapService.clearLayers();
+    this.mapService.resetMapView();
   }
 
   private fetchPolesOnStop(): void {

@@ -36,6 +36,7 @@ export class MapComponent implements OnInit {
   private markersGroup: any;
   // private map!: L.Map;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
+  private readonly defaultZoomLevel: number = 13;
   private poleMarkers: L.Marker[] = [];
 
   ngOnInit(): void {
@@ -48,7 +49,7 @@ export class MapComponent implements OnInit {
     this.map = L.map('map', {
       zoomControl: false,
       center: this.centroid,
-      zoom: 13,
+      zoom: this.defaultZoomLevel,
       minZoom: 13,
       maxZoom: 18,
       maxBounds: L.latLngBounds([[51.944439, 20.554547], [52.521551, 21.475631]])
@@ -182,6 +183,13 @@ export class MapComponent implements OnInit {
       if (popupContent === poleName) {
         marker.openPopup();
       }
+    });
+  }
+
+  public resetMapView(): void {
+    this.map.flyTo(this.centroid, this.defaultZoomLevel, {
+      animate: true,
+      duration: 1.5
     });
   }
 }

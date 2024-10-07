@@ -35,4 +35,8 @@ export class MapService {
   getSelectedPole(): PoleDetails | null {
     return this.selectedPole;
   }
+
+  resetMapView(): void {
+    this.mapComponent!.resetMapView();
+  }
 }
