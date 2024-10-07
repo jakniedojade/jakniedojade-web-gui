@@ -43,8 +43,12 @@ export class DirectionSelectionComponent implements OnInit, OnDestroy {
       this.lineDataService.getLineData(this.routeLine, true),
     ]).subscribe({
       next: ([firstDirectionData, secondDirectionData]) => {
-        this.firstDirectionData = firstDirectionData;
-        this.secondDirectionData = secondDirectionData;
+        if (firstDirectionData.poles.length > 0 && secondDirectionData.poles.length > 0) {
+          this.firstDirectionData = firstDirectionData;
+          this.secondDirectionData = secondDirectionData;
+        } else {
+          this.errorDialogService.openErrorDialog("No poles found on a selected line")
+        }
       },
       error: (err) => {
         this.errorDialogService.openErrorDialog(err.message);
