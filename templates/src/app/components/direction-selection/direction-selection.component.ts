@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LineDataService } from '../../services/line-data.service';
 import { forkJoin } from 'rxjs';
@@ -15,7 +15,7 @@ import { MapService } from '../../services/map.service';
   templateUrl: './direction-selection.component.html',
   styleUrl: './direction-selection.component.scss'
 })
-export class DirectionSelectionComponent implements OnInit {
+export class DirectionSelectionComponent implements OnInit, OnDestroy {
   private lineDataService = inject(LineDataService);
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
@@ -32,14 +32,23 @@ export class DirectionSelectionComponent implements OnInit {
     this.fetchLineData();
   }
 
+  ngOnDestroy(): void {
+    this.mapService.clearLayers();
+    this.mapService.resetMapView();
+  }
+
   private fetchLineData(): void {
     forkJoin<[LineData, LineData]>([
       this.lineDataService.getLineData(this.routeLine, false),
       this.lineDataService.getLineData(this.routeLine, true),
     ]).subscribe({
       next: ([firstDirectionData, secondDirectionData]) => {
-        this.firstDirectionData = firstDirectionData;
-        this.secondDirectionData = secondDirectionData;
+        if (firstDirectionData.poles.length > 0 && secondDirectionData.poles.length > 0) {
+          this.firstDirectionData = firstDirectionData;
+          this.secondDirectionData = secondDirectionData;
+        } else {
+          this.errorDialogService.openErrorDialog("No poles found on a selected line")
+        }
       },
       error: (err) => {
         this.errorDialogService.openErrorDialog(err.message);

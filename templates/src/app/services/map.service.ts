@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { MapComponent } from '../components/map/map.component';
 import { PoleDetails, Shape } from '../interfaces/line-data';
 
@@ -7,20 +7,36 @@ import { PoleDetails, Shape } from '../interfaces/line-data';
 })
 export class MapService {
   private mapComponent: MapComponent | null = null;
+  private selectedPole: PoleDetails | null = null;
 
   setMapComponent(mapComponent: MapComponent): void {
     this.mapComponent = mapComponent;
   }
 
+  clearLayers(): void {
+    this.mapComponent!.clearMapLayers()
+  }
+
   drawRoute(shapes: Shape[]): void {
-    if (this.mapComponent) {
-      this.mapComponent.drawRoute(shapes);
-    }
+    this.mapComponent!.drawRoute(shapes);
   }
 
   drawPoles(poles: PoleDetails[]): void {
-    if (this.mapComponent) {
-      this.mapComponent.drawPoles(poles);
+    this.mapComponent!.drawPoles(poles);
+  }
+
+  selectPole(pole: PoleDetails | null): void {
+    this.selectedPole = pole;
+    if (pole) {
+      this.mapComponent!.openPolePopup(pole.name);
     }
+  }
+
+  getSelectedPole(): PoleDetails | null {
+    return this.selectedPole;
+  }
+
+  resetMapView(): void {
+    this.mapComponent!.resetMapView();
   }
 }

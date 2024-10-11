@@ -36,6 +36,8 @@ export class MapComponent implements OnInit {
   private markersGroup: any;
   // private map!: L.Map;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
+  private readonly defaultZoomLevel: number = 13;
+  private poleMarkers: L.Marker[] = [];
 
   ngOnInit(): void {
     this.initMap()
@@ -47,7 +49,11 @@ export class MapComponent implements OnInit {
     this.map = L.map('map', {
       zoomControl: false,
       center: this.centroid,
-      zoom: 13,
+      zoom: this.defaultZoomLevel,
+      minZoom: 13,
+      maxZoom: 18,
+      maxBounds: L.latLngBounds([[51.944439, 20.554547], [52.521551, 21.475631]])
+      //i just picked some bounds from google maps, modify to our liking
     });
 
     this.map.setActiveArea({
@@ -104,9 +110,12 @@ export class MapComponent implements OnInit {
       });
   }
 
-  public drawRoute(shapes: Shape[]): void {
+  public clearMapLayers() {
     this.markersGroup.clearLayers();
+  }
 
+  public drawRoute(shapes: Shape[]): void {
+    this.clearMapLayers();
     const shapesCoords = shapes.map((shape: Shape) => ({
       lat: shape.latitude,
       lng: shape.longitude
@@ -128,7 +137,6 @@ export class MapComponent implements OnInit {
   }
 
   public drawPoles(polesToDraw: PoleDetails[]): void {
-
     const stopIcon = L.icon({
       iconUrl: '/assets/stop_regular.png',
       iconSize: [20, 20]
@@ -139,19 +147,49 @@ export class MapComponent implements OnInit {
       iconSize: [20, 20]
     });
 
-    /* const endIcon = L.icon({
-      iconUrl: '/assets/stop_regular.png',
-      //iconSize: [50, 50], Zmieniono tymczasowo na ikonkę: endTemp
-      iconSize: [35, 37],
-      //iconAnchor: [25, 41], Tak samo
-      iconAnchor: [19, 35],
-    }); */
+    const bounds = L.latLngBounds(polesToDraw.map((poleToDraw) => { 
+      return [poleToDraw.latitude, poleToDraw.longitude]; 
+    }));
 
+    let poleClicked = false;
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
       const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
+      stopMarker.on({
+        click: () => {
+          this.mapService.selectPole(pole);
+          poleClicked = true;
+        },
+        mouseover: () => {
+          stopMarker.openPopup();
+          poleClicked = false;
+        },
+        mouseout: () => {
+          if (!poleClicked) {
+            stopMarker.closePopup();
+          }
+        }
+      });
+      this.poleMarkers.push(stopMarker);
       stopMarker.addTo(this.map);
       this.markersGroup.addLayer(stopMarker);
+    });
+    this.map.fitBounds(bounds.pad(0.2));
+  }
+
+  public openPolePopup(poleName: string) {
+    this.poleMarkers.forEach(marker => {
+      const popupContent = marker.getPopup()?.getContent();
+      if (popupContent === poleName) {
+        marker.openPopup();
+      }
+    });
+  }
+
+  public resetMapView(): void {
+    this.map.flyTo(this.centroid, this.defaultZoomLevel, {
+      animate: true,
+      duration: 1.5
     });
   }
 }
