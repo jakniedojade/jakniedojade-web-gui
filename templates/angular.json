@@ -34,8 +34,7 @@
             ],
             "styles": [
               "src/custom-theme.scss",
-              "./node_modules/leaflet/dist/leaflet.css",
-              "src/app/styles/root.css"
+              "./node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
           },

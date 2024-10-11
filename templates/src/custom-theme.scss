@@ -1,21 +1,135 @@
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
+@use 'sass:map';
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Define the theme object.
+$_palettes: (
+  primary: (
+    0: #000000,
+    10: #031802,
+    20: #0A4807,
+    25: #0D600A,
+    30: #10780D,
+    35: #14900F,
+    40: #16A813,
+    50: #29A825,
+    60: #3BA837,
+    70: #3BA837,
+    80: #4DA84A,
+    90: #5FA85D,
+    95: #72A870,
+    98: #84A882,
+    99: #96A895,
+    100: #FFFFFF,
+    ),
+  secondary: (
+    0: #000000,
+    10: #000F00,
+    20: #001F00,
+    25: #002E01,
+    30: #003E01,
+    35: #004E01,
+    40: #006E02,
+    50: #006E02,
+    60: #0D6D0F,
+    70: #1B6D1D,
+    80: #296D2A,
+    90: #366D38,
+    95: #446D45,
+    98: #526D52,
+    99: #5F6D60,
+    100: #FFFFFF,
+  ),
+  tertiary: (
+    0: #000000,
+    10: #000E10,
+    20: #001D20,
+    25: #002C30,
+    30: #003B40,
+    35: #004A50,
+    40: #00696F,
+    50: #00696F,
+    60: #0E6970,
+    70: #1C6A70,
+    80: #2A6B70,
+    90: #386C70,
+    95: #466D70,
+    98: #546E70,
+    99: #626F70,
+    100: #FFFFFF,
+  ),
+  neutral: (
+    0: #000000,
+    10: #171817,
+    20: #2F312E,
+    25: #474A45,
+    30: #5E635C,
+    35: #767B73,
+    40: #A7ADA1,
+    50: #A7ADA1,
+    60: #A7ADA2,
+    70: #A7ADA4,
+    80: #A8ADA5,
+    90: #A9ADA7,
+    95: #AAADA8,
+    98: #ABADAA,
+    99: #ACADAB,
+    100: #FFFFFF,
+  ),
+  neutral-variant: (
+    0: #000000,
+    10: #10110F,
+    20: #20221F,
+    25: #31332E,
+    30: #41443E,
+    35: #51554D,
+    40: #73796E,
+    50: #73796E,
+    60: #8D9387,
+    70: #A7ADA1,
+    80: #C3C8BC,
+    90: #EDF3E6,
+    95: #EDF3E6,
+    98: #F6FBEE,
+    99: #F9FEF1,
+    100: #FFFFFF,
+  ),
+  error: (
+    0: #000000,
+    10: #240C0A,
+    20: #481815,
+    25: #6D241F,
+    30: #91302A,
+    35: #B63C34,
+    40: #FF5449,
+    50: #FF5449,
+    60: #FF6960,
+    70: #FF7E77,
+    80: #FF948D,
+    90: #FFA9A4,
+    95: #FFBEBB,
+    98: #FFD4D1,
+    99: #FFE9E8,
+    100: #ffffff,
+  ),
+);
+
+$_rest: (
+  secondary: map.get($_palettes, secondary),
+  neutral: map.get($_palettes, neutral),
+  neutral-variant: map.get($_palettes,  neutral-variant),
+  error: map.get($_palettes, error),
+);
+$_primary: map.merge(map.get($_palettes, primary), $_rest);
+$_tertiary: map.merge(map.get($_palettes, tertiary), $_rest);
+
 $jakniedojade-theme: mat.define-theme(
   (
     color: (
       theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
+      primary: $_primary,
+      tertiary: $_tertiary,
       use-system-variables: true, 
     ),
     typography: (
@@ -27,9 +141,6 @@ $jakniedojade-theme: mat.define-theme(
   )
 );
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 :root {
   @include mat.all-component-themes($jakniedojade-theme);
   @include mat.system-level-colors($jakniedojade-theme); 
@@ -38,7 +149,7 @@ $jakniedojade-theme: mat.define-theme(
 
 // Comment out the line below if you want to use the pre-defined typography utility classes.
 // For more information: https://material.angular.io/guide/typography#using-typography-styles-in-your-application.
-// @include mat.typography-hierarchy($jakniedojade-theme);
+@include mat.typography-hierarchy($jakniedojade-theme);
 
 // Comment out the line below if you want to use the deprecated `color` inputs.
 // @include mat.color-variants-backwards-compatibility($jakniedojade-theme);
