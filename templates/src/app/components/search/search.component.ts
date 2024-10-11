@@ -11,7 +11,7 @@ import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
 import { forkJoin } from 'rxjs';
-import { Stops } from '../../interfaces/stops';
+import { Stop } from '../../interfaces/stop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
 
@@ -40,10 +40,12 @@ export class SearchComponent implements OnInit {
   private errorDialogService = inject(ErrorDialogService);
 
   private lines = new Map<string, string[]>();
-  public selectedStopOrLine: string = "";
+  private stops: Stop[] = [];
+  public filteredStops: Stop[] = [];
+
+  public selectedStop: Stop | null = null;
+  public selectedLine: string = "";
   public filteredLines = new Map<string, string[]>();
-  private stops: Stops[] = [];
-  public filteredStops: Stops[] = [];
   
   public nextButtonDisabled: boolean = true;
   public filterText: string = "";
@@ -64,7 +66,7 @@ export class SearchComponent implements OnInit {
     zoneTemporaryLines: 'apps'
   };  //TODO that's just placeholders - change to our liking
 
-  public popularStopsNames: Stops[] = [
+  public popularStopsNames: Stop[] = [
     { id: 701300, name: "Centrum" },
     { id: 200800, name: "Wiatraczna" },
     { id: 700900, name: "Marszałkowska" },
@@ -78,19 +80,15 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.fetchLinesAndStops();
   }
-
-  selectStopOrLine(stopOrLine: string): void {
-    this.selectedStopOrLine = stopOrLine;
-    this.nextButtonDisabled = false;
-  }
-
+  
   private fetchLinesAndStops(): void {
-    forkJoin<[Lines, Stops[]]>([
+    forkJoin<[Lines, Stop[]]>([
       this.linesService.getLines(),
       this.stopsService.getStops(),
     ]).subscribe({
       next: ([lines, stops]) => {
-        this.processResponse(lines);
+        this.lines = new Map(Object.entries(lines));
+        this.filteredLines = new Map(this.lines);
         this.stops = stops;
       },
       error: (err) => {
@@ -99,11 +97,16 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  private processResponse(responseLines: Lines) {
-    for (const [key, lines] of Object.entries(responseLines)) {
-      this.lines.set(key, lines);
-    }
-    this.filteredLines = new Map<string, string[]>(this.lines);
+  selectLine(line: string): void {
+    this.selectedStop = null;
+    this.selectedLine = line;
+    this.nextButtonDisabled = false;
+  }
+
+  selectStop(stop: Stop): void {
+    this.selectedLine = "";
+    this.selectedStop = stop;
+    this.nextButtonDisabled = false;
   }
 
   //TODO i think we need to adjust trackby for maps
@@ -121,7 +124,7 @@ export class SearchComponent implements OnInit {
       this.filteredLines.set(category, filteredItems);
     });
 
-    this.filteredStops = this.stops.filter((stop: Stops) =>
+    this.filteredStops = this.stops.filter((stop: Stop) =>
       stop.name.toLowerCase().includes(this.filterText)
     );
 
@@ -143,8 +146,12 @@ export class SearchComponent implements OnInit {
     return false;
   }
 
-  navigateToLineOrStop(selectedStopOrLine: string): void {
-    this.router.navigate([`analyze/${selectedStopOrLine}`]);
+  navigateToLineOrStop(): void {
+    if (this.selectedStop) {
+      this.router.navigate([`stop/${this.selectedStop.name}/${this.selectedStop.id}`]);
+    } else {
+      this.router.navigate([`line/${this.selectedLine}`]);
+    }
   }
 
   navigateToWelcomeScreen(): void {

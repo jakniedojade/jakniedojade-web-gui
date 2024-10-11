@@ -10,8 +10,8 @@
             <button
               class="stop-line-button"
               mat-stroked-button
-              [class.selected]="line === selectedStopOrLine"
-              (click)="selectStopOrLine(line)">
+              [class.selected]="line === selectedLine"
+              (click)="selectLine(line)">
               <mat-icon>{{categoryIconsMapping[category]}}</mat-icon>
               {{line}}
             </button>
@@ -26,8 +26,8 @@
             <button
               class="stop-line-button"
               mat-stroked-button
-              [class.selected]="stop.name === selectedStopOrLine"
-              (click)="selectStopOrLine(stop.name)">
+              [class.selected]="stop.name === selectedStop?.name"
+              (click)="selectStop(stop)">
               {{stop.name}}
             </button>
           }
@@ -41,8 +41,8 @@
             <button
               class="stop-line-button"
               mat-stroked-button
-              [class.selected]="popularStop.name === selectedStopOrLine"
-              (click)="selectStopOrLine(popularStop.name)">
+              [class.selected]="popularStop.name === selectedStop?.name"
+              (click)="selectStop(popularStop)">
               {{popularStop.name}}
             </button>
           }
@@ -53,7 +53,7 @@
   <div class="navigation-buttons-container">
     <app-navigation-buttons
       [nextDisabled]="nextButtonDisabled"
-      (next)="navigateToLineOrStop(this.selectedStopOrLine)"
+      (next)="navigateToLineOrStop()"
       (previous)="navigateToWelcomeScreen()">
     </app-navigation-buttons>
   </div>

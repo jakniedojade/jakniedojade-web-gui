@@ -1,0 +1,25 @@
+<div class="direction-selection-component">
+    @if (firstDirectionData && secondDirectionData) {
+        <button
+            class="stop-line-button"
+            mat-stroked-button
+            (click)="selectDirection(firstDirectionData)"
+            [class.selected]="firstDirectionData.endStopName === selectedDirectionStopName">
+            {{routeLine}} {{firstDirectionData.endStopName}}
+        </button>
+        <button
+            class="stop-line-button"
+            mat-stroked-button
+            (click)="selectDirection(secondDirectionData)"
+            [class.selected]="secondDirectionData.endStopName === selectedDirectionStopName">
+            {{routeLine}} {{secondDirectionData.endStopName}}
+        </button>
+    }
+    <div class="navigation-buttons">
+        <app-navigation-buttons
+            [nextDisabled]="nextButtonDisabled"
+            (next)="navigateToLineAnalysisOptions(selectedDirectionStopName)"
+            (previous)="navigateToLineSelection()">
+        </app-navigation-buttons>
+    </div>
+</div>
