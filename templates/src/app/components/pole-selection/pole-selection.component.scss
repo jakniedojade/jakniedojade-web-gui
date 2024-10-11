@@ -1,6 +1,6 @@
+@use '../../../custom-theme.scss' as *;
 @use '../../styles/shared-styles.scss' as *;
 @use '@angular/material' as mat;
-@import '../../../styles.scss';
 
 .pole-selection-component {
     @extend %full-height-component;
@@ -12,7 +12,7 @@
 
 .stop-line-button {
     &.selected {
-        background-color: mat.get-theme-color($_palettes,primary, 40);
+        background-color: var(--sys-primary);
         color: white;
     }
 }
