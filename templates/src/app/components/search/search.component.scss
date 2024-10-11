@@ -1,6 +1,5 @@
 @use '@angular/material' as mat;
 @use '../../styles/shared-styles.scss' as *;
-@use '../../styles/root.css' as *;
 @include mat.core();
 
 .line-selection-component {
