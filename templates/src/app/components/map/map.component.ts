@@ -138,13 +138,13 @@ export class MapComponent implements OnInit {
 
   public drawPoles(polesToDraw: PoleDetails[]): void {
     const stopIcon = L.icon({
-      iconUrl: '/assets/stop_regular.png',
-      iconSize: [20, 20]
+      iconUrl: '/assets/stop_regular.svg',
+      iconSize: [13, 13]
     });
 
     const stopOnRequestIcon = L.icon({
-      iconUrl: '/assets/stop_on_request.png',
-      iconSize: [20, 20]
+      iconUrl: '/assets/stop_on_request.svg',
+      iconSize: [13, 13]
     });
 
     const bounds = L.latLngBounds(polesToDraw.map((poleToDraw) => { 
