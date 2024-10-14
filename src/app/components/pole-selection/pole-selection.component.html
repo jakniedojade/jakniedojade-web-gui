@@ -1,12 +1,14 @@
 <div class="pole-selection-component">
-    @for (pole of poles; track $index) {
-        <button
-            class="stop-line-button"
-            mat-stroked-button
-            (click)="mapService.setSelectedPole(pole)"
-            [class.selected]="pole.name === mapService.selectedPole()?.name">
-            {{pole.name}}
-        </button>
+    @if (polesOnStop$ | async; as polesOnStop) {
+        @for (pole of polesOnStop; track $index) {
+            <button
+                class="stop-line-button"
+                mat-stroked-button
+                (click)="mapService.setSelectedPole(pole)"
+                [class.selected]="pole.name === mapService.selectedPole()?.name">
+                {{pole.name}}
+            </button>
+        }
     }
     <div class="navigation-buttons">
         <app-navigation-buttons
