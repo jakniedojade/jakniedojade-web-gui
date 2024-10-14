@@ -1,1 +1,23 @@
-<p>pole-analysis-type-selection works!</p>
+<div class="pole-analysis-type-selection-component">
+    <div class="header" style="display: flex;">
+        <h2> {{routePoleName}} </h2>
+    </div>
+    <div class="selection-buttons-container">
+        <div class="selection-button" (click)="selectAnalysisType(analysisType.StopTimetable)" [class.selected]="selectedAnalysisType === analysisType.StopTimetable">
+            <div class="selection-header">
+                Rzeczywisty rozkład przystanku
+            </div>
+            Zobacz jak statystycznie wyglądają godziny przejazdów wybranej linii zatrzymującej się na przystanku
+            {{routePoleName}}.
+        </div>
+        <div class="selection-button" (click)="selectAnalysisType(analysisType.Line)" [class.selected]="selectedAnalysisType === analysisType.Line">
+            <div class="selection-header">
+                Analiza linii autobusowej
+            </div>
+            Wybierz linię przejeżdżającą przez ten przystanek, a następnie rodzaj analizy dla tej linii.
+        </div>
+    </div>
+    <div class="navigation-buttons">
+        <app-navigation-buttons [nextDisabled]="!analysisTypeSelected" (next)="navigateToPoleOptions()" (previous)="navigateToPoleSelection()"/>
+    </div>
+</div>
