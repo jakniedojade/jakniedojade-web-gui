@@ -27,7 +27,6 @@ export class PoleSelectionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.fetchPolesOnStop();
-    this.mapService.selectPole(null);
   }
 
   ngOnDestroy(): void {

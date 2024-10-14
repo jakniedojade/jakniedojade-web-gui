@@ -3,14 +3,14 @@
         <button
             class="stop-line-button"
             mat-stroked-button
-            (click)="mapService.selectPole(pole)"
-            [class.selected]="pole.name === mapService.getSelectedPole()?.name">
+            (click)="mapService.setSelectedPole(pole)"
+            [class.selected]="pole.name === mapService.selectedPole()?.name">
             {{pole.name}}
         </button>
     }
     <div class="navigation-buttons">
         <app-navigation-buttons
-            [nextDisabled]="!mapService.getSelectedPole()"
+            [nextDisabled]="mapService.selectedPole() === null"
             (next)="navigateToPoleAnalysisOptions()"
             (previous)="navigateToLineSelection()">
         </app-navigation-buttons>
