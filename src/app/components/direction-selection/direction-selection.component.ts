@@ -15,7 +15,7 @@ import { MapService } from '../../services/map.service';
   templateUrl: './direction-selection.component.html',
   styleUrl: './direction-selection.component.scss'
 })
-export class DirectionSelectionComponent implements OnInit, OnDestroy {
+export class DirectionSelectionComponent implements OnInit {
   private lineDataService = inject(LineDataService);
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
@@ -31,11 +31,6 @@ export class DirectionSelectionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.fetchLineData();
-  }
-
-  ngOnDestroy(): void {
-    this.mapService.clearLayers();
-    this.mapService.resetMapView();
   }
 
   private fetchLineData(): void {
@@ -73,6 +68,8 @@ export class DirectionSelectionComponent implements OnInit, OnDestroy {
   }
 
   navigateToLineSelection(): void {
+    this.mapService.clearLayers();
+    this.mapService.resetMapView();
     this.router.navigate(["search"]);
   }
 }

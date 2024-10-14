@@ -14,7 +14,7 @@ import { PolesOnStopService } from '../../services/poles-on-stop.service';
   templateUrl: './pole-selection.component.html',
   styleUrl: './pole-selection.component.scss'
 })
-export class PoleSelectionComponent implements OnInit, OnDestroy {
+export class PoleSelectionComponent implements OnInit {
   private errorDialogService = inject(ErrorDialogService);
   public mapService = inject(MapService);
   private router = inject(Router);
@@ -29,11 +29,6 @@ export class PoleSelectionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.fetchPolesOnStop();
     this.mapService.selectPole(null);
-  }
-
-  ngOnDestroy(): void {
-    this.mapService.clearLayers();
-    this.mapService.resetMapView();
   }
 
   private fetchPolesOnStop(): void {
@@ -54,6 +49,8 @@ export class PoleSelectionComponent implements OnInit, OnDestroy {
   }
 
   navigateToLineSelection(): void {
+    this.mapService.clearLayers();
+    this.mapService.resetMapView();
     this.router.navigate(["search"]);
   }
 }
