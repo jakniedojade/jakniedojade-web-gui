@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LineDataService } from '../../services/line-data.service';
 import { forkJoin } from 'rxjs';
 import { LineData, PoleDetails, Shape } from '../../interfaces/line-data';
@@ -20,6 +20,7 @@ export class DirectionSelectionComponent implements OnInit, OnDestroy {
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
   
   @Input() routeLine!: string;
   public selectedDirectionStopName: string = "";
@@ -68,7 +69,7 @@ export class DirectionSelectionComponent implements OnInit, OnDestroy {
   }
 
   navigateToLineAnalysisOptions(selectedDirection: string): void {
-    
+    this.router.navigate([`${selectedDirection}`], { relativeTo: this.activatedRoute });
   }
 
   navigateToLineSelection(): void {

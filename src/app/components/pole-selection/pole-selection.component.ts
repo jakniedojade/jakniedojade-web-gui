@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PoleDetails } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MatButton } from '@angular/material/button';
@@ -18,7 +18,8 @@ export class PoleSelectionComponent implements OnInit, OnDestroy {
   private errorDialogService = inject(ErrorDialogService);
   public mapService = inject(MapService);
   private router = inject(Router);
-  private polesOnStopService = inject(PolesOnStopService)
+  private activatedRoute = inject(ActivatedRoute);
+  private polesOnStopService = inject(PolesOnStopService);
   
   @Input() routeStopId!: number;
   @Input() routeStopName!: string;
@@ -49,7 +50,7 @@ export class PoleSelectionComponent implements OnInit, OnDestroy {
   }
 
   navigateToPoleAnalysisOptions(): void {
-    
+    this.router.navigate([`${this.mapService.getSelectedPole()?.name}`], { relativeTo: this.activatedRoute });
   }
 
   navigateToLineSelection(): void {

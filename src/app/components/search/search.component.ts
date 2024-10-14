@@ -148,7 +148,7 @@ export class SearchComponent implements OnInit {
 
   navigateToLineOrStop(): void {
     if (this.selectedStop) {
-      this.router.navigate([`stop/${this.selectedStop.name}/${this.selectedStop.id}`]);
+      this.router.navigate([`stop/${this.selectedStop.id}/${this.selectedStop.name}`]);
     } else {
       this.router.navigate([`line/${this.selectedLine}`]);
     }
