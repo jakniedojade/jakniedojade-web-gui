@@ -1,77 +1,61 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LineDataService } from '../../services/line-data.service';
-import { forkJoin } from 'rxjs';
-import { LineData, PoleDetails, Shape } from '../../interfaces/line-data';
+import { catchError, forkJoin, of, switchMap } from 'rxjs';
+import { LineData } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MatButton } from '@angular/material/button';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MapService } from '../../services/map.service';
+import { AsyncPipe } from '@angular/common';
+import { ErrorDialogComponent } from "../error-dialog/error-dialog.component";
 
 @Component({
   selector: 'app-direction-selection',
   standalone: true,
-  imports: [MatButton, NavigationButtonsComponent],
+  imports: [MatButton, NavigationButtonsComponent, AsyncPipe, ErrorDialogComponent, ErrorDialogComponent],
   templateUrl: './direction-selection.component.html',
-  styleUrl: './direction-selection.component.scss'
+  styleUrl: './direction-selection.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DirectionSelectionComponent implements OnInit, OnDestroy {
+export class DirectionSelectionComponent {
   private lineDataService = inject(LineDataService);
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
   
   @Input() routeLine!: string;
-  public selectedDirectionStopName: string = "";
-  public firstDirectionData: LineData | null = null;
-  public secondDirectionData: LineData | null = null;
+  
+  selectedDirection = signal<string | null>(null);
 
-  public nextButtonDisabled = true;
-
-  ngOnInit(): void {
-    this.fetchLineData();
-  }
-
-  ngOnDestroy(): void {
-    this.mapService.clearLayers();
-    this.mapService.resetMapView();
-  }
-
-  private fetchLineData(): void {
-    forkJoin<[LineData, LineData]>([
-      this.lineDataService.getLineData(this.routeLine, false),
-      this.lineDataService.getLineData(this.routeLine, true),
-    ]).subscribe({
-      next: ([firstDirectionData, secondDirectionData]) => {
-        if (firstDirectionData.poles.length > 0 && secondDirectionData.poles.length > 0) {
-          this.firstDirectionData = firstDirectionData;
-          this.secondDirectionData = secondDirectionData;
-        } else {
-          this.errorDialogService.openErrorDialog("No poles found on a selected line")
-        }
-      },
-      error: (err) => {
-        this.errorDialogService.openErrorDialog(err.message);
-      }
-    });
-  }
+  directionsData$ = this.activatedRoute.paramMap.pipe(
+    switchMap(paramMap => {
+      const routeLine = paramMap.get('routeLine')!;
+      return forkJoin([
+        this.lineDataService.getLineData(routeLine, false),
+        this.lineDataService.getLineData(routeLine, true)
+      ]);
+    }),
+    catchError(error => {
+      this.errorDialogService.openErrorDialog(error.message);
+      return of([]);
+    }),
+  );
 
   selectDirection(lineData: LineData) {
-    this.selectedDirectionStopName = lineData.endStopName;
-    this.nextButtonDisabled = false;
-    this.drawRouteAndPoles(lineData.shapes, lineData.poles)
+    this.selectedDirection.set(lineData.endStopName);
+    this.mapService.drawRoute(lineData.shapes);
+    this.mapService.drawPoles(lineData.poles);
   }
 
-  private drawRouteAndPoles(shapes: Shape[], poles: PoleDetails[]): void {
-    this.mapService.drawRoute(shapes);
-    this.mapService.drawPoles(poles);
-  }
-
-  navigateToLineAnalysisOptions(selectedDirection: string): void {
+  navigateToLineAnalysisOptions(): void {
     
   }
 
   navigateToLineSelection(): void {
+    this.mapService.clearLayers();
+    this.mapService.resetMapView();
     this.router.navigate(["search"]);
   }
 }
