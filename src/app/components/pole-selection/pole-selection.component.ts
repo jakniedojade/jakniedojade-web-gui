@@ -17,7 +17,7 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './pole-selection.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoleSelectionComponent {
+export class PoleSelectionComponent implements OnInit {
   private errorDialogService = inject(ErrorDialogService);
   public mapService = inject(MapService);
   private router = inject(Router);
@@ -35,6 +35,10 @@ export class PoleSelectionComponent {
       this.mapService.drawPoles(poles);
     })
   );
+
+  ngOnInit(): void {
+      this.mapService.setSelectedPole(null);
+  }
 
   navigateToPoleAnalysisOptions(): void {
     
