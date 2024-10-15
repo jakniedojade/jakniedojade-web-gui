@@ -1,16 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
-import { forkJoin } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of, startWith, filter } from 'rxjs';
 import { Stop } from '../../interfaces/stop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
@@ -23,34 +23,22 @@ import { MatIcon } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     CommonModule,
-    FormsModule,
     NavigationButtonsComponent,
     MatTabsModule,
-    MatIcon
+    MatIcon,
+    ReactiveFormsModule
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
-  providers: []
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class SearchComponent implements OnInit {
+export class SearchComponent {
   private router = inject(Router);
   private linesService = inject(LinesService);
   private stopsService = inject(StopsService);
   private errorDialogService = inject(ErrorDialogService);
-
-  private lines = new Map<string, string[]>();
-  private stops: Stop[] = [];
-  public filteredStops: Stop[] = [];
-
-  public selectedStop: Stop | null = null;
-  public selectedLine: string = "";
-  public filteredLines = new Map<string, string[]>();
   
-  public nextButtonDisabled: boolean = true;
-  public filterText: string = "";
-  public selectedTabIndex: number = 0;
-
   public categoryIconsMapping: any = {
     cementaryLines: 'delete',
     expressLines: 'favorite',
@@ -65,7 +53,7 @@ export class SearchComponent implements OnInit {
     zoneLines: 'reply',
     zoneTemporaryLines: 'apps'
   };  //TODO that's just placeholders - change to our liking
-
+  
   public popularStopsNames: Stop[] = [
     { id: 701300, name: "Centrum" },
     { id: 200800, name: "Wiatraczna" },
@@ -77,85 +65,80 @@ export class SearchComponent implements OnInit {
     { id: 700200, name: "Dw. Centralny" },
   ];
 
-  ngOnInit(): void {
-    this.fetchLinesAndStops();
-  }
+  inputText = new FormControl('');
   
-  private fetchLinesAndStops(): void {
-    forkJoin<[Lines, Stop[]]>([
-      this.linesService.getLines(),
-      this.stopsService.getStops(),
-    ]).subscribe({
-      next: ([lines, stops]) => {
-        this.lines = new Map(Object.entries(lines));
-        this.filteredLines = new Map(this.lines);
-        this.stops = stops;
-      },
-      error: (err) => {
-        this.errorDialogService.openErrorDialog(err.message);
+  stopSelection = signal<Stop | null>(null);
+  lineSelection = signal<string>('');
+
+  inputText$ = this.inputText.valueChanges.pipe(
+    startWith(''),
+    map(inputText => inputText ?? ''),
+  );
+  
+  lines$: Observable<Lines> = combineLatest([
+    this.linesService.getLines(),
+    this.inputText$,
+  ]).pipe(
+    map(([lines, inputText]) => ({
+      ...lines,
+      ...Object.keys(lines).reduce((result, key) => ({
+        ...result,
+        [key]: lines[key as keyof Lines].filter(line =>
+          line.toLowerCase().includes(inputText)
+        )
+      }), {})
+    })),
+    catchError(err => {
+      this.errorDialogService.openErrorDialog(err.message);
+      return of(({} as Lines));
+    })
+  );
+  
+  stops$: Observable<Stop[]> = combineLatest([
+    this.stopsService.getStops(),
+    this.inputText$
+  ]).pipe(
+    map(([stops, inputText]) => 
+      stops.filter(stop => stop.name.toLowerCase().includes(inputText))
+    ),
+    catchError(err => {
+      this.errorDialogService.openErrorDialog(err.message);
+      return of([] as Stop[]);
+    })
+  );
+
+  currentTab$ = combineLatest([
+    this.lines$,
+    this.stops$
+  ]).pipe(
+    map(([lines, stops]) => {
+      const hasLines = Object.values(lines).some(lineArray => lineArray.length > 0);
+      if (hasLines && stops.length === 0) {
+        return 0;
+      } else if (!hasLines && stops.length > 0) {
+        return 1;
       }
-    });
-  }
-
-  selectLine(line: string): void {
-    this.selectedStop = null;
-    this.selectedLine = line;
-    this.nextButtonDisabled = false;
-  }
-
-  selectStop(stop: Stop): void {
-    this.selectedLine = "";
-    this.selectedStop = stop;
-    this.nextButtonDisabled = false;
-  }
+      return undefined;
+    }),
+    filter(currentTab => currentTab !== undefined),
+  );
 
   //TODO i think we need to adjust trackby for maps
+  //TODO do we even need this?
   trackByIndex(index: number, item: string): number {
     return index;
   }
-
-  applyFilter(filterValue: EventTarget): void {
-    this.filterText = (filterValue as HTMLInputElement).value.toLowerCase();
-
-    this.lines.forEach((lines, category) => {
-      const filteredItems = lines.filter((line: string) =>
-        line.toLowerCase().includes(this.filterText)
-      );
-      this.filteredLines.set(category, filteredItems);
-    });
-
-    this.filteredStops = this.stops.filter((stop: Stop) =>
-      stop.name.toLowerCase().includes(this.filterText)
-    );
-
-    //switch tabs accordingly
-    if (this.checkIfMapHasValues(this.filteredLines) && this.filteredStops.length === 0) {
-      this.selectedTabIndex = 0;
-    }
-    if (this.filteredStops.length > 0 && !this.checkIfMapHasValues(this.filteredLines)) {
-      this.selectedTabIndex = 1;
-    }
-  }
-
-  private checkIfMapHasValues(map: Map<string, string[]>): boolean {
-    for (const value of map.values()) {
-      if (value.length > 0) {
-        return true;
-      }
-    }
-    return false;
-  }
-
+  
   navigateToLineOrStop(): void {
-    if (this.selectedStop) {
-      this.router.navigate([`stop/${this.selectedStop.name}/${this.selectedStop.id}`]);
+    if (this.stopSelection() !== null) {
+      this.router.navigate([`stop/${this.stopSelection()?.name}/${this.stopSelection()?.id}`]);
     } else {
-      this.router.navigate([`line/${this.selectedLine}`]);
+      this.router.navigate([`line/${this.lineSelection()}`]);
     }
   }
-
+  
   navigateToWelcomeScreen(): void {
     this.router.navigate(["/"]);
   }
-}
 
+}
