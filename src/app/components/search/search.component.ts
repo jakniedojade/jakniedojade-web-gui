@@ -131,7 +131,7 @@ export class SearchComponent {
   
   navigateToLineOrStop(): void {
     if (this.stopSelection() !== null) {
-      this.router.navigate([`stop/${this.stopSelection()?.name}/${this.stopSelection()?.id}`]);
+      this.router.navigate([`stop/${this.stopSelection()?.id}/${this.stopSelection()?.name}`]);
     } else {
       this.router.navigate([`line/${this.lineSelection()}`]);
     }

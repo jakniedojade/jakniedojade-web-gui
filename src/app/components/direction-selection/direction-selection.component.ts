@@ -49,8 +49,8 @@ export class DirectionSelectionComponent {
     this.mapService.drawPoles(lineData.poles);
   }
 
-  navigateToLineAnalysisOptions(): void {
-    
+  navigateToDirectionAnalysisOptions(): void {
+    this.router.navigate([`${this.selectedDirection()}`], { relativeTo: this.activatedRoute });
   }
 
   navigateToLineSelection(): void {

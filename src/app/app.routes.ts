@@ -4,67 +4,55 @@ import { SearchComponent } from './components/search/search.component';
 import { ResultsComponent } from './components/results/results.component';
 import { DirectionSelectionComponent } from './components/direction-selection/direction-selection.component';
 import { PoleSelectionComponent } from './components/pole-selection/pole-selection.component';
+import { DirectionAnalysisSelectionComponent } from './components/direction-analysis-selection/direction-analysis-selection.component';
+import { PoleAnalysisSelectionComponent } from './components/pole-analysis-selection/pole-analysis-selection.component';
 
 export const routes: Routes = [
     { path: '', component: WelcomeScreenComponent },
     { path: 'search', component: SearchComponent },
     {
-        path: 'line/:routeLine', component: DirectionSelectionComponent,
-            children: [
-                {
-                    path: ':direction', redirectTo: '', //component: futurecomponent
-                    children: [
-                        {
-                            path: 'real_schedule', redirectTo: '', //component: futurecomponent
-                            children: [
-                                {
-                                    path: 'settings', redirectTo: '', //component: futurecomponent
-                                },
-                                {
-                                    path: 'results', redirectTo: '', //component: futurecomponent
-                                },
-                            ],
-                        },
-                        {
-                            path: 'mean_latency', redirectTo: '', //component: futurecomponent
-                            children: [
-                                {
-                                    path: 'settings', redirectTo: '', //component: futurecomponent
-                                },
-                                {
-                                    path: 'results', redirectTo: '', //component: futurecomponent
-                                },
-                            ],
-                        },
-                    ]
-                },
-            ]
+        path: 'line/:routeLine', component: DirectionSelectionComponent
     },
     {
-        path: 'stop/:routeStopName/:routeStopId', component: PoleSelectionComponent,
-            children: [
-                {
-                    path: ':poleNumber', redirectTo: '', //component: futurecomponent
-                    children: [
-                        {
-                            path: 'real_schedule', redirectTo: '', //component: futurecomponent
-                            children: [
-                                {
-                                    path: 'settings', redirectTo: '', //component: futurecomponent
-                                },
-                                {
-                                    path: 'results', redirectTo: '', //component: futurecomponent
-                                },
-                            ],
-                        },
-                        {
-                            path: 'lines', redirectTo: '', //component: futurecomponent
-                        },
-                    ]
-                },
-            ]
-
+        path: 'line/:routeLine/:direction', component: DirectionAnalysisSelectionComponent
+    },
+    {
+        path: 'line/:routeLine/:direction/real_schedule', redirectTo: '' // component: FutureComponent
+    },
+    {
+        path: 'line/:routeLine/:direction/real_schedule/settings', redirectTo: '' // component: FutureComponent
+    },
+    {
+        path: 'line/:routeLine/:direction/real_schedule/results', redirectTo: '' // component: FutureComponent
+    },
+    {
+        path: 'line/:routeLine/:direction/mean_latency', redirectTo: '' // component: FutureComponent
+    },
+    {
+        path: 'line/:routeLine/:direction/mean_latency/settings', redirectTo: '' // component: FutureComponent
+    },
+    {
+        path: 'line/:routeLine/:direction/mean_latency/results', redirectTo: '' // component: FutureComponent
+    },
+    {
+        path: 'stop/:routeStopId/:routeStopName', component: PoleSelectionComponent,
+    },
+    {
+        path: 'stop/:routeStopId/:routeStopName/:routePoleName', component: PoleAnalysisSelectionComponent,
+    },
+    {
+        path: 'stop/:routeStopId/:routeStopName/:poleNumber/real_schedule', redirectTo: '' // component: FutureComponent
+    },
+    {
+        path: 'stop/:routeStopId/:routeStopName/:poleNumber/real_schedule/settings', redirectTo: '' // component: FutureComponent
+    },
+    {
+        path: 'stop/:routeStopId/:routeStopName/:poleNumber/real_schedule/results', redirectTo: '' // component: FutureComponent
+    },
+    {
+        path: 'stop/:routeStopId/:routeStopName/:poleNumber/lines', redirectTo: '' // component: FutureComponent
     },
     //THIS PATH IS HERE TEMPORARLY 
-    { path: 'results/:line/:directionSwapped/:startStop/:endStop', component: ResultsComponent },  //TODO is there a more elegant way to construct this url parameters?
+    { path: 'results/:line/:directionSwapped/:startStop/:endStop', component: ResultsComponent },  // TODO: Refactor this route
 ];
+
