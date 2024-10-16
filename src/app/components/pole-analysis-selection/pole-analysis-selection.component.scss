@@ -1,0 +1,32 @@
+@use '../../styles/shared-styles.scss' as *;
+@use '@angular/material' as mat;
+
+.pole-analysis-type-selection-component {
+    @extend %full-height-component;
+}
+
+.navigation-buttons {
+    @extend %navigation-buttons;
+}
+
+.selection-button {
+    background-color: white;
+    border: 1px, solid, black;
+    border-radius: 15px;
+    width: 80%;
+    height: 150px;
+    &.selected {
+        background-color: var(--sys-primary);
+        color: white;
+    }
+}
+
+.selection-header {
+    width: 90%;
+    height: 30px;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 15px;
+    background-color: var(--sys-primary);
+    color: white;
+}
