@@ -1,1 +1,24 @@
-<p>direction-analysis-selection works!</p>
+<div class="pole-analysis-type-selection-component">
+    @if (selectedDirectionFromRoute$ | async; as selectedDirection) {
+        <div class="header" style="display: flex;">
+            <h2> {{routeLine}} | {{selectedDirection.endStopName}}</h2>
+        </div>
+        <div class="selection-buttons-container">
+            <div class="selection-button" (click)="selectedAnalysisType.set(enum.TripTimeTable)" [class.selected]="selectedAnalysisType() === enum.TripTimeTable">
+                <div class="selection-header">
+                    Rzeczywisty rozkład przejazdu
+                </div>
+                Zobacz jak autobusy linii {{routeLine}} opóźniają się między przystankami dla wybranego przejazdu tej linii.
+            </div>
+            <div class="selection-button" (click)="selectedAnalysisType.set(enum.RouteStatistics)" [class.selected]="selectedAnalysisType() === enum.RouteStatistics">
+                <div class="selection-header">
+                    Analiza statystyczna trasy
+                </div>
+                Wybierz trasę linii {{routeLine}} i zobacz wyniki analizy statystycznej opóźnień (w tym średnią, medianę i kwantyle)
+            </div>
+        </div>
+    }
+    <div class="navigation-buttons">
+        <app-navigation-buttons [nextDisabled]="selectedAnalysisType() === enum.None" (next)="navigateToDirectionOptions()" (previous)="navigateToDirectionSelection()"/>
+    </div>
+</div>
