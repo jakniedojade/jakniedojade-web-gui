@@ -10,7 +10,7 @@ import { ErrorDialogService } from '../../services/error-dialog.service';
 import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
-import { catchError, combineLatest, map, Observable, of, startWith, filter } from 'rxjs';
+import { catchError, combineLatest, map, of, startWith, filter, shareReplay } from 'rxjs';
 import { Stop } from '../../interfaces/stop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
@@ -75,7 +75,7 @@ export class SearchComponent {
     map(inputText => inputText ?? ''),
   );
   
-  lines$: Observable<Lines> = combineLatest([
+  lines$ = combineLatest([
     this.linesService.getLines(),
     this.inputText$,
   ]).pipe(
@@ -90,11 +90,12 @@ export class SearchComponent {
     })),
     catchError(err => {
       this.errorDialogService.openErrorDialog(err.message);
-      return of(({} as Lines));
-    })
+      return of(null);
+    }),
+    shareReplay(1)
   );
   
-  stops$: Observable<Stop[]> = combineLatest([
+  stops$ = combineLatest([
     this.stopsService.getStops(),
     this.inputText$
   ]).pipe(
@@ -103,8 +104,9 @@ export class SearchComponent {
     ),
     catchError(err => {
       this.errorDialogService.openErrorDialog(err.message);
-      return of([] as Stop[]);
-    })
+      return of(null);
+    }),
+    shareReplay(1)
   );
 
   currentTab$ = combineLatest([
@@ -112,10 +114,11 @@ export class SearchComponent {
     this.stops$
   ]).pipe(
     map(([lines, stops]) => {
-      const hasLines = Object.values(lines).some(lineArray => lineArray.length > 0);
-      if (hasLines && stops.length === 0) {
+      const hasLines = lines && Object.values(lines).some(lineArray => lineArray.length > 0);
+      const hasStops = stops && stops.length > 0;
+      if (hasLines && !hasStops) {
         return 0;
-      } else if (!hasLines && stops.length > 0) {
+      } else if (!hasLines && hasStops) {
         return 1;
       }
       return undefined;

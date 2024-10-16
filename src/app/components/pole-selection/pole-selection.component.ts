@@ -24,15 +24,15 @@ export class PoleSelectionComponent implements OnInit {
   private polesOnStopService = inject(PolesOnStopService);
   private activatedRoute = inject(ActivatedRoute);
 
-  polesOnStop$: Observable<PoleDetails[]> = this.activatedRoute.params.pipe(
+  polesOnStop$ = this.activatedRoute.params.pipe(
     switchMap(paramMap => this.polesOnStopService.getPolesOnStop(paramMap['routeStopId'])),
     catchError(error => {
       this.errorDialogService.openErrorDialog(error.message);
-      return of([]);
+      return of(null);
     }),
     tap(poles => {
       this.mapService.clearLayers();
-      this.mapService.drawPoles(poles);
+      this.mapService.drawPoles(poles!);
     })
   );
 

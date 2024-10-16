@@ -39,7 +39,7 @@ export class DirectionSelectionComponent {
     }),
     catchError(error => {
       this.errorDialogService.openErrorDialog(error.message);
-      return of([]);
+      return of(null);
     }),
   );
 
