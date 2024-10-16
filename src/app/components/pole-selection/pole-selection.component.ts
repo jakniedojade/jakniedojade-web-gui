@@ -32,7 +32,9 @@ export class PoleSelectionComponent implements OnInit {
     }),
     tap(poles => {
       this.mapService.clearLayers();
-      this.mapService.drawPoles(poles!);
+      if (poles) {
+        this.mapService.drawPoles(poles);
+      }
     })
   );
 
