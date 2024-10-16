@@ -157,7 +157,7 @@ export class MapComponent implements OnInit {
       const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
       stopMarker.on({
         click: () => {
-          this.mapService.selectPole(pole);
+          this.mapService.setSelectedPole(pole);
           poleClicked = true;
         },
         mouseover: () => {

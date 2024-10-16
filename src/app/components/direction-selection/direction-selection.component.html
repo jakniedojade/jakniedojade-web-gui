@@ -1,25 +1,26 @@
 <div class="direction-selection-component">
-    @if (firstDirectionData && secondDirectionData) {
+    @if (directionsData$ | async; as directionData) {
         <button
             class="stop-line-button"
             mat-stroked-button
-            (click)="selectDirection(firstDirectionData)"
-            [class.selected]="firstDirectionData.endStopName === selectedDirectionStopName">
-            {{routeLine}} {{firstDirectionData.endStopName}}
+            (click)="selectDirection(directionData[0])"
+            [class.selected]="directionData[0].endStopName === selectedDirection()">
+            {{ routeLine }} {{ directionData[0].endStopName }}
         </button>
+
         <button
             class="stop-line-button"
             mat-stroked-button
-            (click)="selectDirection(secondDirectionData)"
-            [class.selected]="secondDirectionData.endStopName === selectedDirectionStopName">
-            {{routeLine}} {{secondDirectionData.endStopName}}
+            (click)="selectDirection(directionData[1])"
+            [class.selected]="directionData[1].endStopName === selectedDirection()">
+            {{ routeLine }} {{ directionData[1].endStopName }}
         </button>
     }
     <div class="navigation-buttons">
         <app-navigation-buttons
-            [nextDisabled]="nextButtonDisabled"
-            (next)="navigateToLineAnalysisOptions(selectedDirectionStopName)"
+            [nextDisabled]="selectedDirection() === null"
+            (next)="navigateToLineAnalysisOptions()"
             (previous)="navigateToLineSelection()">
         </app-navigation-buttons>
     </div>
-</div>
+  </div>
