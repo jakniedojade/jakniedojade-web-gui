@@ -51,7 +51,11 @@ export class PoleAnalysisSelectionComponent {
   );
 
   navigateToPoleOptions(): void {
-	
+    
+  }
+
+  navigateToLinesOnPoleSelection(): void {
+    this.router.navigate([`lines`], { relativeTo: this.activatedRoute })
   }
 
   navigateToPoleSelection(): void {
