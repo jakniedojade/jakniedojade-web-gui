@@ -20,6 +20,9 @@
         </div>
     }
     <div class="navigation-buttons">
-        <app-navigation-buttons [nextDisabled]="selectedAnalysisType() === enum.None" (next)="navigateToPoleOptions()" (previous)="navigateToPoleSelection()"/>
+        <app-navigation-buttons
+            [nextDisabled]="selectedAnalysisType() === enum.None"
+            (next)="selectedAnalysisType() === enum.Line ? navigateToLinesOnPoleSelection() : navigateToPoleOptions()"
+            (previous)="navigateToPoleSelection()"/>
     </div>
 </div>
