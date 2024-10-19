@@ -40,7 +40,6 @@ export class PoleAnalysisSelectionComponent {
         tap(pole => {
           this.mapService.clearLayers();
           this.mapService.drawPoles([pole]);
-          this.mapService.setSelectedPole(pole);
         }),
       )
     ),
