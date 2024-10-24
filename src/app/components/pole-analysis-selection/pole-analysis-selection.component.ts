@@ -11,7 +11,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatRipple } from '@angular/material/core';
 
 enum AnalysisType {
-  StopTimetable,
+  RealSchedule,
   Line,
   None
 }

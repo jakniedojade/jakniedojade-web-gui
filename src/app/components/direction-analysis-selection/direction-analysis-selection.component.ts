@@ -12,8 +12,8 @@ import { LinesService } from '../../services/lines.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 enum AnalysisType {
-  TripTimeTable,
-  RouteStatistics,
+  RealSchedule,
+  MeanLatency,
   None
 }
 
