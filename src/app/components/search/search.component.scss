@@ -4,6 +4,9 @@
 
 .line-selection-component {
     @include full-height-component;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 /* *
@@ -63,7 +66,7 @@
     overflow-y: auto;
     padding: 0 16px;
     margin-top: 5px;
-    max-height: 430px;
+    height: 430px;
 }
 
 .line-button {
@@ -97,11 +100,11 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-content: flex-start;
     overflow-y: auto;
     padding: 0 16px;
     margin-top: 5px;
-    max-height: 430px;
+    height: 430px;
 }
 
 .stop-button {

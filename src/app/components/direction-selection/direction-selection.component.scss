@@ -4,6 +4,11 @@
 .direction-selection-component {
     @include full-height-component;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+
     & > header {
         display: flex;
         flex-direction: column;
@@ -36,8 +41,9 @@
     }
 }
 
-.navigation-buttons {
-    @include navigation-buttons;
+#direction-selection-buttons {
+    display: flex;
+    flex-direction: column;
 }
 
 .stop-line-button {
@@ -45,4 +51,8 @@
         background-color: var(--sys-primary);
         color: white;
     }
+}
+
+.navigation-buttons {
+    @include navigation-buttons;
 }
