@@ -7,12 +7,24 @@
 }
 
 #filter-lines {
-    margin-bottom: 0;
     display: block;
-    max-width: 450px;
-    margin-left: auto;
-    margin-right: auto;
     padding: 0 20px;
+}
+
+.search-input mat-icon {
+    color: rgba(0, 0, 0, 0.54);
+    margin-left: 8px;
+}
+
+// really deprecated, but couldn't find another method
+:host ::ng-deep .mdc-text-field--filled {
+    border-radius: 28px !important;
+    --mdc-filled-text-field-active-indicator-height: 0px;
+    --mdc-filled-text-field-focus-active-indicator-height: 0px;
+}
+
+.search-input mat-form-field {
+    font-size: 16px;
 }
 
 .line-buttons-container {
@@ -26,6 +38,7 @@
     max-height: calc(100vh - 320px);
     overflow-y: auto;
     padding: 0 20px;
+
     @media (max-width: 1200px) {
         max-height: calc(100vh - 395px);
     }
@@ -34,7 +47,7 @@
 .stop-buttons-container {
     //it's probably a bad approach but without it height of stops tab is to small
     //and it clips when switching
-    height: calc(100vh - 320px); 
+    height: calc(100vh - 320px);
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto;
@@ -44,7 +57,7 @@
     width: 100%;
     font-size: 24px;
     text-align: left;
-    margin-left:10px;
+    margin-left: 10px;
     margin-bottom: 20px;
 }
 

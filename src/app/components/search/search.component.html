@@ -1,7 +1,13 @@
 <div class="line-selection-component">
-  <mat-form-field id="filter-lines">
-    <input matInput placeholder="Wyszukaj linię lub przystanek" [formControl]="inputText">
+  <mat-form-field id="filter-lines" class="search-input">
+    <mat-icon matPrefix>search</mat-icon>
+    <input 
+      matInput 
+      placeholder="Wyszukaj linię lub przystanek" 
+      [formControl]="inputText" 
+      type="search">
   </mat-form-field>
+  
     <mat-tab-group [selectedIndex]="currentTab$ | async">
       <mat-tab label="linie">
         <div class="line-buttons-container">
