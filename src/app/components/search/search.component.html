@@ -6,10 +6,14 @@
       placeholder="Wyszukaj linię lub przystanek" 
       [formControl]="inputText" 
       type="search">
-  </mat-form-field>
+    </mat-form-field>
   
-    <mat-tab-group [selectedIndex]="currentTab$ | async">
-      <mat-tab label="linie">
+    <mat-tab-group [selectedIndex]="currentTab$ | async" (selectedTabChange)="onTabChange($event)">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon [ngClass]="{ 'selected-tab': (currentTab$ | async) === 0 }">directions_bus</mat-icon>
+      <span [ngClass]="{ 'selected-tab': (currentTab$ | async) === 0, 'tab-text': true }">Linie autobusowe</span>
+        </ng-template>
         <div class="line-buttons-container">
           @if (lines$ | async; as lines) {
             @for (category of lines | keyvalue; track category.key) {
@@ -27,7 +31,11 @@
           }
         </div>
       </mat-tab>
-      <mat-tab label="przystanki">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon [ngClass]="{ 'selected-tab': (currentTab$ | async) === 1 }">commit</mat-icon>
+      <span [ngClass]="{ 'selected-tab': (currentTab$ | async) === 1, 'tab-text': true }">Przystanki</span>
+        </ng-template>
         <div class="stop-buttons-container">    
           @if (stops$ | async; as stops) {
             @if (inputText.value!.length > 1) { <!-- start showing stops when more than 1 letter is typed because it lags a bit -->

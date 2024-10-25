@@ -10,9 +10,9 @@ import { ErrorDialogService } from '../../services/error-dialog.service';
 import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
-import { catchError, combineLatest, map, of, startWith, filter, shareReplay } from 'rxjs';
+import { catchError, BehaviorSubject, combineLatest, map, of, startWith, filter, shareReplay } from 'rxjs';
 import { Stop } from '../../interfaces/stop';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -109,22 +109,39 @@ export class SearchComponent {
     shareReplay(1)
   );
 
-  currentTab$ = combineLatest([
-    this.lines$,
-    this.stops$
-  ]).pipe(
-    map(([lines, stops]) => {
-      const hasLines = lines && Object.values(lines).some(lineArray => lineArray.length > 0);
-      const hasStops = stops && stops.length > 0;
-      if (hasLines && !hasStops) {
+  /**
+   * Beginning of tab changing logic
+   */
+  private currentTabSubject = new BehaviorSubject<number>(0);
+  currentTab$ = this.currentTabSubject.asObservable();
+
+  constructor() {
+    combineLatest([
+      this.lines$,
+      this.stops$
+    ]).pipe(
+      map(([lines, stops]) => {
+        const hasLines = lines && Object.values(lines).some(lineArray => lineArray.length > 0);
+        const hasStops = stops && stops.length > 0;
+        if (hasLines && !hasStops) {
+          return 0;
+        } else if (!hasLines && hasStops) {
+          return 1;
+        }
         return 0;
-      } else if (!hasLines && hasStops) {
-        return 1;
-      }
-      return undefined;
-    }),
-    filter(currentTab => currentTab !== undefined),
-  );
+      }),
+      filter(currentTab => currentTab !== undefined),
+    ).subscribe(currentTab => {
+      this.currentTabSubject.next(currentTab);
+    });
+  }
+  onTabChange(event: MatTabChangeEvent) {
+    this.currentTabSubject.next(event.index);
+  }
+  /**
+   * The end of of tab changing logic
+   */
+
 
   //TODO i think we need to adjust trackby for maps
   //TODO do we even need this?
@@ -143,5 +160,4 @@ export class SearchComponent {
   navigateToWelcomeScreen(): void {
     this.router.navigate(["/"]);
   }
-
 }
