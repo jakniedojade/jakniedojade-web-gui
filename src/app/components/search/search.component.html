@@ -12,7 +12,7 @@
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon [ngClass]="{ 'selected-tab': (currentTab$ | async) === 0 }">directions_bus</mat-icon>
-      <span [ngClass]="{ 'selected-tab': (currentTab$ | async) === 0, 'tab-text': true }">Linie autobusowe</span>
+          <span [ngClass]="{ 'selected-tab': (currentTab$ | async) === 0, 'tab-text': true }">Linie autobusowe</span>
         </ng-template>
         <div class="line-buttons-container">
           @if (lines$ | async; as lines) {
@@ -34,7 +34,7 @@
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon [ngClass]="{ 'selected-tab': (currentTab$ | async) === 1 }">commit</mat-icon>
-      <span [ngClass]="{ 'selected-tab': (currentTab$ | async) === 1, 'tab-text': true }">Przystanki</span>
+          <span [ngClass]="{ 'selected-tab': (currentTab$ | async) === 1, 'tab-text': true }">Przystanki</span>
         </ng-template>
         <div class="stop-buttons-container">    
           @if (stops$ | async; as stops) {
