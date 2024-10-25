@@ -40,19 +40,19 @@ export class SearchComponent {
   private errorDialogService = inject(ErrorDialogService);
   
   public categoryIconsMapping: any = {
-    cementaryLines: 'delete',
-    expressLines: 'favorite',
-    fastLines: 'menu',
-    fastTemporaryLines: 'check',
-    localLines: 'umbrella',
-    nightLines: 'sunny',
-    regularLines: 'home',
-    regularTemporaryLines: 'curtains',
-    specialLines: 'flare',
-    substituteLines: 'undo',
-    zoneLines: 'reply',
-    zoneTemporaryLines: 'apps'
-  };  //TODO that's just placeholders - change to our liking
+    cementaryLines: 'local_florist', 
+    expressLines: 'bolt', 
+    fastLines: 'fast_forward', 
+    fastTemporaryLines: 'directions_bus', // no one knows about them anyway
+    localLines: 'location_city', 
+    nightLines: 'bedtime', 
+    regularLines: 'directions_bus',
+    regularTemporaryLines: 'directions_bus', // no one knows about them anyway
+    specialLines: 'star',
+    substituteLines: 'swap_horiz', 
+    zoneLines: 'map',
+    zoneTemporaryLines: 'map', // no one knows about them anyway
+  };
   
   public popularStopsNames: Stop[] = [
     { id: 701300, name: "Centrum" },
