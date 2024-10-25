@@ -1,3 +1,7 @@
 .leaflet-popup-tip {
     display: none;
 }
+
+body {
+    color: #4E544A;
+}
