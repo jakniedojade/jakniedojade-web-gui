@@ -1,13 +1,12 @@
-@use '../../../custom-theme.scss' as *;
-@use '../../styles/shared-styles.scss' as *;
+@use '../../../mixins.scss' as *;
 @use '@angular/material' as mat;
 
 .direction-selection-component {
-    @extend %full-height-component;
+    @include full-height-component;
 }
 
 .navigation-buttons {
-    @extend %navigation-buttons;
+    @include navigation-buttons;
 }
 
 .stop-line-button {
