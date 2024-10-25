@@ -1,0 +1,10 @@
+@mixin full-height-component {
+    position: relative;
+    height: 100%;
+}
+
+@mixin navigation-buttons {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}

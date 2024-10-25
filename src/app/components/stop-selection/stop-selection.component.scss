@@ -1,4 +1,4 @@
-@use '../../styles/shared-styles.scss' as *;
+@use '../../../mixins.scss' as *;
 
 .stops-container {
     display: flex;
@@ -24,9 +24,9 @@
 }
 
 .stop-selection-component {
-    @extend %full-height-component;
+    @include full-height-component;
 }
 
 .navigation-buttons {
-    @extend %navigation-buttons;
+    @include navigation-buttons;
 }

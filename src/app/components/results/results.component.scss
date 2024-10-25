@@ -1,11 +1,11 @@
-@use '../../styles/shared-styles.scss' as *;
+@use '../../../mixins.scss' as *;
 
 .results-component {
-    @extend %full-height-component;
+    @include full-height-component;
 }
 
 .navigation-buttons {
-    @extend %navigation-buttons;
+    @include navigation-buttons;
 }
 
 .results {
