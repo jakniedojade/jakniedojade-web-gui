@@ -19,7 +19,7 @@
             @for (category of lines | keyvalue; track category.key) {
               @for (line of category.value; track $index) {
                 <button
-                  class="stop-line-button"
+                  class="line-button"
                   mat-stroked-button
                   [class.selected]="line === lineSelection()"
                   (click)="lineSelection.set(line); stopSelection.set(null)">
@@ -41,7 +41,7 @@
             @if (inputText.value!.length > 1) { <!-- start showing stops when more than 1 letter is typed because it lags a bit -->
                 @for (stop of stops; track stop.id) {
                   <button
-                  class="stop-line-button"
+                  class="stop-button"
                   mat-stroked-button
                   [class.selected]="stop.name === stopSelection()?.name"
                   (click)="lineSelection.set(''); stopSelection.set(stop)">
