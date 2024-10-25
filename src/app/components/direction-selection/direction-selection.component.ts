@@ -27,7 +27,7 @@ export class DirectionSelectionComponent {
   
   @Input() routeLine!: string;
   
-  selectedDirection = signal<string | null>(null);
+  selectedDirection = signal<boolean | null>(null);
 
   directionsData$ = this.activatedRoute.paramMap.pipe(
     switchMap(paramMap => {
@@ -44,13 +44,13 @@ export class DirectionSelectionComponent {
   );
 
   selectDirection(lineData: LineData) {
-    this.selectedDirection.set(lineData.endStopName);
+    this.selectedDirection.set(lineData.direction);
     this.mapService.drawRoute(lineData.shapes);
     this.mapService.drawPoles(lineData.poles);
   }
 
-  navigateToLineAnalysisOptions(): void {
-    
+  navigateToDirectionAnalysisOptions(): void {
+    this.router.navigate([`${this.selectedDirection()}`], { relativeTo: this.activatedRoute });
   }
 
   navigateToLineSelection(): void {

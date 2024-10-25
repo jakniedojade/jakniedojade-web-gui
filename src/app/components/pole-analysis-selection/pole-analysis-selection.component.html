@@ -1,0 +1,28 @@
+<div class="pole-analysis-type-selection-component">
+    @if (selectedPoleFromRoute$ | async; as selectedPole) {
+        <div class="header" style="display: flex;">
+            <h2> {{selectedPole.name}} </h2>
+        </div>
+        <div class="selection-buttons-container">
+            <div class="selection-button" (click)="selectedAnalysisType.set(enum.StopTimetable)" [class.selected]="selectedAnalysisType() === enum.StopTimetable">
+                <div class="selection-header">
+                    Rzeczywisty rozkład przystanku
+                </div>
+                Zobacz jak statystycznie wyglądają godziny przejazdów wybranej linii zatrzymującej się na przystanku
+                {{selectedPole.name}}.
+            </div>
+            <div class="selection-button" (click)="selectedAnalysisType.set(enum.Line)" [class.selected]="selectedAnalysisType() === enum.Line">
+                <div class="selection-header">
+                    Analiza linii autobusowej
+                </div>
+                Wybierz linię przejeżdżającą przez ten przystanek, a następnie rodzaj analizy dla tej linii.
+            </div>
+        </div>
+    }
+    <div class="navigation-buttons">
+        <app-navigation-buttons
+            [nextDisabled]="selectedAnalysisType() === enum.None"
+            (next)="selectedAnalysisType() === enum.Line ? navigateToLinesOnPoleSelection() : navigateToPoleOptions()"
+            (previous)="navigateToPoleSelection()"/>
+    </div>
+</div>

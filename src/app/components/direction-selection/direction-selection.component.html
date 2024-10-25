@@ -4,7 +4,7 @@
             class="stop-line-button"
             mat-stroked-button
             (click)="selectDirection(directionData[0])"
-            [class.selected]="directionData[0].endStopName === selectedDirection()">
+            [class.selected]="directionData[0].direction === selectedDirection()">
             {{ routeLine }} {{ directionData[0].endStopName }}
         </button>
 
@@ -12,14 +12,14 @@
             class="stop-line-button"
             mat-stroked-button
             (click)="selectDirection(directionData[1])"
-            [class.selected]="directionData[1].endStopName === selectedDirection()">
+            [class.selected]="directionData[1].direction === selectedDirection()">
             {{ routeLine }} {{ directionData[1].endStopName }}
         </button>
     }
     <div class="navigation-buttons">
         <app-navigation-buttons
             [nextDisabled]="selectedDirection() === null"
-            (next)="navigateToLineAnalysisOptions()"
+            (next)="navigateToDirectionAnalysisOptions()"
             (previous)="navigateToLineSelection()">
         </app-navigation-buttons>
     </div>

@@ -43,7 +43,7 @@ export class PoleSelectionComponent implements OnInit {
   }
 
   navigateToPoleAnalysisOptions(): void {
-    
+    this.router.navigate([`${this.mapService.selectedPole()?.name}`], { relativeTo: this.activatedRoute });
   }
 
   navigateToLineSelection(): void {

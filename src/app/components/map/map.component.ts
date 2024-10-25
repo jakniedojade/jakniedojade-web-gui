@@ -173,6 +173,7 @@ export class MapComponent implements OnInit {
       this.poleMarkers.push(stopMarker);
       stopMarker.addTo(this.map);
       this.markersGroup.addLayer(stopMarker);
+      polesToDraw.length > 1 ? this.poleMarkers.push(stopMarker) : stopMarker.openPopup();
     });
     this.map.fitBounds(bounds.pad(0.2));
   }
