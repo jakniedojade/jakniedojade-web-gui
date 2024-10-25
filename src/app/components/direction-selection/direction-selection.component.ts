@@ -9,11 +9,12 @@ import { NavigationButtonsComponent } from "../navigation-buttons/navigation-but
 import { MapService } from '../../services/map.service';
 import { AsyncPipe } from '@angular/common';
 import { ErrorDialogComponent } from "../error-dialog/error-dialog.component";
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-direction-selection',
   standalone: true,
-  imports: [MatButton, NavigationButtonsComponent, AsyncPipe, ErrorDialogComponent, ErrorDialogComponent],
+  imports: [MatButton, NavigationButtonsComponent, AsyncPipe, ErrorDialogComponent, ErrorDialogComponent, MatIcon],
   templateUrl: './direction-selection.component.html',
   styleUrl: './direction-selection.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
