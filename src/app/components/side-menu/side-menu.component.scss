@@ -6,8 +6,6 @@
 }
 
 main {
-    position: absolute;
-    
     width: 400px;
     margin-left: 30px;
     margin-right: 30px;
@@ -27,7 +25,7 @@ main {
 }
 
 #router-container {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    height: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    height: 580px;
 }
