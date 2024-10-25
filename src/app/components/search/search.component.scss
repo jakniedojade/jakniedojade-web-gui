@@ -16,11 +16,14 @@
     margin-left: 8px;
 }
 
-// really deprecated, but couldn't find another method
+// really deprecated and stupid, but couldn't find another method
 :host ::ng-deep .mdc-text-field--filled {
-    border-radius: 28px !important;
+    border-radius: 28px;
     --mdc-filled-text-field-active-indicator-height: 0px;
     --mdc-filled-text-field-focus-active-indicator-height: 0px;
+}
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    height: 0;
 }
 
 .search-input mat-form-field {
