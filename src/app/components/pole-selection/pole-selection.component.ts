@@ -8,11 +8,12 @@ import { MapService } from '../../services/map.service';
 import { PolesOnStopService } from '../../services/poles-on-stop.service';
 import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-direction-selection',
   standalone: true,
-  imports: [MatButton, NavigationButtonsComponent, AsyncPipe],
+  imports: [MatButton, NavigationButtonsComponent, AsyncPipe, MatIcon],
   templateUrl: './pole-selection.component.html',
   styleUrl: './pole-selection.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
