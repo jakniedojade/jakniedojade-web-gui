@@ -127,7 +127,7 @@ export class MapComponent implements OnInit {
     this.map.fitBounds(routeBounds);
 
     const animatedLine = (L as any).motion.polyline([shapesCoords], {
-      color: "green"  //TODO adjust for color palette
+      color: "#16a813",
     }, {
       auto: true,
       duration: 1500,
