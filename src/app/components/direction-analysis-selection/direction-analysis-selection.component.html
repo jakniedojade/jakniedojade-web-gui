@@ -5,7 +5,7 @@
             <h2><mat-icon>directions_bus</mat-icon>{{ routeLine }} | {{selectedDirection.endStopName}}</h2> 
             <h3>Wybierz kierunek</h3>
         </header>
-        <div class="selection-buttons-container">
+        <div id="selection-buttons-container">
             <div class="selection-button"
                 matRipple
                 [matRippleCentered]="true"
@@ -19,8 +19,13 @@
                 Zobacz jak autobusy linii {{routeLine}} opóźniają się między przystankami dla wybranego przejazdu tej linii.
             </div>
 
-                
-            <div class="selection-button" (click)="selectedAnalysisType.set(enum.RouteStatistics)" [class.selected]="selectedAnalysisType() === enum.RouteStatistics">
+            <div class="selection-button"
+                matRipple
+                [matRippleCentered]="true"
+                [matRippleDisabled]="false"
+                [matRippleUnbounded]="false"
+                (click)="selectedAnalysisType.set(enum.RouteStatistics)"
+                [class.selected]="selectedAnalysisType() === enum.RouteStatistics">
                 <div class="selection-header">
                     Analiza statystyczna trasy
                 </div>
