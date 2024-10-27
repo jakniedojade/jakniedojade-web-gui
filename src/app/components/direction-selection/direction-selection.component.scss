@@ -51,12 +51,18 @@
 }
 
 .stop-line-button {
-    height: 35px;
-    margin: 6px 0;
-    margin-right: 10px;
-    padding: 0 12px;
-    width: fit-content;
+    margin: 7px 5px;
+    padding-left: 15px;
+    padding-right: 10px;
+    &.selected {
+        background-color: var(--sys-primary);
+        color: white;
+    }
 
+    mat-icon {
+        margin-right: 5px;
+    }
+    
     &.selected {
         background-color: var(--sys-primary);
         --mdc-outlined-button-outline-color: var(--sys-primary);
