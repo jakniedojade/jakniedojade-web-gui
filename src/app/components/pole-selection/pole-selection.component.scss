@@ -43,17 +43,15 @@
 
 #pole-selection-buttons {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     padding: 0 16px;
 
-    height: max-content;
-    height: fit-content;
     max-height: 465px;
     margin-bottom: 7px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .stop-line-button {
