@@ -1,4 +1,22 @@
+.leaflet-popup {
+    margin-bottom: 10px;
+}
+
 .leaflet-popup-tip {
+    display: none;
+}
+
+.leaflet-popup-content-wrapper {
+    background-color: var(--sys-primary) !important;
+    color: white !important;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, .1) !important;
+}
+
+.leaflet-popup-content {
+    margin: 5px 20px 5px 16px !important;
+}
+
+.leaflet-popup-close-button {
     display: none;
 }
 
