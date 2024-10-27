@@ -7,6 +7,8 @@ import { PoleDetails } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { catchError, filter, map, of, switchMap, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatRipple } from '@angular/material/core';
 
 enum AnalysisType {
   StopTimetable,
@@ -17,7 +19,7 @@ enum AnalysisType {
 @Component({
   selector: 'app-pole-analysis-type-selection',
   standalone: true,
-  imports: [NavigationButtonsComponent, AsyncPipe],
+  imports: [NavigationButtonsComponent, AsyncPipe, MatIcon, MatRipple],
   templateUrl: './pole-analysis-selection.component.html',
   styleUrl: './pole-analysis-selection.component.scss'
 })
