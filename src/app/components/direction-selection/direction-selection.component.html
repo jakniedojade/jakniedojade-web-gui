@@ -12,7 +12,8 @@
                 mat-stroked-button
                 (click)="selectDirection(directionData[0])"
                 [class.selected]="directionData[0].direction === selectedDirection()">
-                {{ routeLine }} {{ directionData[0].endStopName }}
+                <mat-icon>directions_bus</mat-icon>
+                {{ routeLine }} | {{ directionData[0].endStopName }}
             </button>
     
             <button
@@ -20,7 +21,8 @@
                 mat-stroked-button
                 (click)="selectDirection(directionData[1])"
                 [class.selected]="directionData[1].direction === selectedDirection()">
-                {{ routeLine }} {{ directionData[1].endStopName }}
+                <mat-icon>directions_bus</mat-icon>
+                {{ routeLine }} | {{ directionData[1].endStopName }}
             </button>
         }
     </div>
