@@ -1,10 +1,9 @@
 <div class="pole-selection-component">
+    <header>
+        <h2><mat-icon>commit</mat-icon>Nazwa przystanku</h2> 
+        <h3>Wybierz kierunek</h3>
+    </header>
     @if (polesOnStop$ | async; as polesOnStop) {
-        <header>
-            <h2><mat-icon>commit</mat-icon>Nazwa przystanku</h2> 
-            <h3>Wybierz kierunek</h3>
-        </header>
-
         <div id="pole-selection-buttons">
             @for (pole of polesOnStop; track $index) {
                 <button
