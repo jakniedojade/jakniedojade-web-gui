@@ -3,16 +3,65 @@
 
 .lines-on-pole-selection-component {
     @include full-height-component;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+
+    & > header {
+        display: flex;
+        flex-direction: column;
+        padding: 0 16px;
+
+        h2 {
+            display: block;
+            background-color: var(--sys-primary);
+            color: white;
+            font-size: 24px;
+            line-height: 28px;
+
+            width: fit-content;
+            height: fit-content;
+            border-radius: 10px;
+            padding: 4px 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            mat-icon {
+                margin-right: 3px;
+            }
+        }
+
+        h3 {
+            font-size: 20px;
+            line-height: 20px;
+        }
+    }
 }
 
-.navigation-buttons {
-    @include navigation-buttons;
+#lines-on-pole-selection-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
 }
 
 .stop-line-button {
+    margin: 7px 5px;
+    padding-left: 15px;
+    padding-right: 10px;
     &.selected {
         background-color: var(--sys-primary);
         color: white;
+    }
+
+    mat-icon {
+        margin-right: 5px;
     }
 }
 
@@ -24,4 +73,8 @@
     border-radius: 15px;
     background-color: var(--sys-primary);
     color: white;
+}
+
+.navigation-buttons {
+    @include navigation-buttons;
 }
