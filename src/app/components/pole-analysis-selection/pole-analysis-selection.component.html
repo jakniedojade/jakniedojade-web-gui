@@ -35,7 +35,7 @@
     <div class="navigation-buttons">
         <app-navigation-buttons
             [nextDisabled]="selectedAnalysisType() === enum.None"
-            (next)="selectedAnalysisType() === enum.Line ? navigateToLinesOnPoleSelection() : navigateToPoleOptions()"
+            (next)="selectedAnalysisType() === enum.Line ? navigateToLinesOnPoleSelection() : navigateToRealScheduleSettings()"
             (previous)="navigateToPoleSelection()"/>
     </div>
 </div>

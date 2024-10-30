@@ -58,8 +58,12 @@ export class DirectionAnalysisSelectionComponent {
     })
   );
 
-  navigateToDirectionOptions(): void {
-	
+  navigateToRealScheduleSettings(): void {
+    this.router.navigate([`real_schedule/settings`], { relativeTo: this.activatedRoute });
+  }
+
+  navigateToMeanLatencySettings(): void {
+    this.router.navigate([`mean_latency/settings`], { relativeTo: this.activatedRoute });
   }
 
   navigateToDirectionSelection(): void {

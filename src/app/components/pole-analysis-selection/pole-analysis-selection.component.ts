@@ -51,8 +51,8 @@ export class PoleAnalysisSelectionComponent {
     })
   );
 
-  navigateToPoleOptions(): void {
-    
+  navigateToRealScheduleSettings(): void {
+    this.router.navigate([`real_schedule/settings`], { relativeTo: this.activatedRoute });
   }
 
   navigateToLinesOnPoleSelection(): void {

@@ -35,6 +35,9 @@
         </div>
     }
     <div class="navigation-buttons">
-        <app-navigation-buttons [nextDisabled]="selectedAnalysisType() === enum.None" (next)="navigateToDirectionOptions()" (previous)="navigateToDirectionSelection()"/>
+        <app-navigation-buttons
+            [nextDisabled]="selectedAnalysisType() === enum.None"
+            (next)="selectedAnalysisType() === enum.RealSchedule ? navigateToRealScheduleSettings() : navigateToMeanLatencySettings()"
+            (previous)="navigateToDirectionSelection()"/>
     </div>
 </div>
