@@ -35,25 +35,10 @@ import { MatIcon } from '@angular/material/icon';
 
 export class SearchComponent {
   private router = inject(Router);
-  private linesService = inject(LinesService);
+  public linesService = inject(LinesService);
   private stopsService = inject(StopsService);
   private errorDialogService = inject(ErrorDialogService);
-  
-  public categoryIconsMapping: any = {
-    cementaryLines: 'local_florist', 
-    expressLines: 'bolt', 
-    fastLines: 'fast_forward', 
-    fastTemporaryLines: 'directions_bus', // no one knows about them anyway
-    localLines: 'location_city', 
-    nightLines: 'bedtime', 
-    regularLines: 'directions_bus',
-    regularTemporaryLines: 'directions_bus', // no one knows about them anyway
-    specialLines: 'star',
-    substituteLines: 'swap_horiz', 
-    zoneLines: 'map',
-    zoneTemporaryLines: 'map', // no one knows about them anyway
-  };
-  
+
   public popularStopsNames: Stop[] = [
     { id: 701300, name: "Centrum" },
     { id: 200800, name: "Wiatraczna" },
