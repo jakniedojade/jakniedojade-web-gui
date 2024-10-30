@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoleDetails } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
@@ -24,6 +24,8 @@ export class PoleSelectionComponent implements OnInit {
   private router = inject(Router);
   private polesOnStopService = inject(PolesOnStopService);
   private activatedRoute = inject(ActivatedRoute);
+
+  @Input() routeStopName!: string;
 
   polesOnStop$ = this.activatedRoute.params.pipe(
     switchMap(paramMap => this.polesOnStopService.getPolesOnStop(paramMap['routeStopId'])),
