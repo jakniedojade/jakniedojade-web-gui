@@ -8,6 +8,8 @@ import { AsyncPipe } from '@angular/common';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MatRipple } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
+import { LinesService } from '../../services/lines.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 enum AnalysisType {
   TripTimeTable,
@@ -27,9 +29,15 @@ export class DirectionAnalysisSelectionComponent {
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
   private lineDataService = inject(LineDataService);
+  private linesService = inject(LinesService);
   private activatedRoute = inject(ActivatedRoute);
 
   @Input() routeLine!: string;
+  lineIcon$ = this.activatedRoute.paramMap.pipe(
+    switchMap((paramMap) => {
+      return this.linesService.getLineIcon(paramMap.get('routeLine')!);
+    })
+  );
 
   public enum: typeof AnalysisType = AnalysisType;
 

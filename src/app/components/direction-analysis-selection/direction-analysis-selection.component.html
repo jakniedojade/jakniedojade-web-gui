@@ -1,9 +1,10 @@
 <div class="pole-analysis-type-selection-component">
     @if (selectedDirectionFromRoute$ | async; as selectedDirection) {
         <header>
-            <!-- TO DO: get current line category  -->
-            <h2><mat-icon>directions_bus</mat-icon>{{ routeLine }} | {{selectedDirection.endStopName}}</h2> 
-            <h3>Wybierz rodzaj analizy</h3>
+            @if (lineIcon$ | async; as lineIcon) {
+                <h2><mat-icon>{{ lineIcon }}</mat-icon>{{ routeLine }} | {{selectedDirection.endStopName}}</h2> 
+                <h3>Wybierz rodzaj analizy</h3>
+            }
         </header>
         <div id="selection-buttons-container">
             <div class="selection-button"
