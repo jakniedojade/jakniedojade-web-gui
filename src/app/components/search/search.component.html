@@ -23,7 +23,7 @@
                   mat-stroked-button
                   [class.selected]="line === lineSelection()"
                   (click)="lineSelection.set(line); stopSelection.set(null)">
-                  <mat-icon>{{categoryIconsMapping[category.key]}}</mat-icon>
+                  <mat-icon>{{linesService.categoryIconsMapping[category.key]}}</mat-icon>
                   {{line}}
                 </button>
               }

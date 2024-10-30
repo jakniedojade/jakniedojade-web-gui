@@ -10,12 +10,12 @@
                     <button
                         class="stop-line-button"
                         mat-stroked-button
-                        [class.selected]="line === lineSelection()"
-                        (click)="lineSelection.set(line)">
-                        <mat-icon>directions_bus</mat-icon>
-                        {{line}} | Kierunek Jazdy
+                        [class.selected]="line.lineNumber === lineSelection()"
+                        (click)="lineSelection.set(line.lineNumber)">
+                        <mat-icon>{{ line.icon }}</mat-icon>
+                        {{ line.lineNumber }} | Kierunek Jazdy
                     </button>
-                } 
+                }
             }
         </div>
     }

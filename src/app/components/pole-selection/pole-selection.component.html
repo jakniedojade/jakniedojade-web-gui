@@ -1,6 +1,6 @@
 <div class="pole-selection-component">
     <header>
-        <h2><mat-icon>commit</mat-icon>Nazwa przystanku</h2> 
+        <h2><mat-icon>commit</mat-icon>{{ routeStopName }}</h2> 
         <h3>Wybierz kierunek</h3>
     </header>
     @if (polesOnStop$ | async; as polesOnStop) {
