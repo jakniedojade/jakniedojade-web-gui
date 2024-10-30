@@ -10,6 +10,7 @@ import { MapService } from '../../services/map.service';
 import { AsyncPipe } from '@angular/common';
 import { ErrorDialogComponent } from "../error-dialog/error-dialog.component";
 import { MatIcon } from '@angular/material/icon';
+import { LinesService } from '../../services/lines.service';
 
 @Component({
   selector: 'app-direction-selection',
@@ -21,12 +22,18 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class DirectionSelectionComponent {
   private lineDataService = inject(LineDataService);
+  private linesService = inject(LinesService);
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   
   @Input() routeLine!: string;
+  lineIcon$ = this.activatedRoute.paramMap.pipe(
+    switchMap((paramMap) => {
+      return this.linesService.getLineIcon(paramMap.get('routeLine')!);
+    })
+  );
   
   selectedDirection = signal<boolean | null>(null);
 
