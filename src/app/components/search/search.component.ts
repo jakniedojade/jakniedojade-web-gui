@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
@@ -10,10 +10,11 @@ import { ErrorDialogService } from '../../services/error-dialog.service';
 import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
-import { catchError, BehaviorSubject, combineLatest, map, of, startWith, filter, shareReplay } from 'rxjs';
+import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged } from 'rxjs';
 import { Stop } from '../../interfaces/stop';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search',
@@ -38,7 +39,7 @@ export class SearchComponent {
   public linesService = inject(LinesService);
   private stopsService = inject(StopsService);
   private errorDialogService = inject(ErrorDialogService);
-
+  
   public popularStopsNames: Stop[] = [
     { id: 701300, name: "Centrum" },
     { id: 200800, name: "Wiatraczna" },
@@ -93,40 +94,33 @@ export class SearchComponent {
     }),
     shareReplay(1)
   );
+  
 
-  /**
-   * Beginning of tab changing logic
-   */
-  private currentTabSubject = new BehaviorSubject<number>(0);
-  currentTab$ = this.currentTabSubject.asObservable();
+  
+  selectedTab = signal<number>(0);
+  private selectedTab$ = toObservable(this.selectedTab);
+  
+  private currentTab$ = combineLatest([
+    this.lines$,
+    this.stops$,
+    this.selectedTab$,
+  ]).pipe(
+    map(([lines, stops, selected]) => {
+      const linesTabIndex: number = 0;
+      const stopsTabIndex: number = 1;
 
-  constructor() {
-    combineLatest([
-      this.lines$,
-      this.stops$
-    ]).pipe(
-      map(([lines, stops]) => {
-        const hasLines = lines && Object.values(lines).some(lineArray => lineArray.length > 0);
-        const hasStops = stops && stops.length > 0;
-        if (hasLines && !hasStops) {
-          return 0;
-        } else if (!hasLines && hasStops) {
-          return 1;
-        }
-        return 0;
-      }),
-      filter(currentTab => currentTab !== undefined),
-    ).subscribe(currentTab => {
-      this.currentTabSubject.next(currentTab);
-    });
-  }
-  onTabChange(event: MatTabChangeEvent) {
-    this.currentTabSubject.next(event.index);
-  }
-  /**
-   * The end of of tab changing logic
-   */
+      const hasLines = !!lines && Object.values(lines).some(lineArray => lineArray.length > 0);
+      const hasStops = !!stops && stops.length > 0;
 
+      if (hasLines && !hasStops) return linesTabIndex;
+      if (!hasLines && hasStops) return stopsTabIndex;
+      
+      return selected;
+    }),
+    startWith(0),
+    distinctUntilChanged()
+  );
+  currentTab = toSignal(this.currentTab$);
 
   //TODO i think we need to adjust trackby for maps
   //TODO do we even need this?
@@ -145,4 +139,5 @@ export class SearchComponent {
   navigateToWelcomeScreen(): void {
     this.router.navigate(["/"]);
   }
+
 }
