@@ -8,11 +8,11 @@
       type="search">
     </mat-form-field>
   
-    <mat-tab-group [selectedIndex]="currentTab$ | async" (selectedTabChange)="onTabChange($event)">
+    <mat-tab-group [selectedIndex]="currentTab()" (selectedIndexChange)="manualTabSelection.set($event)">
       <mat-tab>
         <ng-template mat-tab-label>
-          <mat-icon [ngClass]="{ 'selected-tab': (currentTab$ | async) === 0 }">directions_bus</mat-icon>
-          <span [ngClass]="{ 'selected-tab': (currentTab$ | async) === 0, 'tab-text': true }">Linie autobusowe</span>
+          <mat-icon [ngClass]="{ 'selected-tab': currentTab() === 0 }">directions_bus</mat-icon>
+          <span [ngClass]="{ 'selected-tab': currentTab() === 0, 'tab-text': true }">Linie autobusowe</span>
         </ng-template>
         <div class="line-buttons-container">
           @if (lines$ | async; as lines) {
@@ -33,8 +33,8 @@
       </mat-tab>
       <mat-tab>
         <ng-template mat-tab-label>
-          <mat-icon [ngClass]="{ 'selected-tab': (currentTab$ | async) === 1 }">commit</mat-icon>
-          <span [ngClass]="{ 'selected-tab': (currentTab$ | async) === 1, 'tab-text': true }">Przystanki</span>
+          <mat-icon [ngClass]="{ 'selected-tab': currentTab() === 1 }">commit</mat-icon>
+          <span [ngClass]="{ 'selected-tab': currentTab() === 1, 'tab-text': true }">Przystanki</span>
         </ng-template>
         <div class="stop-buttons-container">    
           @if (stops$ | async; as stops) {
