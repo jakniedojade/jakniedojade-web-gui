@@ -10,7 +10,7 @@ import { ErrorDialogService } from '../../services/error-dialog.service';
 import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
-import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged, pairwise, debounceTime } from 'rxjs';
+import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged, pairwise, debounceTime, merge, tap } from 'rxjs';
 import { Stop } from '../../interfaces/stop';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
@@ -96,43 +96,30 @@ export class SearchComponent {
   );
   
 
-  
-  selectedTab = signal<number>(0);
-  private selectedTab$ = toObservable(this.selectedTab);
+  manualTabSelection = signal<number>(0);
+  private manualTabSelection$ = toObservable(this.manualTabSelection);
 
-  private tabChangedManually$ = combineLatest([
-    this.selectedTab$,
-    this.inputText$
-  ]).pipe(
-    pairwise(),
-    map(([[prevTab], [currTab]]) => prevTab !== currTab),
-    distinctUntilChanged()
-  );
-
-  private currentTab$ = combineLatest([
-    this.lines$,
-    this.stops$,
-    this.selectedTab$,
-    this.tabChangedManually$
-  ]).pipe(
-    debounceTime(0), //to prevent currentTab double emission when stops and lines emit simultaneously
-    map(([lines, stops, selected, tabChangedManually]) => {
+  private autoTabSelection$ = combineLatest([this.lines$, this.stops$]).pipe(
+    debounceTime(0), //because lines and stops emit simultaneously
+    map(([lines, stops]) => {
       const linesTabIndex: number = 0;
       const stopsTabIndex: number = 1;
-
-      if (!tabChangedManually) {
-        const hasLines = !!lines && Object.values(lines).some(lineArray => lineArray.length > 0);
-        const hasStops = !!stops && stops.length > 0;
-
-        if (hasLines && !hasStops) return linesTabIndex;
-        if (!hasLines && hasStops) return stopsTabIndex;
-      }
+      const hasLines = !!lines && Object.values(lines).some(lineArray => lineArray.length > 0);
+      const hasStops = !!stops && stops.length > 0;
+  
+      if (hasLines && !hasStops) return linesTabIndex;
+      if (!hasLines && hasStops) return stopsTabIndex;
       
-      return selected;
+      return this.manualTabSelection();
     }),
+    distinctUntilChanged()
+  );
+    
+  private currentTab$ = merge(this.autoTabSelection$, this.manualTabSelection$).pipe(
     startWith(0),
     distinctUntilChanged()
   );
+  
   currentTab = toSignal(this.currentTab$);
 
   //TODO i think we need to adjust trackby for maps
