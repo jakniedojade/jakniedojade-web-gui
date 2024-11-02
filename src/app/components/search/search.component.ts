@@ -112,14 +112,12 @@ export class SearchComponent {
       
       return this.manualTabSelection();
     }),
-    distinctUntilChanged()
   );
     
   private currentTab$ = merge(this.autoTabSelection$, this.manualTabSelection$).pipe(
     startWith(0),
     distinctUntilChanged()
   );
-  
   currentTab = toSignal(this.currentTab$);
 
   //TODO i think we need to adjust trackby for maps
@@ -139,5 +137,4 @@ export class SearchComponent {
   navigateToWelcomeScreen(): void {
     this.router.navigate(["/"]);
   }
-
 }
