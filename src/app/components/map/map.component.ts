@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,7 +36,9 @@ export class MapComponent implements OnInit {
   private markersGroup: any;
   // private map!: L.Map;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
-  private readonly defaultZoomLevel: number = 13;
+  readonly defaultZoomLevel: number = 13;
+  readonly minimumZoomLevel: number = 11;
+  readonly maximumZoomLevel: number = 18
   private poleMarkers: L.Marker[] = [];
 
   ngOnInit(): void {
@@ -50,8 +52,8 @@ export class MapComponent implements OnInit {
       zoomControl: false,
       center: this.centroid,
       zoom: this.defaultZoomLevel,
-      minZoom: 13,
-      maxZoom: 18,
+      minZoom: this.minimumZoomLevel,
+      maxZoom: this.maximumZoomLevel,
       maxBounds: L.latLngBounds([[51.944439, 20.554547], [52.521551, 21.475631]])
       //i just picked some bounds from google maps, modify to our liking
     });
