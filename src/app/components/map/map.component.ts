@@ -52,9 +52,10 @@ export class MapComponent implements OnInit {
       zoomControl: false,
       center: this.centroid,
       zoom: this.defaultZoomLevel,
+      zoomSnap: 0.1,
       minZoom: this.minimumZoomLevel,
       maxZoom: this.maximumZoomLevel,
-      maxBounds: L.latLngBounds([[51.944439, 20.554547], [52.521551, 21.475631]])
+      maxBounds: L.latLngBounds([[51.967955, 20.394070], [52.584544, 21.469421]])
       //i just picked some bounds from google maps, modify to our liking
     });
 
