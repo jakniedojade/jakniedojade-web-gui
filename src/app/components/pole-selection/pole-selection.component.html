@@ -1,14 +1,20 @@
 <div class="pole-selection-component">
+    <header>
+        <h2><mat-icon>commit</mat-icon>{{ routeStopName }}</h2> 
+        <h3>Wybierz słupek</h3>
+    </header>
     @if (polesOnStop$ | async; as polesOnStop) {
-        @for (pole of polesOnStop; track $index) {
-            <button
-                class="stop-line-button"
-                mat-stroked-button
-                (click)="mapService.setSelectedPole(pole)"
-                [class.selected]="pole.name === mapService.selectedPole()?.name">
-                {{pole.name}}
-            </button>
-        }
+        <div id="pole-selection-buttons">
+            @for (pole of polesOnStop; track $index) {
+                <button
+                    class="stop-line-button"
+                    mat-stroked-button
+                    (click)="mapService.setSelectedPole(pole)"
+                    [class.selected]="pole.name === mapService.selectedPole()?.name">
+                    {{pole.name}}
+                </button>
+            }
+        </div>
     }
     <div class="navigation-buttons">
         <app-navigation-buttons

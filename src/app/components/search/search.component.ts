@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
@@ -10,10 +10,11 @@ import { ErrorDialogService } from '../../services/error-dialog.service';
 import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
-import { catchError, combineLatest, map, of, startWith, filter, shareReplay } from 'rxjs';
+import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged, pairwise, debounceTime, merge, tap } from 'rxjs';
 import { Stop } from '../../interfaces/stop';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search',
@@ -35,24 +36,9 @@ import { MatIcon } from '@angular/material/icon';
 
 export class SearchComponent {
   private router = inject(Router);
-  private linesService = inject(LinesService);
+  public linesService = inject(LinesService);
   private stopsService = inject(StopsService);
   private errorDialogService = inject(ErrorDialogService);
-  
-  public categoryIconsMapping: any = {
-    cementaryLines: 'delete',
-    expressLines: 'favorite',
-    fastLines: 'menu',
-    fastTemporaryLines: 'check',
-    localLines: 'umbrella',
-    nightLines: 'sunny',
-    regularLines: 'home',
-    regularTemporaryLines: 'curtains',
-    specialLines: 'flare',
-    substituteLines: 'undo',
-    zoneLines: 'reply',
-    zoneTemporaryLines: 'apps'
-  };  //TODO that's just placeholders - change to our liking
   
   public popularStopsNames: Stop[] = [
     { id: 701300, name: "Centrum" },
@@ -108,23 +94,31 @@ export class SearchComponent {
     }),
     shareReplay(1)
   );
+  
 
-  currentTab$ = combineLatest([
-    this.lines$,
-    this.stops$
-  ]).pipe(
+  manualTabSelection = signal<number>(0);
+  private manualTabSelection$ = toObservable(this.manualTabSelection);
+
+  private autoTabSelection$ = combineLatest([this.lines$, this.stops$]).pipe(
+    debounceTime(0), //because lines and stops emit simultaneously
     map(([lines, stops]) => {
-      const hasLines = lines && Object.values(lines).some(lineArray => lineArray.length > 0);
-      const hasStops = stops && stops.length > 0;
-      if (hasLines && !hasStops) {
-        return 0;
-      } else if (!hasLines && hasStops) {
-        return 1;
-      }
-      return undefined;
+      const linesTabIndex: number = 0;
+      const stopsTabIndex: number = 1;
+      const hasLines = !!lines && Object.values(lines).some(lineArray => lineArray.length > 0);
+      const hasStops = !!stops && stops.length > 0;
+  
+      if (hasLines && !hasStops) return linesTabIndex;
+      if (!hasLines && hasStops) return stopsTabIndex;
+      
+      return this.manualTabSelection();
     }),
-    filter(currentTab => currentTab !== undefined),
   );
+    
+  private currentTab$ = merge(this.autoTabSelection$, this.manualTabSelection$).pipe(
+    startWith(0),
+    distinctUntilChanged()
+  );
+  currentTab = toSignal(this.currentTab$);
 
   //TODO i think we need to adjust trackby for maps
   //TODO do we even need this?
@@ -143,5 +137,4 @@ export class SearchComponent {
   navigateToWelcomeScreen(): void {
     this.router.navigate(["/"]);
   }
-
 }

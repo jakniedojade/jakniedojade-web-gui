@@ -1,17 +1,30 @@
 <div class="pole-analysis-type-selection-component">
     @if (selectedPoleFromRoute$ | async; as selectedPole) {
-        <div class="header" style="display: flex;">
-            <h2> {{selectedPole.name}} </h2>
-        </div>
-        <div class="selection-buttons-container">
-            <div class="selection-button" (click)="selectedAnalysisType.set(enum.StopTimetable)" [class.selected]="selectedAnalysisType() === enum.StopTimetable">
+        <header>
+            <h2><mat-icon>commit</mat-icon>{{ selectedPole.name }}</h2> 
+            <h3>Wybierz rodzaj analizy</h3>
+        </header>
+        <div id="selection-buttons-container">
+            <div class="selection-button"
+                matRipple
+                [matRippleCentered]="true"
+                [matRippleDisabled]="false"
+                [matRippleUnbounded]="false"
+                (click)="selectedAnalysisType.set(enum.StopTimetable)"
+                [class.selected]="selectedAnalysisType() === enum.StopTimetable">
                 <div class="selection-header">
                     Rzeczywisty rozkład przystanku
                 </div>
-                Zobacz jak statystycznie wyglądają godziny przejazdów wybranej linii zatrzymującej się na przystanku
-                {{selectedPole.name}}.
+                Zobacz jak statystycznie wyglądają godziny przejazdów wybranej linii zatrzymującej się na przystanku {{selectedPole.name}}.
             </div>
-            <div class="selection-button" (click)="selectedAnalysisType.set(enum.Line)" [class.selected]="selectedAnalysisType() === enum.Line">
+
+            <div class="selection-button"
+                matRipple
+                [matRippleCentered]="true"
+                [matRippleDisabled]="false"
+                [matRippleUnbounded]="false"
+                (click)="selectedAnalysisType.set(enum.Line)"
+                [class.selected]="selectedAnalysisType() === enum.Line">
                 <div class="selection-header">
                     Analiza linii autobusowej
                 </div>

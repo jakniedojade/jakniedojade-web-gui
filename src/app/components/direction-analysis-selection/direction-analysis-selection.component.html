@@ -1,16 +1,32 @@
 <div class="pole-analysis-type-selection-component">
     @if (selectedDirectionFromRoute$ | async; as selectedDirection) {
-        <div class="header" style="display: flex;">
-            <h2> {{routeLine}} | {{selectedDirection.endStopName}}</h2>
-        </div>
-        <div class="selection-buttons-container">
-            <div class="selection-button" (click)="selectedAnalysisType.set(enum.TripTimeTable)" [class.selected]="selectedAnalysisType() === enum.TripTimeTable">
+        <header>
+            @if (lineIcon$ | async; as lineIcon) {
+                <h2><mat-icon>{{ lineIcon }}</mat-icon><span>{{ routeLine }}&nbsp;|</span>{{selectedDirection.endStopName}}</h2> 
+                <h3>Wybierz rodzaj analizy</h3>
+            }
+        </header>
+        <div id="selection-buttons-container">
+            <div class="selection-button"
+                matRipple
+                [matRippleCentered]="true"
+                [matRippleDisabled]="false"
+                [matRippleUnbounded]="false"
+                (click)="selectedAnalysisType.set(enum.TripTimeTable)"
+                [class.selected]="selectedAnalysisType() === enum.TripTimeTable">
                 <div class="selection-header">
                     Rzeczywisty rozkład przejazdu
                 </div>
                 Zobacz jak autobusy linii {{routeLine}} opóźniają się między przystankami dla wybranego przejazdu tej linii.
             </div>
-            <div class="selection-button" (click)="selectedAnalysisType.set(enum.RouteStatistics)" [class.selected]="selectedAnalysisType() === enum.RouteStatistics">
+
+            <div class="selection-button"
+                matRipple
+                [matRippleCentered]="true"
+                [matRippleDisabled]="false"
+                [matRippleUnbounded]="false"
+                (click)="selectedAnalysisType.set(enum.RouteStatistics)"
+                [class.selected]="selectedAnalysisType() === enum.RouteStatistics">
                 <div class="selection-header">
                     Analiza statystyczna trasy
                 </div>

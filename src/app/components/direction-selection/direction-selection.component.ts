@@ -9,23 +9,31 @@ import { NavigationButtonsComponent } from "../navigation-buttons/navigation-but
 import { MapService } from '../../services/map.service';
 import { AsyncPipe } from '@angular/common';
 import { ErrorDialogComponent } from "../error-dialog/error-dialog.component";
+import { MatIcon } from '@angular/material/icon';
+import { LinesService } from '../../services/lines.service';
 
 @Component({
   selector: 'app-direction-selection',
   standalone: true,
-  imports: [MatButton, NavigationButtonsComponent, AsyncPipe, ErrorDialogComponent, ErrorDialogComponent],
+  imports: [MatButton, NavigationButtonsComponent, AsyncPipe, ErrorDialogComponent, ErrorDialogComponent, MatIcon],
   templateUrl: './direction-selection.component.html',
   styleUrl: './direction-selection.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DirectionSelectionComponent {
   private lineDataService = inject(LineDataService);
+  private linesService = inject(LinesService);
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   
   @Input() routeLine!: string;
+  lineIcon$ = this.activatedRoute.paramMap.pipe(
+    switchMap((paramMap) => {
+      return this.linesService.getLineIcon(paramMap.get('routeLine')!);
+    })
+  );
   
   selectedDirection = signal<boolean | null>(null);
 

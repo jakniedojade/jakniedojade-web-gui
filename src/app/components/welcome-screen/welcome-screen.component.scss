@@ -1,18 +1,51 @@
-.welcome-button {
-    margin-top: 10px;
-    width: 90%;
-    max-width: 300px;
-}
-
 #welcome-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     height: 100%;
 }
 
-:host
-{
-    display: contents;
+#welcome-main-content {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#app-title {
+    font-size: 40px;
+    color: var(--sys-primary);
+    line-height: 30px;
+}
+
+#app-title > span {
+    color: var(--sys-secondary);
+}
+
+
+#welcome-text {
+    font-size: 15px;
+    text-align: center;
+    line-height: 17px;
+    max-width: 323px;
+
+    margin-bottom: 20px;
+}
+
+.welcome-button {
+    margin-top: 10px;
+    width: 90%;
+    max-width: 230px;
+}
+
+footer {
+    font-size: 9px;
+    line-height: 11px;
+    max-width: 350px;
+    text-align: center;
+    height: 55px;
+    color: var(--sys-outline);
 }

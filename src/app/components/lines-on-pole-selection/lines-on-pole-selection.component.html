@@ -1,19 +1,23 @@
 <div class="lines-on-pole-selection-component">
     @if (selectedPoleFromRoute$ | async; as selectedPole) {
-        <div class="header" style="display: flex;">
-            <h2> {{selectedPole.name}} </h2>
+        <header>
+            <h2><mat-icon>commit</mat-icon>{{ selectedPole.name }}</h2> 
+            <h3>Wybierz linię</h3>
+        </header>
+        <div id="lines-on-pole-selection-buttons">
+            @if (linesOnPole$ | async; as linesOnPole) {
+                @for (line of linesOnPole; track $index) {
+                    <button
+                        class="stop-line-button"
+                        mat-stroked-button
+                        [class.selected]="line.lineNumber === lineSelection()"
+                        (click)="lineSelection.set(line.lineNumber)">
+                        <mat-icon>{{ line.icon }}</mat-icon>
+                        {{ line.lineNumber }} | Kierunek Jazdy
+                    </button>
+                }
+            }
         </div>
-        @if (linesOnPole$ | async; as linesOnPole) {
-            @for (line of linesOnPole; track $index) {
-                <button
-                    class="stop-line-button"
-                    mat-stroked-button
-                    [class.selected]="line === lineSelection()"
-                    (click)="lineSelection.set(line)">
-                    {{line}}
-                </button>
-            } 
-        }
     }
     <div class="navigation-buttons">
         <app-navigation-buttons [nextDisabled]="!lineSelection()" (next)="navigateToDirectionSelection()" (previous)="navigateToPoleAnalysisSelection()"/>

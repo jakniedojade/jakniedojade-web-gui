@@ -3,9 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MapService } from '../../services/map.service';
 import { LineDataService } from '../../services/line-data.service';
-import { catchError, map, of, switchMap, tap } from 'rxjs';
+import { catchError, of, switchMap, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
+import { MatRipple } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
+import { LinesService } from '../../services/lines.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 enum AnalysisType {
   TripTimeTable,
@@ -16,7 +20,7 @@ enum AnalysisType {
 @Component({
   selector: 'app-direction-analysis-selection',
   standalone: true,
-  imports: [AsyncPipe, NavigationButtonsComponent],
+  imports: [AsyncPipe, NavigationButtonsComponent, MatRipple, MatIcon],
   templateUrl: './direction-analysis-selection.component.html',
   styleUrl: './direction-analysis-selection.component.scss'
 })
@@ -25,9 +29,15 @@ export class DirectionAnalysisSelectionComponent {
   private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
   private lineDataService = inject(LineDataService);
+  private linesService = inject(LinesService);
   private activatedRoute = inject(ActivatedRoute);
 
   @Input() routeLine!: string;
+  lineIcon$ = this.activatedRoute.paramMap.pipe(
+    switchMap((paramMap) => {
+      return this.linesService.getLineIcon(paramMap.get('routeLine')!);
+    })
+  );
 
   public enum: typeof AnalysisType = AnalysisType;
 
