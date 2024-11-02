@@ -54,8 +54,12 @@
     overflow-y: auto;
 }
 
+:host ::ng-deep .mat-mdc-button-touch-target {
+    height: unset !important;
+}
+
 .stop-line-button {
-    height: 35px;
+    --mdc-outlined-button-container-height: 35px;
     margin: 6px 0;
     margin-right: 10px;
     padding: 0 12px;
