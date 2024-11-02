@@ -33,6 +33,10 @@
             mat-icon {
                 margin-right: 3px;
             }
+
+            & > span {
+                margin-right: 8px;
+            }
         }
 
         h3 {
