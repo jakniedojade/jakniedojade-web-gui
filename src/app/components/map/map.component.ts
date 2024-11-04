@@ -158,7 +158,15 @@ export class MapComponent implements OnInit {
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
       const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
-      stopMarker.on({
+
+      const hoverArea = L.circleMarker([pole.latitude, pole.longitude], {
+        radius: 10,
+        opacity: 0,
+        fillOpacity: 0,
+        pane: 'popupPane' //because this pane has the highest z index
+      });
+
+      hoverArea.on({
         click: () => {
           this.mapService.setSelectedPole(pole);
           poleClicked = true;
@@ -174,7 +182,9 @@ export class MapComponent implements OnInit {
         }
       });
       this.poleMarkers.push(stopMarker);
+      hoverArea.addTo(this.map);
       stopMarker.addTo(this.map);
+      this.markersGroup.addLayer(hoverArea);
       this.markersGroup.addLayer(stopMarker);
       polesToDraw.length > 1 ? this.poleMarkers.push(stopMarker) : stopMarker.openPopup();
     });
