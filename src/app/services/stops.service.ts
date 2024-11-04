@@ -11,7 +11,7 @@ export class StopsService {
   private stopsData$: Observable<Stop[]>;
 
   constructor() {
-    this.stopsData$ = this.http.get<Stop[]>('/api/v1/stops/')
+    this.stopsData$ = this.http.get<Stop[]>('https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/api/v1/stops/')
     .pipe(
       shareReplay(),
       catchError(this.handleError)

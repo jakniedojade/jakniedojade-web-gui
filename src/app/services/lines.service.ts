@@ -26,7 +26,7 @@ export class LinesService {
   };
   
   constructor() {
-    this.linesData$ = this.http.get<Lines>('/api/v1/lines/')
+    this.linesData$ = this.http.get<Lines>('https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/api/v1/lines/')
     .pipe(
       shareReplay(),
       catchError(this.handleError)

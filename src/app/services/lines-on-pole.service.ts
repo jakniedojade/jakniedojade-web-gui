@@ -9,7 +9,7 @@ export class LinesOnPoleService {
   private http = inject(HttpClient);
 
   getLinesOnPole(poleId: number): Observable<string[]> {
-    return this.http.get<string[]>(`/api/v1/poles/${poleId}/lines/`)
+    return this.http.get<string[]>(`https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/api/v1/poles/${poleId}/lines/`)
       .pipe(
         shareReplay(),
         catchError(this.handleError)

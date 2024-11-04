@@ -12,7 +12,7 @@ export class LineDataService {
 
   getLineData(line: string, directionSwapped: boolean): Observable<LineData> {
     const directionNumber: string = directionSwapped ? "1" : "0";
-    const url = `/api/v1/lines/${line}/poles/?direction=${directionNumber}`;
+    const url = `https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/api/v1/lines/${line}/poles/?direction=${directionNumber}`;
     const key = this.constructKey(line, directionSwapped);
     if (!this.lineData.has(key)) {
       this.lineData.set(key, this.http.get<LineData>(url)

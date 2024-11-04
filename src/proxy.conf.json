@@ -1,7 +1,0 @@
-{
-    "/api": {
-        "target": "https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/",
-        "secure": false,
-        "changeOrigin": true
-    }
-}
