@@ -28,6 +28,7 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              "src/web.config",
               {
                 "glob": "**/*",
                 "input": "public"
