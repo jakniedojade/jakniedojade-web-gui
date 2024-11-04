@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import 'leaflet-active-area';
 import 'leaflet.motion/dist/leaflet.motion.js'
 import { fromEvent } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, startWith } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
 import { PoleDetails, Shape } from '../../interfaces/line-data';
 
@@ -59,20 +59,27 @@ export class MapComponent implements OnInit {
       //i just picked some bounds from google maps, modify to our liking
     });
 
-    this.map.setActiveArea({
-      position: 'absolute',
-      top: '0',
-      right: '0',
-      bottom: '0',
-      width: '66vw',
-    }, true, false);
-
     const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
     tiles.addTo(this.map)
+
+    fromEvent(window, 'resize')
+    .pipe(
+      startWith(null),
+      debounceTime(200)
+    )
+    .subscribe(() => {
+      this.map.setActiveArea({
+        position: 'absolute',
+        top: '0',
+        right: '0',
+        bottom: '0',
+        width: (window.innerWidth - document.getElementById('side-menu-container')!.offsetWidth) + 'px',
+      }, false, false);
+    });
   }
 
   zoomIn(): void {
@@ -81,36 +88,6 @@ export class MapComponent implements OnInit {
 
   zoomOut(): void {
     this.map.setZoom(this.map.getZoom() - 1);
-  }
-
-  /**
-   * When resized, set new active area of the map,
-   * but don't recenter, cause it works kind of weird
-   */
-  ngAfterViewInit() {
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(200))
-      .subscribe(() => {
-        if(document.getElementById('main-component') != null) {
-          if (window.innerWidth > 1200) {
-            this.map.setActiveArea({
-              position: 'absolute',
-              top: '0',
-              right: '0',
-              bottom: '0',
-              width: (window.innerWidth - document.getElementById('main-component')!.offsetWidth) + 'px',
-            }, false, false);
-          } else {
-            this.map.setActiveArea({
-              position: 'absolute',
-              top: '0',
-              right: '0',
-              bottom: '0',
-              width: '100vw',
-            }, false, false);
-          }
-        }
-      });
   }
 
   public clearMapLayers() {
