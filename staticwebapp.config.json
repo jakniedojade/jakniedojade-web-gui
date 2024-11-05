@@ -1,0 +1,13 @@
+{
+  "routes": [
+    {
+      "route": "*",
+      "methods": [
+        "get"
+      ],
+      "rewrite": "/index.html",
+      "redirect": "/",
+      "statusCode": 301
+    }
+  ]
+}
