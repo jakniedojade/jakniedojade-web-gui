@@ -3,7 +3,8 @@ import * as L from 'leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import 'leaflet-active-area';
-import 'leaflet.motion/dist/leaflet.motion.js'
+import 'leaflet.polyline.snakeanim';
+import '../../plugins/leaflet-polyline-snakeanim.js';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
@@ -33,6 +34,7 @@ export class MapComponent implements OnInit {
    * our own type definitions for needed functions).
    */
   private map!: any;
+  private polyline!: any;
   private markersGroup: any;
   // private map!: L.Map;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
@@ -126,14 +128,13 @@ export class MapComponent implements OnInit {
     const routeBounds = polyline.getBounds().pad(0.1);
     this.map.fitBounds(routeBounds);
 
-    const animatedLine = (L as any).motion.polyline([shapesCoords], {
-      color: "#16a813",
-    }, {
-      auto: true,
-      duration: 1500,
-      easing: (L as any).Motion.Ease.easeInOutQuart
-    }).addTo(this.map);
-    this.markersGroup.addLayer(animatedLine);
+    this.polyline = new L.Polyline(shapesCoords, { 
+      color: '#16a813',
+      snakingSpeed: 1800
+    } as L.PolylineOptions);
+
+    this.polyline.addTo(this.map).snakeIn();
+    this.markersGroup.addLayer(this.polyline);
   }
 
   public drawPoles(polesToDraw: PoleDetails[]): void {
