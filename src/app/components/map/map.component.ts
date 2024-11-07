@@ -90,12 +90,15 @@ export class MapComponent implements OnInit {
     this.map.setZoom(this.map.getZoom() - 1);
   }
 
+  private routeDrawn = false;
   public clearMapLayers() {
     this.markersGroup.clearLayers();
+    this.routeDrawn = false;
   }
 
   public drawRoute(shapes: Shape[]): void {
     this.clearMapLayers();
+    this.routeDrawn = true;
     const shapesCoords = shapes.map((shape: Shape) => ({
       lat: shape.latitude,
       lng: shape.longitude
@@ -165,7 +168,9 @@ export class MapComponent implements OnInit {
       this.markersGroup.addLayer(stopMarker);
       polesToDraw.length > 1 ? this.poleMarkers.push(stopMarker) : stopMarker.openPopup();
     });
-    this.map.fitBounds(bounds.pad(0.2));
+    if (!this.routeDrawn) {
+      this.map.fitBounds(bounds.pad(0.2));
+    }
   }
 
   public openPolePopup(poleName: string) {
