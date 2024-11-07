@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +6,7 @@ import 'leaflet-active-area';
 import 'leaflet.polyline.snakeanim';
 import '../../plugins/leaflet-polyline-snakeanim.js';
 import { fromEvent } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, startWith } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
 import { PoleDetails, Shape } from '../../interfaces/line-data';
 
@@ -38,7 +38,9 @@ export class MapComponent implements OnInit {
   private markersGroup: any;
   // private map!: L.Map;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
-  private readonly defaultZoomLevel: number = 13;
+  readonly defaultZoomLevel: number = 13;
+  readonly minimumZoomLevel: number = 11;
+  readonly maximumZoomLevel: number = 18
   private poleMarkers: L.Marker[] = [];
 
   ngOnInit(): void {
@@ -52,19 +54,12 @@ export class MapComponent implements OnInit {
       zoomControl: false,
       center: this.centroid,
       zoom: this.defaultZoomLevel,
-      minZoom: 13,
-      maxZoom: 18,
-      maxBounds: L.latLngBounds([[51.944439, 20.554547], [52.521551, 21.475631]])
+      zoomSnap: 0.1,
+      minZoom: this.minimumZoomLevel,
+      maxZoom: this.maximumZoomLevel,
+      maxBounds: L.latLngBounds([[51.967955, 20.394070], [52.584544, 21.469421]])
       //i just picked some bounds from google maps, modify to our liking
     });
-
-    this.map.setActiveArea({
-      position: 'absolute',
-      top: '0',
-      right: '0',
-      bottom: '0',
-      width: '66vw',
-    }, true, false);
 
     const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       maxZoom: 19,
@@ -72,6 +67,21 @@ export class MapComponent implements OnInit {
     });
 
     tiles.addTo(this.map)
+
+    fromEvent(window, 'resize')
+    .pipe(
+      startWith(null),
+      debounceTime(200)
+    )
+    .subscribe(() => {
+      this.map.setActiveArea({
+        position: 'absolute',
+        top: '0',
+        right: '0',
+        bottom: '0',
+        width: (window.innerWidth - document.getElementById('side-menu-container')!.offsetWidth) + 'px',
+      }, false, false);
+    });
   }
 
   zoomIn(): void {
@@ -82,42 +92,15 @@ export class MapComponent implements OnInit {
     this.map.setZoom(this.map.getZoom() - 1);
   }
 
-  /**
-   * When resized, set new active area of the map,
-   * but don't recenter, cause it works kind of weird
-   */
-  ngAfterViewInit() {
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(200))
-      .subscribe(() => {
-        if(document.getElementById('main-component') != null) {
-          if (window.innerWidth > 1200) {
-            this.map.setActiveArea({
-              position: 'absolute',
-              top: '0',
-              right: '0',
-              bottom: '0',
-              width: (window.innerWidth - document.getElementById('main-component')!.offsetWidth) + 'px',
-            }, false, false);
-          } else {
-            this.map.setActiveArea({
-              position: 'absolute',
-              top: '0',
-              right: '0',
-              bottom: '0',
-              width: '100vw',
-            }, false, false);
-          }
-        }
-      });
-  }
-
+  private routeDrawn = false;
   public clearMapLayers() {
     this.markersGroup.clearLayers();
+    this.routeDrawn = false;
   }
 
   public drawRoute(shapes: Shape[]): void {
     this.clearMapLayers();
+    this.routeDrawn = true;
     const shapesCoords = shapes.map((shape: Shape) => ({
       lat: shape.latitude,
       lng: shape.longitude
@@ -156,7 +139,15 @@ export class MapComponent implements OnInit {
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
       const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
-      stopMarker.on({
+
+      const hoverArea = L.circleMarker([pole.latitude, pole.longitude], {
+        radius: 10,
+        opacity: 0,
+        fillOpacity: 0,
+        pane: 'popupPane' //because this pane has the highest z index
+      });
+
+      hoverArea.on({
         click: () => {
           this.mapService.setSelectedPole(pole);
           poleClicked = true;
@@ -172,11 +163,15 @@ export class MapComponent implements OnInit {
         }
       });
       this.poleMarkers.push(stopMarker);
+      hoverArea.addTo(this.map);
       stopMarker.addTo(this.map);
+      this.markersGroup.addLayer(hoverArea);
       this.markersGroup.addLayer(stopMarker);
       polesToDraw.length > 1 ? this.poleMarkers.push(stopMarker) : stopMarker.openPopup();
     });
-    this.map.fitBounds(bounds.pad(0.2));
+    if (!this.routeDrawn) {
+      this.map.fitBounds(bounds.pad(0.2));
+    }
   }
 
   public openPolePopup(poleName: string) {

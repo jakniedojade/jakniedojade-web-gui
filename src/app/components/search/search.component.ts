@@ -58,7 +58,7 @@ export class SearchComponent {
 
   inputText$ = this.inputText.valueChanges.pipe(
     startWith(''),
-    map(inputText => inputText ?? ''),
+    map(inputText => inputText?.toLowerCase() ?? ''),
   );
   
   lines$ = combineLatest([
