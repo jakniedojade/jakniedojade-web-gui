@@ -57,8 +57,8 @@ export class DirectionMeanlatencySettingsComponent {
     switchMap(paramMap => 
       this.lineDataService.getLineData(paramMap['routeLine'], paramMap['direction']).pipe(
         tap(lineData => {
-          this.mapService.drawRoute(lineData.shapes);
-          this.mapService.drawPoles(lineData.poles);
+          this.mapService.drawRoute(lineData.shapes, true); //these booleans determine whether we draw route and poles in gray
+          this.mapService.drawPoles(lineData.poles, true);
         }),
       )
     ),

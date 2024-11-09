@@ -18,12 +18,12 @@ export class MapService {
     this.mapComponent!.clearMapLayers()
   }
 
-  drawRoute(shapes: Shape[]): void {
-    this.mapComponent!.drawRoute(shapes);
+  drawRoute(shapes: Shape[], grayPolyline: boolean = false): void {
+    this.mapComponent!.drawRoute(shapes, grayPolyline);
   }
 
-  drawPoles(poles: PoleDetails[]): void {
-    this.mapComponent!.drawPoles(poles);
+  drawPoles(poles: PoleDetails[], grayIcons: boolean = false): void {
+    this.mapComponent!.drawPoles(poles, grayIcons);
   }
 
   setSelectedPole(pole: PoleDetails | null): void {

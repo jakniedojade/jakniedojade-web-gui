@@ -29,12 +29,7 @@ export class DirectionMeanlatencyRouteSelectionComponent {
 
   selectedDirectionFromRoute$ = this.activatedRoute.params.pipe(
     switchMap(paramMap => 
-      this.lineDataService.getLineData(paramMap['routeLine'], paramMap['direction']).pipe(
-        tap(lineData => {
-          this.mapService.drawRoute(lineData.shapes);
-          this.mapService.drawPoles(lineData.poles);
-        }),
-      )
+      this.lineDataService.getLineData(paramMap['routeLine'], paramMap['direction'])
     ),
     catchError(error => {
       this.errorDialogService.openErrorDialog(error.message);

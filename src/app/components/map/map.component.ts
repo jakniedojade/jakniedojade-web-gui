@@ -98,7 +98,7 @@ export class MapComponent implements OnInit {
     this.routeDrawn = false;
   }
 
-  public drawRoute(shapes: Shape[]): void {
+  public drawRoute(shapes: Shape[], grayPolyline: boolean = false): void {
     this.clearMapLayers();
     this.routeDrawn = true;
     const shapesCoords = shapes.map((shape: Shape) => ({
@@ -112,7 +112,7 @@ export class MapComponent implements OnInit {
     this.map.fitBounds(routeBounds);
 
     this.polyline = new L.Polyline(shapesCoords, { 
-      color: '#16a813',
+      color: grayPolyline ? 'gray' : '#16a813', //TODO adjust gray to palette here and in SVGs!!
       snakingSpeed: 1800
     } as L.PolylineOptions);
 
@@ -120,14 +120,14 @@ export class MapComponent implements OnInit {
     this.markersGroup.addLayer(this.polyline);
   }
 
-  public drawPoles(polesToDraw: PoleDetails[]): void {
+  public drawPoles(polesToDraw: PoleDetails[], grayIcons: boolean = false): void {
     const stopIcon = L.icon({
-      iconUrl: '/assets/stop_regular.svg',
+      iconUrl: grayIcons ? '/assets/stop_regular_gray.svg' : '/assets/stop_regular.svg',
       iconSize: [13, 13]
     });
 
     const stopOnRequestIcon = L.icon({
-      iconUrl: '/assets/stop_on_request.svg',
+      iconUrl: grayIcons ? '/assets/stop_on_request_gray.svg' : '/assets/stop_on_request.svg',
       iconSize: [13, 13]
     });
 
