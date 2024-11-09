@@ -9,6 +9,7 @@ import { MapService } from '../../services/map.service';
 import { MatIcon } from '@angular/material/icon';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { DirectionMeanlatencyRouteSelectionComponent } from '../direction-meanlatency-route-selection/direction-meanlatency-route-selection.component';
+import { WeekdaysSelectionComponent } from "../weekdays-selection/weekdays-selection.component";
 
 @Component({
   selector: 'app-direction-meanlatency-settings',
@@ -19,6 +20,7 @@ import { DirectionMeanlatencyRouteSelectionComponent } from '../direction-meanla
     MatIcon,
     NavigationButtonsComponent,
     DirectionMeanlatencyRouteSelectionComponent,
+    WeekdaysSelectionComponent
   ],
   templateUrl: './direction-meanlatency-settings.component.html',
   styleUrl: './direction-meanlatency-settings.component.scss'

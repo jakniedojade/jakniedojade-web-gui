@@ -10,8 +10,12 @@
             @case ('routeSelection') {
                 <app-direction-meanlatency-route-selection (selectSettings)="selectComponent($event)"/>
             }
+            @case ('weekdaySelection') {
+                <app-weekdays-selection (selectSettings)="selectComponent($event)"/>
+            }
             @default {
                 <button (click)="selectComponent('routeSelection')">route</button>
+                <button (click)="selectComponent('weekdaySelection')">weekdays</button>
                 <div class="navigation-buttons">
                     <app-navigation-buttons
                         [nextDisabled]="false"

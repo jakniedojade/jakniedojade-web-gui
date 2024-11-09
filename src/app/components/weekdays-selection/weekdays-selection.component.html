@@ -1,0 +1,25 @@
+<div class="weekdays-component">
+    <div class="buttons-container">
+        <mat-button-toggle-group name="weekdayOptions" aria-label="weekdayOptions" [formControl]="toggleControl" [hideSingleSelectionIndicator]="true">
+            <mat-button-toggle value="regular">Dni powszednie</mat-button-toggle>
+            <mat-button-toggle value="holidays">Soboty i święta</mat-button-toggle>
+            <mat-button-toggle value="custom">Niestandardowe</mat-button-toggle>
+        </mat-button-toggle-group>
+        
+        <mat-chip-listbox aria-label="weekdays" [multiple]="true" [formGroup]="chipControl">
+            <mat-chip-option [selected]="chipControl.value.mondays" (click)="toggleChip('mondays')">Poniedziałki</mat-chip-option>
+            <mat-chip-option [selected]="chipControl.value.tuesdays" (click)="toggleChip('tuesdays')">Wtorki</mat-chip-option>
+            <mat-chip-option [selected]="chipControl.value.wednesdays" (click)="toggleChip('wednesdays')">Środy</mat-chip-option>
+            <mat-chip-option [selected]="chipControl.value.thursdays" (click)="toggleChip('thursdays')">Czwartki</mat-chip-option>
+            <mat-chip-option [selected]="chipControl.value.fridays" (click)="toggleChip('fridays')">Piątki</mat-chip-option>
+            <mat-chip-option [selected]="chipControl.value.saturdays" (click)="toggleChip('saturdays')">Soboty</mat-chip-option>
+            <mat-chip-option [selected]="chipControl.value.sundays" (click)="toggleChip('sundays')">Niedziele</mat-chip-option>
+        </mat-chip-listbox>
+    </div>
+    <div class="navigation-buttons">
+        <app-navigation-buttons
+            [nextDisabled]="nextDisabled() ?? true"
+            (next)="goToSettings()"
+            (previous)="goToSettings()"/>
+    </div>
+</div>
