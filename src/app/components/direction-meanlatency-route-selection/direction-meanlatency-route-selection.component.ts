@@ -7,12 +7,12 @@ import { BehaviorSubject, catchError, fromEvent, map, of, pairwise, Subject, swi
 import { AsyncPipe } from '@angular/common';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MatIcon } from '@angular/material/icon';
-import { LinesService } from '../../services/lines.service';
+import { MeanlatencyChildComponents } from '../direction-meanlatency-settings/direction-meanlatency-settings.component';
 
 @Component({
   selector: 'app-direction-meanlatency-route-selection',
   standalone: true,
-  imports: [AsyncPipe, NavigationButtonsComponent, MatIcon],
+  imports: [AsyncPipe, NavigationButtonsComponent],
   templateUrl: './direction-meanlatency-route-selection.component.html',
   styleUrl: './direction-meanlatency-route-selection.component.scss'
 })
@@ -22,7 +22,7 @@ export class DirectionMeanlatencyRouteSelectionComponent {
   private lineDataService = inject(LineDataService);
   private activatedRoute = inject(ActivatedRoute);
 
-  selectSettings = output<string>()
+  selectSettings = output<MeanlatencyChildComponents>()
 
   startingIndex: number | null = null;
   endingIndex: number | null = null;
@@ -62,6 +62,6 @@ export class DirectionMeanlatencyRouteSelectionComponent {
   }
 
   goToSettings(): void {
-    this.selectSettings.emit('settings');
+    this.selectSettings.emit(MeanlatencyChildComponents.Settings);
   }
 }

@@ -6,6 +6,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { map, Subject, takeUntil, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AsyncPipe } from '@angular/common';
+import { MeanlatencyChildComponents } from '../direction-meanlatency-settings/direction-meanlatency-settings.component';
 
 interface WeekdayFormValue {
   mondays: boolean;
@@ -20,12 +21,12 @@ interface WeekdayFormValue {
 @Component({
   selector: 'app-weekdays-selection',
   standalone: true,
-  imports: [NavigationButtonsComponent, MatButtonToggleModule, MatChipsModule, FormsModule, ReactiveFormsModule, AsyncPipe],
+  imports: [NavigationButtonsComponent, MatButtonToggleModule, MatChipsModule, FormsModule, ReactiveFormsModule],
   templateUrl: './weekdays-selection.component.html',
   styleUrl: './weekdays-selection.component.scss'
 })
 export class WeekdaysSelectionComponent {
-  selectSettings = output<string>();
+  selectSettings = output<MeanlatencyChildComponents>();
 
   toggleControl = new FormControl('custom');
   
@@ -110,7 +111,7 @@ export class WeekdaysSelectionComponent {
   }
 
   goToSettings(): void {
-    this.selectSettings.emit('settings');
+    this.selectSettings.emit(MeanlatencyChildComponents.Settings);
   }
 
   ngOnDestroy() {

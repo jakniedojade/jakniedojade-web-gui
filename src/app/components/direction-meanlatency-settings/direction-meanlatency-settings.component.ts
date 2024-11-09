@@ -11,11 +11,22 @@ import { NavigationButtonsComponent } from "../navigation-buttons/navigation-but
 import { DirectionMeanlatencyRouteSelectionComponent } from '../direction-meanlatency-route-selection/direction-meanlatency-route-selection.component';
 import { WeekdaysSelectionComponent } from "../weekdays-selection/weekdays-selection.component";
 
+export enum MeanlatencyChildComponents {
+  RouteSelection = 'routeSelection',
+  WeekdaySelection = 'weekdaySelection',
+  Settings = 'settings'
+}
+
+const COMPONENT_HEADERS = {
+  [MeanlatencyChildComponents.RouteSelection]: 'Wybierz trasę',
+  [MeanlatencyChildComponents.WeekdaySelection]: 'Wybierz dni tygodnia',
+  [MeanlatencyChildComponents.Settings]: 'Wybierz opcje analizy'
+};
+
 @Component({
   selector: 'app-direction-meanlatency-settings',
   standalone: true,
   imports: [
-    NgComponentOutlet,
     AsyncPipe,
     MatIcon,
     NavigationButtonsComponent,
@@ -32,6 +43,7 @@ export class DirectionMeanlatencySettingsComponent {
   private lineDataService = inject(LineDataService);
   private linesService = inject(LinesService);
   private activatedRoute = inject(ActivatedRoute);
+  public ChildComponents = MeanlatencyChildComponents;
 
   @Input() direction!: string;
   @Input() routeLine!: string;
@@ -56,10 +68,12 @@ export class DirectionMeanlatencySettingsComponent {
     })
   );
   
-  selectedComponentName = signal<string>('settings');
-
-  selectComponent(componentName: string): void {
+  selectedComponentName = signal<MeanlatencyChildComponents>(MeanlatencyChildComponents.Settings);
+  selectedComponentHeader = signal<string>(COMPONENT_HEADERS[MeanlatencyChildComponents.Settings]);
+  
+  selectComponent(componentName: MeanlatencyChildComponents): void {
     this.selectedComponentName.set(componentName);
+    this.selectedComponentHeader.set(COMPONENT_HEADERS[componentName]);
   }
 
   navigateToDirectionAnalysisOptions(): void {
