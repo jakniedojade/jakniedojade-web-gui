@@ -1,1 +1,25 @@
-<p>direction-meanlatency-settings works!</p>
+<div class="pole-analysis-type-selection-component">
+    @if (selectedDirectionFromRoute$ | async; as selectedDirection) {
+        <header>
+            @if (lineIcon$ | async; as lineIcon) {
+                <h2><mat-icon>{{ lineIcon }}</mat-icon><span>{{ routeLine }}&nbsp;|</span>{{selectedDirection.endStopName}}</h2> 
+                <h3>Wybierz opcję analizy</h3>
+            }
+        </header>
+        @switch (selectedComponentName) {
+            @case ('routeSelection') {
+                <app-direction-meanlatency-route-selection (selectSettings)="selectComponent($event)"/>
+            }
+            @default {
+                <button (click)="selectComponent('routeSelection')">route</button>
+                <div class="navigation-buttons">
+                    <app-navigation-buttons
+                        [nextDisabled]="false"
+                        [nextButtonLabel]="'Gotowe'"
+                        (next)="false"
+                        (previous)="false"/>
+                </div>
+            }
+        }
+    }
+</div>
