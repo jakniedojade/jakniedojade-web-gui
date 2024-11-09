@@ -1,5 +1,5 @@
 import { AsyncPipe, NgComponentOutlet } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { switchMap, tap, catchError, of } from 'rxjs';
 import { ErrorDialogService } from '../../services/error-dialog.service';
@@ -56,10 +56,10 @@ export class DirectionMeanlatencySettingsComponent {
     })
   );
   
-  selectedComponentName: string = 'settings';
+  selectedComponentName = signal<string>('settings');
 
   selectComponent(componentName: string): void {
-    this.selectedComponentName = componentName;
+    this.selectedComponentName.set(componentName);
   }
 
   navigateToDirectionAnalysisOptions(): void {

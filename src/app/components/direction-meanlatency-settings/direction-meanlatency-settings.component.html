@@ -6,7 +6,7 @@
                 <h3>Wybierz opcję analizy</h3>
             }
         </header>
-        @switch (selectedComponentName) {
+        @switch (selectedComponentName()) {
             @case ('routeSelection') {
                 <app-direction-meanlatency-route-selection (selectSettings)="selectComponent($event)"/>
             }
