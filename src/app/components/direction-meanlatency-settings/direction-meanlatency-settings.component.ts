@@ -33,6 +33,7 @@ export class DirectionMeanlatencySettingsComponent {
   private linesService = inject(LinesService);
   private activatedRoute = inject(ActivatedRoute);
 
+  @Input() direction!: string;
   @Input() routeLine!: string;
   lineIcon$ = this.activatedRoute.paramMap.pipe(
     switchMap((paramMap) => {
@@ -59,5 +60,9 @@ export class DirectionMeanlatencySettingsComponent {
 
   selectComponent(componentName: string): void {
     this.selectedComponentName = componentName;
+  }
+
+  navigateToDirectionAnalysisOptions(): void {
+    this.router.navigate([`line/${this.routeLine}/${this.direction}`]);
   }
 }
