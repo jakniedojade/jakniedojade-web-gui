@@ -10,7 +10,7 @@
             @case (ChildComponents.RouteSelection) {
                 <app-direction-meanlatency-route-selection (selectSettings)="selectComponent($event)"/>
             }
-            @case ('weekdaySelection') {
+            @case (ChildComponents.WeekdaySelection) {
                 <app-weekdays-selection (selectSettings)="selectComponent($event)"/>
             }
             @default {
