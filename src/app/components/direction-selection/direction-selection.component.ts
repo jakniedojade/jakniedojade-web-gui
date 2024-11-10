@@ -4,18 +4,16 @@ import { LineDataService } from '../../services/line-data.service';
 import { catchError, forkJoin, of, switchMap } from 'rxjs';
 import { LineData } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
-import { MatButton } from '@angular/material/button';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MapService } from '../../services/map.service';
 import { AsyncPipe } from '@angular/common';
-import { ErrorDialogComponent } from "../error-dialog/error-dialog.component";
 import { MatIcon } from '@angular/material/icon';
 import { LinesService } from '../../services/lines.service';
 
 @Component({
   selector: 'app-direction-selection',
   standalone: true,
-  imports: [MatButton, NavigationButtonsComponent, AsyncPipe, ErrorDialogComponent, ErrorDialogComponent, MatIcon],
+  imports: [NavigationButtonsComponent, AsyncPipe, MatIcon],
   templateUrl: './direction-selection.component.html',
   styleUrl: './direction-selection.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
