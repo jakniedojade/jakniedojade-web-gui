@@ -31,6 +31,7 @@ jobs:
           app_location: "/" # App source code path
           output_location: "dist/jakniedojade/browser" # Built app content directory - optional
           skip_api_build: true
+          production_branch: "main"
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
