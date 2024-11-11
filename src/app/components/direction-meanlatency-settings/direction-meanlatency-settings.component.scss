@@ -46,6 +46,23 @@
     }
 }
 
+.settings-page {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.icon-text {
+    display: flex;
+    align-items: center;
+
+    > * {
+        padding: 4px;
+        display: flex;
+        align-items: center;
+    }
+}
+
 .navigation-buttons {
     @include navigation-buttons;
 }

@@ -14,14 +14,28 @@
                 <app-weekdays-selection (selectSettings)="selectComponent($event)"/>
             }
             @default {
-                <button (click)="selectComponent(ChildComponents.RouteSelection)">route</button>
-                <button (click)="selectComponent(ChildComponents.WeekdaySelection)">weekdays</button>
+                <div class="settings-page">
+                    <div class="icon-text">
+                        <span>Trasa:</span>
+                        <div class="button" style="cursor: pointer;" (click)="selectComponent(ChildComponents.RouteSelection)">
+                            <span style="font-weight: 600;">Wybierz trasę</span>
+                            <mat-icon>settings</mat-icon>
+                        </div>
+                    </div>
+                    <div class="icon-text">
+                        <span>Dni tygodnia:</span>
+                        <div class="button" style="cursor: pointer;" (click)="selectComponent(ChildComponents.WeekdaySelection)">
+                            <span style="font-weight: 600;">Powszednie</span>
+                            <mat-icon>settings</mat-icon>
+                        </div>
+                    </div>
+                </div>
                 <div class="navigation-buttons">
                     <app-navigation-buttons
-                        [nextDisabled]="false"
-                        [nextButtonLabel]="'Gotowe'"
-                        (next)="false"
-                        (previous)="navigateToDirectionAnalysisOptions()"/>
+                    [nextDisabled]="false"
+                    [nextButtonLabel]="'Gotowe'"
+                    (next)="false"
+                    (previous)="navigateToDirectionAnalysisOptions()"/>
                 </div>
             }
         }
