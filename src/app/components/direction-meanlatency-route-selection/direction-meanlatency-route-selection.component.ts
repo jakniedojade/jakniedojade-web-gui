@@ -1,59 +1,45 @@
-import { Component, computed, EventEmitter, inject, Input, output, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ErrorDialogService } from '../../services/error-dialog.service';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { MapService } from '../../services/map.service';
-import { LineDataService } from '../../services/line-data.service';
-import { BehaviorSubject, catchError, fromEvent, map, of, pairwise, Subject, switchMap, tap } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
-import { MatIcon } from '@angular/material/icon';
 import { MeanlatencyChildComponents } from '../direction-meanlatency-settings/direction-meanlatency-settings.component';
+import { LineData } from '../../interfaces/line-data';
 
 @Component({
   selector: 'app-direction-meanlatency-route-selection',
   standalone: true,
-  imports: [AsyncPipe, NavigationButtonsComponent],
+  imports: [NavigationButtonsComponent],
   templateUrl: './direction-meanlatency-route-selection.component.html',
   styleUrl: './direction-meanlatency-route-selection.component.scss'
 })
 export class DirectionMeanlatencyRouteSelectionComponent {
-  private errorDialogService = inject(ErrorDialogService);
   private mapService = inject(MapService);
-  private lineDataService = inject(LineDataService);
-  private activatedRoute = inject(ActivatedRoute);
 
-  selectSettings = output<MeanlatencyChildComponents>()
+  directionData = input.required<LineData>();
+  selectSettings = output<MeanlatencyChildComponents>();
 
-  startingIndex: number | null = null;
-  endingIndex: number | null = null;
-
-  selectedDirectionFromRoute$ = this.activatedRoute.params.pipe(
-    switchMap(paramMap => 
-      this.lineDataService.getLineData(paramMap['routeLine'], paramMap['direction'])
-    ),
-    catchError(error => {
-      this.errorDialogService.openErrorDialog(error.message);
-      return of(null);
-    })
-  );
+  startingIndex = signal<number | null>(null);
+  endingIndex = signal<number | null>(null);
 
   setIndex(index: number): void {
-    if (this.startingIndex !== null && this.endingIndex !== null) {
-      this.startingIndex = null;
-      this.endingIndex = null;
+    let start: number | null = this.startingIndex();
+    let end: number | null = this.endingIndex();
+    
+    if (start !== null && end !== null) {
+      start = null;
+      end = null;
     }
     
-    if (this.startingIndex === null) {
-      this.startingIndex = index;
+    if (start === null) {
+      start = index;
     } else {
-      this.endingIndex = index;
+      end = index;
+      if (end < start) [start, end] = [end, start];
+      const data = this.directionData();
+      this.mapService.drawSlicedRoute(data.shapes, data.poles, data.poles[start], data.poles[end]);
     }
-    
-    if (this.endingIndex !== null && this.endingIndex < this.startingIndex) {
-      const temp = this.endingIndex;
-      this.endingIndex = this.startingIndex;
-      this.startingIndex = temp;
-    }
+
+    this.startingIndex.set(start);
+    this.endingIndex.set(end);
   }
 
   goToSettings(): void {

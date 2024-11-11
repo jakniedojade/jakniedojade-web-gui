@@ -1,17 +1,15 @@
 <div class="direction-meanlatency-route-selection-component">
-    @if (selectedDirectionFromRoute$ | async; as selectedDirection) {
-        <div class="pole-container">
-            @for (pole of selectedDirection.poles; track $index; let index = $index) {
-                <div class="pole" (click)="setIndex(index)">
-                    <img style="width: 10px;" src="../../../assets/stop_regular.svg" alt="stop_image">
-                    <span class="pole-text"
-                        [class.selected]="(startingIndex !== null && endingIndex !== null && index >= startingIndex && index <= endingIndex) || index === startingIndex">
-                        {{pole.name}}
-                    </span>
-                </div>
-            }
-        </div>
-    }
+    <div class="pole-container">
+        @for (pole of directionData().poles; track $index; let index = $index) {
+            <div class="pole" (click)="setIndex(index)">
+                <img style="width: 10px;" src="../../../assets/stop_regular.svg" alt="stop_image">
+                <span class="pole-text"
+                    [class.selected]="index >= (startingIndex() ?? -1) && index <= (endingIndex() ?? -1) || index === startingIndex()">
+                    {{pole.name}}
+                </span>
+            </div>
+        }
+    </div>
     <div class="navigation-buttons">
         <app-navigation-buttons
             [nextDisabled]="(startingIndex === null || endingIndex === null)"

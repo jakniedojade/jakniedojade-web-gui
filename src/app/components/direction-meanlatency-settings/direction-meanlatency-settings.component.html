@@ -8,7 +8,7 @@
         </header>
         @switch (selectedComponentName()) {
             @case (ChildComponents.RouteSelection) {
-                <app-direction-meanlatency-route-selection (selectSettings)="selectComponent($event)"/>
+                <app-direction-meanlatency-route-selection [directionData]="selectedDirection" (selectSettings)="selectComponent($event)"/>
             }
             @case (ChildComponents.WeekdaySelection) {
                 <app-weekdays-selection (selectSettings)="selectComponent($event)"/>
