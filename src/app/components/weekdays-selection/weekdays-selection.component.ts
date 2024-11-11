@@ -5,7 +5,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, Subject, takeUntil, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { AsyncPipe } from '@angular/common';
 import { MeanlatencyChildComponents } from '../direction-meanlatency-settings/direction-meanlatency-settings.component';
 
 interface WeekdayFormValue {
@@ -92,6 +91,7 @@ export class WeekdaysSelectionComponent {
         }
       })
     ).subscribe();
+    this.toggleControl.setValue('regular');
   }
 
   private $nextDisabled = this.chipControl.valueChanges.pipe(
