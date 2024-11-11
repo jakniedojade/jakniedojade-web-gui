@@ -102,7 +102,25 @@ export class WeekdaysSelectionComponent {
   nextDisabled = toSignal(this.$nextDisabled);
 
   toggleChip(day: keyof WeekdayFormValue): void {
+    const regularWeekdays = ['mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays'];
+    const saturdaysAndHolidays = ['saturdays', 'sundays', 'holidays'];
     const currentState = this.chipControl.value[day];
+
+    if (regularWeekdays.includes(day)) {
+      this.chipControl.patchValue({
+        ['saturdays']: false,
+        ['sundays']: false,
+        ['holidays']: false
+      });
+    } else if (saturdaysAndHolidays.includes(day)) {
+      this.chipControl.patchValue({
+        ['mondays']: false,
+        ['tuesdays']: false,
+        ['wednesdays']: false,
+        ['thursdays']: false,
+        ['fridays']: false,
+      })
+    }
     this.chipControl.patchValue({
       [day]: !currentState
     });
