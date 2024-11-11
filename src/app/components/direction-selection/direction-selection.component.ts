@@ -9,11 +9,12 @@ import { MapService } from '../../services/map.service';
 import { AsyncPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { LinesService } from '../../services/lines.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-direction-selection',
   standalone: true,
-  imports: [NavigationButtonsComponent, AsyncPipe, MatIcon],
+  imports: [MatButton, NavigationButtonsComponent, AsyncPipe, MatIcon],
   templateUrl: './direction-selection.component.html',
   styleUrl: './direction-selection.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
