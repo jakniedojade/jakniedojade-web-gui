@@ -16,6 +16,7 @@ interface WeekdayFormValue {
   fridays: boolean;
   saturdays: boolean;
   sundays: boolean;
+  holidays: boolean;
 }
 
 @Component({
@@ -37,7 +38,8 @@ export class WeekdaysSelectionComponent {
     thursdays: new FormControl(false),
     fridays: new FormControl(false),
     saturdays: new FormControl(false),
-    sundays: new FormControl(false)
+    sundays: new FormControl(false),
+    holidays: new FormControl(false)
   });
 
   regularWeekdays: WeekdayFormValue = {
@@ -47,17 +49,19 @@ export class WeekdaysSelectionComponent {
     thursdays: true,
     fridays: true,
     saturdays: false,
-    sundays: false
+    sundays: false,
+    holidays: false
   }
 
-  holidays: WeekdayFormValue = {
+  saturdaysAndHolidays: WeekdayFormValue = {
     mondays: false,
     tuesdays: false,
     wednesdays: false,
     thursdays: false,
     fridays: false,
     saturdays: true,
-    sundays: true
+    sundays: true,
+    holidays: true
   }
 
   noWeekdaySelected: WeekdayFormValue = {
@@ -67,7 +71,8 @@ export class WeekdaysSelectionComponent {
     thursdays: false,
     fridays: false,
     saturdays: false,
-    sundays: false
+    sundays: false,
+    holidays: false
   }
 
   private destroy$ = new Subject<void>();
@@ -79,9 +84,9 @@ export class WeekdaysSelectionComponent {
         if (value === 'regular') {
           this.chipControl.setValue(this.regularWeekdays);
         } else if (value === 'holidays') {
-          this.chipControl.setValue(this.holidays);
+          this.chipControl.setValue(this.saturdaysAndHolidays);
         } else if (value === 'custom') {
-          if (JSON.stringify(this.chipControl.value) === JSON.stringify(this.regularWeekdays) || JSON.stringify(this.chipControl.value) === JSON.stringify(this.holidays)) {
+          if (JSON.stringify(this.chipControl.value) === JSON.stringify(this.regularWeekdays) || JSON.stringify(this.chipControl.value) === JSON.stringify(this.saturdaysAndHolidays)) {
             this.chipControl.setValue(this.noWeekdaySelected);
           }
         }
@@ -103,7 +108,7 @@ export class WeekdaysSelectionComponent {
     });
     if (JSON.stringify(this.chipControl.value) === JSON.stringify(this.regularWeekdays)) {
       this.toggleControl.setValue("regular");
-    } else if (JSON.stringify(this.chipControl.value) === JSON.stringify(this.holidays)) {
+    } else if (JSON.stringify(this.chipControl.value) === JSON.stringify(this.saturdaysAndHolidays)) {
       this.toggleControl.setValue("holidays");
     } else {
       this.toggleControl.setValue("custom");
