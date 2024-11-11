@@ -12,7 +12,7 @@
     </div>
     <div class="navigation-buttons">
         <app-navigation-buttons
-            [nextDisabled]="(startingIndex === null || endingIndex === null)"
+            [nextDisabled]="(startingIndex() === null || endingIndex() === null)"
             (next)="goToSettings()"
             (previous)="goToSettings()"/>
     </div>
