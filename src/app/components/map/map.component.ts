@@ -165,7 +165,6 @@ export class MapComponent implements OnInit {
           }
         }
       });
-      this.poleMarkers.push(stopMarker);
       hoverArea.addTo(this.map);
       stopMarker.addTo(this.map);
       this.routeMarkersGroup.addLayer(hoverArea);
