@@ -14,7 +14,7 @@
                     (selectedRoute)="setRangeFromRouteSelection($event)"/>
             }
             @case (ChildComponents.WeekdaySelection) {
-                <app-weekdays-selection (selectSettings)="selectComponent($event)"/>
+                <app-weekdays-selection (selectSettings)="selectComponent($event)" (selectedWeekdays)="setSelectedWeekdays($event)"/>
             }
             @default {
                 <div class="settings-page">
@@ -28,7 +28,7 @@
                     <div class="icon-text">
                         <span>Dni tygodnia:</span>
                         <div class="button" style="cursor: pointer;" (click)="selectComponent(ChildComponents.WeekdaySelection)">
-                            <span style="font-weight: 600;">Powszednie</span>
+                            <span style="font-weight: 600;">{{ selectedWeekdaysString() }}</span>
                             <mat-icon>settings</mat-icon>
                         </div>
                     </div>

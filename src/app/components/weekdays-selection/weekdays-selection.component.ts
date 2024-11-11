@@ -7,7 +7,7 @@ import { map, Subject, takeUntil, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MeanlatencyChildComponents } from '../direction-meanlatency-settings/direction-meanlatency-settings.component';
 
-interface WeekdayFormValue {
+export interface Weekdays {
   mondays: boolean;
   tuesdays: boolean;
   wednesdays: boolean;
@@ -16,6 +16,39 @@ interface WeekdayFormValue {
   saturdays: boolean;
   sundays: boolean;
   holidays: boolean;
+}
+
+export const regularWeekdays: Weekdays = {
+  mondays: true,
+  tuesdays: true,
+  wednesdays: true,
+  thursdays: true,
+  fridays: true,
+  saturdays: false,
+  sundays: false,
+  holidays: false
+}
+
+export const saturdaysAndHolidays: Weekdays = {
+  mondays: false,
+  tuesdays: false,
+  wednesdays: false,
+  thursdays: false,
+  fridays: false,
+  saturdays: true,
+  sundays: true,
+  holidays: true
+}
+
+export const noWeekdaySelected: Weekdays = {
+  mondays: false,
+  tuesdays: false,
+  wednesdays: false,
+  thursdays: false,
+  fridays: false,
+  saturdays: false,
+  sundays: false,
+  holidays: false
 }
 
 @Component({
@@ -27,6 +60,7 @@ interface WeekdayFormValue {
 })
 export class WeekdaysSelectionComponent {
   selectSettings = output<MeanlatencyChildComponents>();
+  selectedWeekdays = output<Weekdays>();
 
   toggleControl = new FormControl('custom');
   
@@ -41,38 +75,7 @@ export class WeekdaysSelectionComponent {
     holidays: new FormControl(false)
   });
 
-  regularWeekdays: WeekdayFormValue = {
-    mondays: true,
-    tuesdays: true,
-    wednesdays: true,
-    thursdays: true,
-    fridays: true,
-    saturdays: false,
-    sundays: false,
-    holidays: false
-  }
 
-  saturdaysAndHolidays: WeekdayFormValue = {
-    mondays: false,
-    tuesdays: false,
-    wednesdays: false,
-    thursdays: false,
-    fridays: false,
-    saturdays: true,
-    sundays: true,
-    holidays: true
-  }
-
-  noWeekdaySelected: WeekdayFormValue = {
-    mondays: false,
-    tuesdays: false,
-    wednesdays: false,
-    thursdays: false,
-    fridays: false,
-    saturdays: false,
-    sundays: false,
-    holidays: false
-  }
 
   private destroy$ = new Subject<void>();
 
@@ -81,12 +84,12 @@ export class WeekdaysSelectionComponent {
       takeUntil(this.destroy$),
       tap(value => {
         if (value === 'regular') {
-          this.chipControl.setValue(this.regularWeekdays);
+          this.chipControl.setValue(regularWeekdays);
         } else if (value === 'holidays') {
-          this.chipControl.setValue(this.saturdaysAndHolidays);
+          this.chipControl.setValue(saturdaysAndHolidays);
         } else if (value === 'custom') {
-          if (JSON.stringify(this.chipControl.value) === JSON.stringify(this.regularWeekdays) || JSON.stringify(this.chipControl.value) === JSON.stringify(this.saturdaysAndHolidays)) {
-            this.chipControl.setValue(this.noWeekdaySelected);
+          if (JSON.stringify(this.chipControl.value) === JSON.stringify(regularWeekdays) || JSON.stringify(this.chipControl.value) === JSON.stringify(saturdaysAndHolidays)) {
+            this.chipControl.setValue(noWeekdaySelected);
           }
         }
       })
@@ -96,12 +99,12 @@ export class WeekdaysSelectionComponent {
 
   private $nextDisabled = this.chipControl.valueChanges.pipe(
     map(value => {
-      return JSON.stringify(value) === JSON.stringify(this.noWeekdaySelected)
+      return JSON.stringify(value) === JSON.stringify(noWeekdaySelected)
     })
   ) 
   nextDisabled = toSignal(this.$nextDisabled);
 
-  toggleChip(day: keyof WeekdayFormValue): void {
+  toggleChip(day: keyof Weekdays): void {
     const regularWeekdays = ['mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays'];
     const saturdaysAndHolidays = ['saturdays', 'sundays', 'holidays'];
     const currentState = this.chipControl.value[day];
@@ -124,13 +127,18 @@ export class WeekdaysSelectionComponent {
     this.chipControl.patchValue({
       [day]: !currentState
     });
-    if (JSON.stringify(this.chipControl.value) === JSON.stringify(this.regularWeekdays)) {
+    if (JSON.stringify(this.chipControl.value) === JSON.stringify(regularWeekdays)) {
       this.toggleControl.setValue("regular");
-    } else if (JSON.stringify(this.chipControl.value) === JSON.stringify(this.saturdaysAndHolidays)) {
+    } else if (JSON.stringify(this.chipControl.value) === JSON.stringify(saturdaysAndHolidays)) {
       this.toggleControl.setValue("holidays");
     } else {
       this.toggleControl.setValue("custom");
     }
+  }
+
+  returnWeekdaysAndGoToSettings(): void {
+    this.selectedWeekdays.emit(this.chipControl.value as Weekdays);
+    this.goToSettings();
   }
 
   goToSettings(): void {

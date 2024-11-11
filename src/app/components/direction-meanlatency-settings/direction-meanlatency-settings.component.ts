@@ -1,5 +1,5 @@
-import { AsyncPipe, NgComponentOutlet } from '@angular/common';
-import { Component, inject, Input, signal } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, computed, inject, Input, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { switchMap, tap, catchError, of } from 'rxjs';
 import { ErrorDialogService } from '../../services/error-dialog.service';
@@ -9,7 +9,7 @@ import { MapService } from '../../services/map.service';
 import { MatIcon } from '@angular/material/icon';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { DirectionMeanlatencyRouteSelectionComponent } from '../direction-meanlatency-route-selection/direction-meanlatency-route-selection.component';
-import { WeekdaysSelectionComponent } from "../weekdays-selection/weekdays-selection.component";
+import { regularWeekdays, saturdaysAndHolidays, Weekdays, WeekdaysSelectionComponent } from "../weekdays-selection/weekdays-selection.component";
 import { PoleDetails } from '../../interfaces/line-data';
 
 export enum MeanlatencyChildComponents {
@@ -50,6 +50,16 @@ export class DirectionMeanlatencySettingsComponent {
   @Input() routeLine!: string;
 
   routeString = signal<string>('Wybierz trasę');
+  private selectedWeekdays = signal<Weekdays>(regularWeekdays);
+  selectedWeekdaysString = computed(() => {
+    if (JSON.stringify(this.selectedWeekdays()) === JSON.stringify(regularWeekdays)) {
+      return 'Powszednie';
+    } else if (JSON.stringify(this.selectedWeekdays()) === JSON.stringify(saturdaysAndHolidays)) {
+      return 'Soboty i święta';
+    } else {
+      return 'Niestandardowe';
+    }
+  });
 
   lineIcon$ = this.activatedRoute.paramMap.pipe(
     switchMap((paramMap) => {
@@ -82,6 +92,10 @@ export class DirectionMeanlatencySettingsComponent {
 
   setRangeFromRouteSelection(selectedRoutePoles: PoleDetails[]): void {
     this.routeString.set(`${selectedRoutePoles[0].name} -> ${selectedRoutePoles[selectedRoutePoles.length - 1].name}`)
+  }
+
+  setSelectedWeekdays(weekdays: Weekdays): void {
+    this.selectedWeekdays.set(weekdays);
   }
 
   navigateToDirectionAnalysisOptions(): void {

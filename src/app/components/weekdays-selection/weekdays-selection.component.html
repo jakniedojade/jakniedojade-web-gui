@@ -20,7 +20,7 @@
     <div class="navigation-buttons">
         <app-navigation-buttons
             [nextDisabled]="nextDisabled() ?? true"
-            (next)="goToSettings()"
+            (next)="returnWeekdaysAndGoToSettings()"
             (previous)="goToSettings()"/>
     </div>
 </div>
