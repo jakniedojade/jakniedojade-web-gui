@@ -11,17 +11,17 @@
                 <app-direction-meanlatency-route-selection
                     [directionData]="selectedDirection"
                     (selectSettings)="selectComponent($event)"
-                    (selectedRoute)="setRangeFromRouteSelection($event)"/>
+                    (selectedRoute)="selectedRoutePoles.set($event)"/>
             }
             @case (ChildComponents.WeekdaySelection) {
-                <app-weekdays-selection (selectSettings)="selectComponent($event)" (selectedWeekdays)="setSelectedWeekdays($event)"/>
+                <app-weekdays-selection (selectSettings)="selectComponent($event)" (selectedWeekdays)="selectedWeekdays.set($event)"/>
             }
             @default {
                 <div class="settings-page">
                     <div class="icon-text">
                         <span>Trasa:</span>
                         <div class="button" style="cursor: pointer;" (click)="selectComponent(ChildComponents.RouteSelection)">
-                            <span style="font-weight: 600;">{{ routeString() }}</span>
+                            <span style="font-weight: 600;">{{ selectedRouteString() }}</span>
                             <mat-icon>settings</mat-icon>
                         </div>
                     </div>

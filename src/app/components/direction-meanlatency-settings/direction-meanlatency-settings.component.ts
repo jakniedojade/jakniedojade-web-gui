@@ -49,8 +49,15 @@ export class DirectionMeanlatencySettingsComponent {
   @Input() direction!: string;
   @Input() routeLine!: string;
 
-  routeString = signal<string>('Wybierz trasę');
-  private selectedWeekdays = signal<Weekdays>(regularWeekdays);
+  selectedRoutePoles = signal<PoleDetails[]>([]);
+  selectedRouteString = computed(() => {
+    const poles = this.selectedRoutePoles();
+    return poles.length > 0
+      ? `${poles[0].name} -> ${poles[poles.length - 1].name}`
+      : 'Wybierz trasę';
+  });
+
+  selectedWeekdays = signal<Weekdays>(regularWeekdays);
   selectedWeekdaysString = computed(() => {
     if (JSON.stringify(this.selectedWeekdays()) === JSON.stringify(regularWeekdays)) {
       return 'Powszednie';
@@ -88,14 +95,6 @@ export class DirectionMeanlatencySettingsComponent {
   selectComponent(componentName: MeanlatencyChildComponents): void {
     this.selectedComponentName.set(componentName);
     this.selectedComponentHeader.set(COMPONENT_HEADERS[componentName]);
-  }
-
-  setRangeFromRouteSelection(selectedRoutePoles: PoleDetails[]): void {
-    this.routeString.set(`${selectedRoutePoles[0].name} -> ${selectedRoutePoles[selectedRoutePoles.length - 1].name}`)
-  }
-
-  setSelectedWeekdays(weekdays: Weekdays): void {
-    this.selectedWeekdays.set(weekdays);
   }
 
   navigateToDirectionAnalysisOptions(): void {
