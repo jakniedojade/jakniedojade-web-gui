@@ -10,6 +10,9 @@ export class MapService {
   #selectedPole = signal<PoleDetails | null>(null);
   public selectedPole = computed(() => this.#selectedPole());
 
+  routeDrawn = signal<boolean>(false);
+  grayRouteDrawn = signal<boolean>(false);
+
   setMapComponent(mapComponent: MapComponent): void {
     this.mapComponent = mapComponent;
   }
@@ -19,7 +22,10 @@ export class MapService {
   }
 
   drawRoute(shapes: Shape[], grayPolyline: boolean = false): void {
-    this.mapComponent!.drawRoute(shapes, grayPolyline);
+    if (!this.routeDrawn() || this.grayRouteDrawn() || grayPolyline) {
+      this.mapComponent!.drawRoute(shapes, grayPolyline);
+      this.routeDrawn.set(true);
+    }
   }
 
   drawPoles(poles: PoleDetails[], grayIcons: boolean = false): void {
@@ -41,7 +47,7 @@ export class MapService {
     const data = this.sliceRoute(poles, shapes, startingPole, endingPole)
     this.mapComponent!.drawSlicedRoute(data.shapes, data.poles);
   }
-  
+
   private sliceRoute(poles: PoleDetails[], shapes: Shape[], startingPole: PoleDetails, endingPole: PoleDetails) {
     const calculateDistance = (x1: number, y1: number, x2: number, y2: number): number => {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));

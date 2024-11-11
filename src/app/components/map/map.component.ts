@@ -92,19 +92,24 @@ export class MapComponent implements OnInit {
     this.map.setZoom(this.map.getZoom() - 1);
   }
 
-  private routeDrawn = false;
   private tempPoles: any = [] //used to store removed gray poles green route overwrites gray one
 
   public clearMapLayers() {
     this.routeMarkersGroup.clearLayers();
     this.slicedRouteMarkersGroup.clearLayers();
-    this.routeDrawn = false;
+    this.mapService.routeDrawn.set(false);
     this.tempPoles = [];
   }
 
   public drawRoute(shapes: Shape[], grayPolyline: boolean = false): void {
     this.clearMapLayers();
-    this.routeDrawn = true;
+    if (grayPolyline) {
+      this.mapService.grayRouteDrawn.set(true);
+      this.mapService.routeDrawn.set(false);
+    } else {
+      this.mapService.grayRouteDrawn.set(false);
+      this.mapService.routeDrawn.set(true);
+    }
     const shapesCoords = shapes.map((shape: Shape) => ({
       lat: shape.latitude,
       lng: shape.longitude
@@ -171,7 +176,7 @@ export class MapComponent implements OnInit {
       this.routeMarkersGroup.addLayer(stopMarker);
       polesToDraw.length > 1 ? this.poleMarkers.push(stopMarker) : stopMarker.openPopup();
     });
-    if (!this.routeDrawn) {
+    if (!this.mapService.routeDrawn()) {
       this.map.fitBounds(bounds.pad(0.2));
     }
   }
