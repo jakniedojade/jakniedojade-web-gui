@@ -8,7 +8,10 @@
         </header>
         @switch (selectedComponentName()) {
             @case (ChildComponents.RouteSelection) {
-                <app-direction-meanlatency-route-selection [directionData]="selectedDirection" (selectSettings)="selectComponent($event)"/>
+                <app-direction-meanlatency-route-selection
+                    [directionData]="selectedDirection"
+                    (selectSettings)="selectComponent($event)"
+                    (selectedRoute)="setRangeFromRouteSelection($event)"/>
             }
             @case (ChildComponents.WeekdaySelection) {
                 <app-weekdays-selection (selectSettings)="selectComponent($event)"/>
@@ -18,7 +21,7 @@
                     <div class="icon-text">
                         <span>Trasa:</span>
                         <div class="button" style="cursor: pointer;" (click)="selectComponent(ChildComponents.RouteSelection)">
-                            <span style="font-weight: 600;">Wybierz trasę</span>
+                            <span style="font-weight: 600;">{{ routeString() }}</span>
                             <mat-icon>settings</mat-icon>
                         </div>
                     </div>

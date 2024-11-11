@@ -10,6 +10,7 @@ import { MatIcon } from '@angular/material/icon';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { DirectionMeanlatencyRouteSelectionComponent } from '../direction-meanlatency-route-selection/direction-meanlatency-route-selection.component';
 import { WeekdaysSelectionComponent } from "../weekdays-selection/weekdays-selection.component";
+import { PoleDetails } from '../../interfaces/line-data';
 
 export enum MeanlatencyChildComponents {
   RouteSelection = 'routeSelection',
@@ -47,6 +48,9 @@ export class DirectionMeanlatencySettingsComponent {
 
   @Input() direction!: string;
   @Input() routeLine!: string;
+
+  routeString = signal<string>('Wybierz trasę');
+
   lineIcon$ = this.activatedRoute.paramMap.pipe(
     switchMap((paramMap) => {
       return this.linesService.getLineIcon(paramMap.get('routeLine')!);
@@ -74,6 +78,10 @@ export class DirectionMeanlatencySettingsComponent {
   selectComponent(componentName: MeanlatencyChildComponents): void {
     this.selectedComponentName.set(componentName);
     this.selectedComponentHeader.set(COMPONENT_HEADERS[componentName]);
+  }
+
+  setRangeFromRouteSelection(selectedRoutePoles: PoleDetails[]): void {
+    this.routeString.set(`${selectedRoutePoles[0].name} -> ${selectedRoutePoles[selectedRoutePoles.length - 1].name}`)
   }
 
   navigateToDirectionAnalysisOptions(): void {
