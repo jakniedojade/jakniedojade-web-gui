@@ -7,6 +7,7 @@ import { PoleSelectionComponent } from './components/pole-selection/pole-selecti
 import { DirectionAnalysisSelectionComponent } from './components/direction-analysis-selection/direction-analysis-selection.component';
 import { PoleAnalysisSelectionComponent } from './components/pole-analysis-selection/pole-analysis-selection.component';
 import { LinesOnPoleSelectionComponent } from './components/lines-on-pole-selection/lines-on-pole-selection.component';
+import { WrongRouteScreenComponent } from './components/wrong-route-screen/wrong-route-screen.component';
 
 export const routes: Routes = [
     { path: '', component: WelcomeScreenComponent },
@@ -52,8 +53,11 @@ export const routes: Routes = [
     },
     {
         path: 'stop/:routeStopId/:routeStopName/:routePoleName/lines', component: LinesOnPoleSelectionComponent,
-    },
+    }, 
     //THIS PATH IS HERE TEMPORARLY 
     { path: 'results/:line/:directionSwapped/:startStop/:endStop', component: ResultsComponent },  // TODO: Refactor this route
+    {
+        path: '**', pathMatch: 'full', component: WrongRouteScreenComponent,
+    },   
 ];
 

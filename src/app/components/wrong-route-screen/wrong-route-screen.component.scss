@@ -1,0 +1,38 @@
+#error-404-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#error-404-title {
+    font-size: 40px;
+    color: var(--sys-primary);
+    line-height: 30px;
+}
+
+#error-404-title > span {
+    color: var(--sys-secondary);
+}
+
+
+#error-404-text {
+    font-size: 15px;
+    text-align: center;
+    line-height: 17px;
+    max-width: 323px;
+
+    margin-bottom: 20px;
+
+    &  > span {
+        color: var(--sys-primary);
+        overflow-wrap: anywhere;
+    }
+}
+
+.error-404-button {
+    margin-top: 10px;
+    width: 90%;
+    max-width: 230px;
+}
