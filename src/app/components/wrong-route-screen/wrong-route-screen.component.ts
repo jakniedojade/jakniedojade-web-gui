@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
   templateUrl: './wrong-route-screen.component.html',
   styleUrl: './wrong-route-screen.component.scss'
 })
-export class WrongRouteScreenComponent implements OnInit {
-private router = inject(Router);
-  
-public currentRoute = this.router.url
+export class WrongRouteScreenComponent {
+  private router = inject(Router);
+  public currentRoute = this.router.url;
+}
