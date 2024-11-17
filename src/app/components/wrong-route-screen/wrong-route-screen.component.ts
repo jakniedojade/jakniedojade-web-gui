@@ -10,14 +10,6 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
   styleUrl: './wrong-route-screen.component.scss'
 })
 export class WrongRouteScreenComponent implements OnInit {
-  public currentRoute: string = "";
-
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {
-    this.currentRoute = this.router.url;
-    this.router.events.subscribe(() => {
-      this.currentRoute = this.router.url;
-    });
-  }
-}
+private router = inject(Router);
+  
+public currentRoute = this.router.url
