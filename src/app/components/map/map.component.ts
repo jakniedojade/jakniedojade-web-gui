@@ -98,6 +98,7 @@ export class MapComponent implements OnInit {
     this.routeMarkersGroup.clearLayers();
     this.slicedRouteMarkersGroup.clearLayers();
     this.mapService.routeDrawn.set(false);
+    this.poleMarkers = [];
     this.tempPoles = [];
   }
 
@@ -190,12 +191,17 @@ export class MapComponent implements OnInit {
     });
   }
 
-  public drawSlicedRoute(slicedShapes: Shape[], slicedPoles: PoleDetails[]): void {
+  public clearSlicedRouteLayers(): void {
     this.slicedRouteMarkersGroup.clearLayers();
     this.tempPoles.forEach((marker: any) => {
       marker.addTo(this.map);
-      this.slicedRouteMarkersGroup.addLayer(marker);
+      this.routeMarkersGroup.addLayer(marker);
     });
+    this.tempPoles = [];
+  }
+  
+  public drawSlicedRoute(slicedShapes: Shape[], slicedPoles: PoleDetails[]): void {
+    this.clearSlicedRouteLayers();
     const shapesCoords = slicedShapes.map((shape: Shape) => ({
       lat: shape.latitude,
       lng: shape.longitude

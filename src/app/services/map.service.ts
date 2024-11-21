@@ -21,6 +21,10 @@ export class MapService {
     this.mapComponent!.clearMapLayers()
   }
 
+  clearSlicedRouteLayers(): void {
+    this.mapComponent!.clearSlicedRouteLayers();
+  }
+
   drawRoute(shapes: Shape[], grayPolyline: boolean = false): void {
     if (!this.routeDrawn() || this.grayRouteDrawn() || grayPolyline) {
       this.mapComponent!.drawRoute(shapes, grayPolyline);
