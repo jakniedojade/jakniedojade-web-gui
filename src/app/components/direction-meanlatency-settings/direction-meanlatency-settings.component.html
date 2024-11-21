@@ -14,7 +14,7 @@
                     [(state)]="routeSelectionState"/>
             }
             @case (ChildComponents.WeekdaySelection) {
-                <app-weekdays-selection (selectSettings)="selectComponent($event)" (selectedWeekdays)="selectedWeekdays.set($event)"/>
+                <app-weekdays-selection (selectSettings)="selectComponent($event)" [(weekdaysState)]="selectedWeekdays"/>
             }
             @default {
                 <div class="settings-page">

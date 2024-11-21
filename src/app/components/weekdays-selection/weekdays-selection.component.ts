@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, model, OnInit, output, signal } from '@angular/core';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
@@ -58,9 +58,8 @@ export const noWeekdaySelected: Weekdays = {
   templateUrl: './weekdays-selection.component.html',
   styleUrl: './weekdays-selection.component.scss'
 })
-export class WeekdaysSelectionComponent {
+export class WeekdaysSelectionComponent implements OnInit {
   selectSettings = output<MeanlatencyChildComponents>();
-  selectedWeekdays = output<Weekdays>();
 
   toggleControl = new FormControl('');
   
@@ -76,6 +75,13 @@ export class WeekdaysSelectionComponent {
   });
 
   private destroy$ = new Subject<void>();
+
+  weekdaysState = model<Weekdays>();
+
+  ngOnInit(): void {
+    this.chipControl.patchValue(this.weekdaysState() as Weekdays);
+    this.updateToggles();
+  }
 
   constructor() {
     this.toggleControl.valueChanges.pipe(
@@ -126,6 +132,10 @@ export class WeekdaysSelectionComponent {
       [day]: !currentState
     });
 
+    this.updateToggles();
+  }
+
+  private updateToggles(): void {
     if (JSON.stringify(this.chipControl.value) === JSON.stringify(regularWeekdays)) {
       this.toggleControl.setValue("regular");
     } else if (JSON.stringify(this.chipControl.value) === JSON.stringify(saturdaysAndHolidays)) {
@@ -136,7 +146,7 @@ export class WeekdaysSelectionComponent {
   }
 
   returnWeekdaysAndGoToSettings(): void {
-    this.selectedWeekdays.emit(this.chipControl.value as Weekdays);
+    this.weekdaysState.set(this.chipControl.value as Weekdays);
     this.goToSettings();
   }
 
