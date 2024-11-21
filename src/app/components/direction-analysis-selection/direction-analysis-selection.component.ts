@@ -47,8 +47,10 @@ export class DirectionAnalysisSelectionComponent {
     switchMap(paramMap => 
       this.lineDataService.getLineData(paramMap['routeLine'], paramMap['direction']).pipe(
         tap(lineData => {
-          this.mapService.drawRoute(lineData.shapes);
-          this.mapService.drawPoles(lineData.poles);
+          if (!this.mapService.routeDrawn()) {
+            this.mapService.drawRoute(lineData.shapes);
+            this.mapService.drawPoles(lineData.poles);
+          }
         }),
       )
     ),
