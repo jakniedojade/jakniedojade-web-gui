@@ -8,7 +8,6 @@ import { DirectionAnalysisSelectionComponent } from './components/direction-anal
 import { PoleAnalysisSelectionComponent } from './components/pole-analysis-selection/pole-analysis-selection.component';
 import { LinesOnPoleSelectionComponent } from './components/lines-on-pole-selection/lines-on-pole-selection.component';
 import { DirectionMeanlatencySettingsComponent } from './components/direction-meanlatency-settings/direction-meanlatency-settings.component';
-import { PoleRealscheduleSettingsComponent } from './components/pole-realschedule-settings/pole-realschedule-settings.component';
 
 export const routes: Routes = [
     { path: '', component: WelcomeScreenComponent },
@@ -38,7 +37,7 @@ export const routes: Routes = [
         path: 'stop/:routeStopId/:routeStopName/:routePoleName', component: PoleAnalysisSelectionComponent,
     },
     {
-        path: 'stop/:routeStopId/:routeStopName/:poleNumber/real_schedule/settings', component: PoleRealscheduleSettingsComponent,
+        path: 'stop/:routeStopId/:routeStopName/:poleNumber/real_schedule/settings', redirectTo: '' // component: FutureComponent
     },
     {
         path: 'stop/:routeStopId/:routeStopName/:poleNumber/real_schedule/results', redirectTo: '' // component: FutureComponent
