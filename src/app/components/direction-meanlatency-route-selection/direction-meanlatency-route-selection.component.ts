@@ -44,7 +44,7 @@ export class DirectionMeanlatencyRouteSelectionComponent implements OnInit{
     const data = this.directionData();
     if (start === undefined) {
       start = index;
-    } else {
+    } else if (index !== start) {
       end = index;
       if (end < start) [start, end] = [end, start];
       this.mapService.drawSlicedRoute(data.shapes, data.poles, data.poles[start], data.poles[end]);
