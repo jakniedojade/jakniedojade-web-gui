@@ -62,7 +62,7 @@ export class WeekdaysSelectionComponent {
   selectSettings = output<MeanlatencyChildComponents>();
   selectedWeekdays = output<Weekdays>();
 
-  toggleControl = new FormControl('custom');
+  toggleControl = new FormControl('');
   
   chipControl = new FormGroup({
     mondays: new FormControl(false),
@@ -74,8 +74,6 @@ export class WeekdaysSelectionComponent {
     sundays: new FormControl(false),
     holidays: new FormControl(false)
   });
-
-
 
   private destroy$ = new Subject<void>();
 
@@ -105,17 +103,17 @@ export class WeekdaysSelectionComponent {
   nextDisabled = toSignal(this.$nextDisabled);
 
   toggleChip(day: keyof Weekdays): void {
-    const regularWeekdays = ['mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays'];
-    const saturdaysAndHolidays = ['saturdays', 'sundays', 'holidays'];
+    const regularWeekdaysArray = ['mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays'];
+    const saturdaysAndHolidaysArray = ['saturdays', 'sundays', 'holidays'];
     const currentState = this.chipControl.value[day];
 
-    if (regularWeekdays.includes(day)) {
+    if (regularWeekdaysArray.includes(day)) {
       this.chipControl.patchValue({
         ['saturdays']: false,
         ['sundays']: false,
         ['holidays']: false
       });
-    } else if (saturdaysAndHolidays.includes(day)) {
+    } else if (saturdaysAndHolidaysArray.includes(day)) {
       this.chipControl.patchValue({
         ['mondays']: false,
         ['tuesdays']: false,
@@ -127,6 +125,7 @@ export class WeekdaysSelectionComponent {
     this.chipControl.patchValue({
       [day]: !currentState
     });
+
     if (JSON.stringify(this.chipControl.value) === JSON.stringify(regularWeekdays)) {
       this.toggleControl.setValue("regular");
     } else if (JSON.stringify(this.chipControl.value) === JSON.stringify(saturdaysAndHolidays)) {
