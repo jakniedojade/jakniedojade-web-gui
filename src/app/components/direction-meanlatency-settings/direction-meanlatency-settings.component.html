@@ -18,28 +18,28 @@
             }
             @default {
                 <div class="settings-page">
-                    <div class="icon-text">
+                    <div class="setting">
                         <span>Trasa:</span>
                         <div class="button" style="cursor: pointer;" (click)="selectComponent(ChildComponents.RouteSelection)">
                             <span style="font-weight: 600;">{{ selectedRouteString() }}</span>
                             <mat-icon>settings</mat-icon>
                         </div>
                     </div>
-                    <div class="icon-text">
+                    <div class="setting">
                         <span>Dni tygodnia:</span>
                         <div class="button" style="cursor: pointer;" (click)="selectComponent(ChildComponents.WeekdaySelection)">
                             <span style="font-weight: 600;">{{ selectedWeekdaysString() }}</span>
                             <mat-icon>settings</mat-icon>
                         </div>
                     </div>
-                    <div class="icon-text">
+                    <div class="setting">
                         <span>Zakres godzin:</span>
                         <div class="button" style="cursor: pointer;">
                             <span style="font-weight: 600;">placeholder</span>
                             <mat-icon>schedule</mat-icon>
                         </div>
                     </div>
-                    <div class="icon-text">
+                    <div class="setting">
                         <span>Okres analizy:</span>
                         <select style="cursor: pointer;">
                             <option mat-menu-item>1 miesiąc</option>
