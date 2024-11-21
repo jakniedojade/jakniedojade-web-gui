@@ -8,9 +8,8 @@ import { LinesService } from '../../services/lines.service';
 import { MapService } from '../../services/map.service';
 import { MatIcon } from '@angular/material/icon';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
-import { DirectionMeanlatencyRouteSelectionComponent } from '../direction-meanlatency-route-selection/direction-meanlatency-route-selection.component';
+import { DirectionMeanlatencyRouteSelectionComponent, RouteSelectionState } from '../direction-meanlatency-route-selection/direction-meanlatency-route-selection.component';
 import { regularWeekdays, saturdaysAndHolidays, Weekdays, WeekdaysSelectionComponent } from "../weekdays-selection/weekdays-selection.component";
-import { PoleDetails } from '../../interfaces/line-data';
 
 export enum MeanlatencyChildComponents {
   RouteSelection = 'routeSelection',
@@ -49,9 +48,14 @@ export class DirectionMeanlatencySettingsComponent {
   @Input() direction!: string;
   @Input() routeLine!: string;
 
-  selectedRoutePoles = signal<PoleDetails[]>([]);
+  routeSelectionState = signal<RouteSelectionState>({
+    selectedRoute: [],
+    startingIndex: undefined,
+    endingIndex: undefined,
+  });
+
   selectedRouteString = computed(() => {
-    const poles = this.selectedRoutePoles();
+    const poles = this.routeSelectionState().selectedRoute;
     return poles.length > 0
       ? `${poles[0].name} -> ${poles[poles.length - 1].name}`
       : 'Wybierz trasę';

@@ -1,8 +1,14 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { MapService } from '../../services/map.service';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MeanlatencyChildComponents } from '../direction-meanlatency-settings/direction-meanlatency-settings.component';
 import { LineData, PoleDetails } from '../../interfaces/line-data';
+
+export interface RouteSelectionState {
+  selectedRoute: PoleDetails[],
+  startingIndex: number | undefined;
+  endingIndex: number | undefined;
+}
 
 @Component({
   selector: 'app-direction-meanlatency-route-selection',
@@ -11,46 +17,59 @@ import { LineData, PoleDetails } from '../../interfaces/line-data';
   templateUrl: './direction-meanlatency-route-selection.component.html',
   styleUrl: './direction-meanlatency-route-selection.component.scss'
 })
-export class DirectionMeanlatencyRouteSelectionComponent {
+export class DirectionMeanlatencyRouteSelectionComponent implements OnInit{
   private mapService = inject(MapService);
 
   directionData = input.required<LineData>();
+  state = model<RouteSelectionState>();
   selectSettings = output<MeanlatencyChildComponents>();
-  selectedRoute = output<PoleDetails[]>();
-  
-  selectedRoutePoles = signal<PoleDetails[]>([]);
-  startingIndex = signal<number | null>(null);
-  endingIndex = signal<number | null>(null);
+
+  startingIndex = signal<number | undefined>(undefined);
+  endingIndex = signal<number | undefined>(undefined);
+
+  ngOnInit(): void {
+    this.startingIndex.set(this.state()?.startingIndex);
+    this.endingIndex.set(this.state()?.endingIndex);      
+  }
 
   setIndex(index: number): void {
-    let start: number | null = this.startingIndex();
-    let end: number | null = this.endingIndex();
-    
-    if (start !== null && end !== null) {
-      start = null;
-      end = null;
+    let start = this.startingIndex();
+    let end = this.endingIndex();
+
+    if (start !== undefined && end !== undefined) {
+      start = undefined;
+      end = undefined;
     }
-    
-    if (start === null) {
+
+    const data = this.directionData();
+    if (start === undefined) {
       start = index;
     } else {
       end = index;
       if (end < start) [start, end] = [end, start];
-      const data = this.directionData();
       this.mapService.drawSlicedRoute(data.shapes, data.poles, data.poles[start], data.poles[end]);
-      this.selectedRoutePoles.set(this.directionData().poles.slice(start, end + 1));
     }
 
     this.startingIndex.set(start);
     this.endingIndex.set(end);
   }
-
-  returnRouteAndGoToSettings(): void {
-    this.selectedRoute.emit(this.selectedRoutePoles());
-    this.goToSettings();
+  
+  setRouteAndGoToSettings(): void {
+    this.state.update((state) => ({
+      ...state,
+      selectedRoute: this.directionData().poles.slice(this.startingIndex()!, this.endingIndex()! + 1),
+      startingIndex: this.startingIndex(),
+      endingIndex: this.endingIndex()
+    }));
+    
+    this.selectSettings.emit(MeanlatencyChildComponents.Settings);
   }
 
   goToSettings(): void {
+    if (this.state()?.startingIndex !== undefined && this.state()?.endingIndex !== undefined) {
+      this.mapService.drawSlicedRoute(this.directionData().shapes, this.directionData().poles,
+        this.directionData().poles[this.state()?.startingIndex!], this.directionData().poles[this.state()?.endingIndex!]);
+    }
     this.selectSettings.emit(MeanlatencyChildComponents.Settings);
   }
 }

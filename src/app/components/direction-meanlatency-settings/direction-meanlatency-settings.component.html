@@ -11,7 +11,7 @@
                 <app-direction-meanlatency-route-selection
                     [directionData]="selectedDirection"
                     (selectSettings)="selectComponent($event)"
-                    (selectedRoute)="selectedRoutePoles.set($event)"/>
+                    [(state)]="routeSelectionState"/>
             }
             @case (ChildComponents.WeekdaySelection) {
                 <app-weekdays-selection (selectSettings)="selectComponent($event)" (selectedWeekdays)="selectedWeekdays.set($event)"/>
