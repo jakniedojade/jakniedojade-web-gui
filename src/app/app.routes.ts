@@ -7,7 +7,6 @@ import { PoleSelectionComponent } from './components/pole-selection/pole-selecti
 import { DirectionAnalysisSelectionComponent } from './components/direction-analysis-selection/direction-analysis-selection.component';
 import { PoleAnalysisSelectionComponent } from './components/pole-analysis-selection/pole-analysis-selection.component';
 import { LinesOnPoleSelectionComponent } from './components/lines-on-pole-selection/lines-on-pole-selection.component';
-import { DirectionRealscheduleSettingsComponent } from './components/direction-realschedule-settings/direction-realschedule-settings.component';
 import { DirectionMeanlatencySettingsComponent } from './components/direction-meanlatency-settings/direction-meanlatency-settings.component';
 import { PoleRealscheduleSettingsComponent } from './components/pole-realschedule-settings/pole-realschedule-settings.component';
 
@@ -21,7 +20,7 @@ export const routes: Routes = [
         path: 'line/:routeLine/:direction', component: DirectionAnalysisSelectionComponent
     },
     {
-        path: 'line/:routeLine/:direction/real_schedule/settings', component: DirectionRealscheduleSettingsComponent,
+        path: 'line/:routeLine/:direction/real_schedule/settings', redirectTo: '' // component: FutureComponent
     },
     {
         path: 'line/:routeLine/:direction/real_schedule/results', redirectTo: '' // component: FutureComponent
