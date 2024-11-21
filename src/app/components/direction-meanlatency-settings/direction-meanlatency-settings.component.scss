@@ -64,6 +64,21 @@
     }
 }
 
+.setting-text {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.setting-icon {
+    padding-left: 5px;
+    padding-right: 10px;
+}
+
+.button {
+    cursor: pointer;
+}
+
 .navigation-buttons {
     @include navigation-buttons;
 }
