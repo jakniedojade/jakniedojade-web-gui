@@ -29,7 +29,7 @@
     overflow-y: auto;
     padding-left: 16px;
     padding-bottom: 0;
-    height: 390px;
+    height: 380px;
 }
 
 .pole {
@@ -67,6 +67,7 @@
 
 .pole-text {
     padding-left: 8px;
+    font-weight: 500;
     &.selected {
         color: green;
     }
