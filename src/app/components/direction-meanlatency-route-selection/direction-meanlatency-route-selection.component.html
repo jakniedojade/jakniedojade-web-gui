@@ -1,4 +1,7 @@
 <div class="direction-meanlatency-route-selection-component">
+    <div class="sub-header">
+        <p>Aby wybrać trasę linii {{ routeLine() }}, wybierz przystanek początkowy oraz końcowy</p>
+    </div>
     <div class="pole-container">
         @for (pole of directionData().poles; track $index; let index = $index) {
             <div class="pole" (click)="setIndex(index)">

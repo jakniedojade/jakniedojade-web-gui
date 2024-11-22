@@ -1,4 +1,4 @@
-import { Component, inject, input, model, OnInit, output, signal } from '@angular/core';
+import { Component, inject, Input, input, model, OnInit, output, signal } from '@angular/core';
 import { MapService } from '../../services/map.service';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MeanlatencyChildComponents } from '../direction-meanlatency-settings/direction-meanlatency-settings.component';
@@ -21,6 +21,7 @@ export class DirectionMeanlatencyRouteSelectionComponent implements OnInit{
   private mapService = inject(MapService);
 
   directionData = input.required<LineData>();
+  routeLine = input.required<string>();
   state = model<RouteSelectionState>();
   selectSettings = output<MeanlatencyChildComponents>();
 

@@ -9,6 +9,7 @@
         @switch (selectedComponentName()) {
             @case (ChildComponents.RouteSelection) {
                 <app-direction-meanlatency-route-selection
+                    [routeLine]="routeLine"
                     [directionData]="selectedDirection"
                     (selectSettings)="selectComponent($event)"
                     [(state)]="routeSelectionState"/>
