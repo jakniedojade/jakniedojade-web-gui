@@ -1,7 +1,7 @@
 @use '@angular/material' as mat;
 @use '../../../mixins.scss' as *;
 
-.pole-analysis-type-selection-component {
+.direction-meanlatency-settings-component {
     @include full-height-component;
 
     display: flex;
