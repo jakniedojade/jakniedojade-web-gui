@@ -2,7 +2,7 @@
     <div class="pole-container">
         @for (pole of directionData().poles; track $index; let index = $index) {
             <div class="pole" (click)="setIndex(index)">
-                <img style="width: 10px;" src="../../../assets/stop_regular.svg" alt="stop_image">
+                <img [src]="pole.onDemand ? '../../../assets/stop_on_request.svg' : '../../../assets/stop_regular.svg'" alt="stop_image">
                 <span class="pole-text"
                     [class.selected]="index >= (startingIndex() ?? -1) && index <= (endingIndex() ?? -1) || index === startingIndex()">
                     {{pole.name}}
