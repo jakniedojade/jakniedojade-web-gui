@@ -16,17 +16,15 @@
         </ng-template>
         <div class="line-buttons-container">
           @if (lines$ | async; as lines) {
-            @for (category of lines | keyvalue; track category.key) {
-              @for (line of category.value; track $index) {
-                <button
-                  class="line-button"
-                  mat-stroked-button
-                  [class.selected]="line === lineSelection()"
-                  (click)="lineSelection.set(line); stopSelection.set(null)">
-                  <mat-icon>{{linesService.categoryIconsMapping[category.key]}}</mat-icon>
-                  {{line}}
-                </button>
-              }
+            @for (line of lines; track $index) {
+              <button
+                class="line-button"
+                mat-stroked-button
+                [class.selected]="line.lineNumber === lineSelection()"
+                (click)="lineSelection.set(line.lineNumber); stopSelection.set(null)">
+                <mat-icon>{{line.icon}}</mat-icon>
+                {{line.lineNumber}}
+              </button>
             }
           }
         </div>

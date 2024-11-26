@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
@@ -7,12 +7,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ErrorDialogService } from '../../services/error-dialog.service';
-import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
 import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged, pairwise, debounceTime, merge, tap } from 'rxjs';
 import { Stop } from '../../interfaces/stop';
-import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
@@ -65,15 +64,14 @@ export class SearchComponent {
     this.linesService.getLines(),
     this.inputText$,
   ]).pipe(
-    map(([lines, inputText]) => ({
-      ...lines,
-      ...Object.keys(lines).reduce((result, key) => ({
-        ...result,
-        [key]: lines[key as keyof Lines].filter(line =>
-          line.toLowerCase().includes(inputText)
-        )
-      }), {})
-    })),
+    map(([responseLines, inputText]) => 
+      responseLines[0].lines
+        .filter(line => line.toLowerCase().includes(inputText))
+        .map(lineNumber => ({
+          lineNumber,
+          icon: this.linesService.getLineIcon(lineNumber) || '' //this is quite bad as we are calling this function 
+        }))                                                     //on every combineLatest change for every single line
+    ),
     catchError(err => {
       this.errorDialogService.openErrorDialog(err.message);
       return of(null);
@@ -104,7 +102,7 @@ export class SearchComponent {
     map(([lines, stops]) => {
       const linesTabIndex: number = 0;
       const stopsTabIndex: number = 1;
-      const hasLines = !!lines && Object.values(lines).some(lineArray => lineArray.length > 0);
+      const hasLines = !!lines && lines.length > 0;
       const hasStops = !!stops && stops.length > 0;
   
       if (hasLines && !hasStops) return linesTabIndex;

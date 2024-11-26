@@ -8,45 +8,38 @@ import { Lines } from '../interfaces/lines';
 })
 export class LinesService {
   private http = inject(HttpClient);
-  private linesData$: Observable<Lines>;
-
-  public categoryIconsMapping: any = {
-    cementaryLines: 'local_florist', 
-    expressLines: 'bolt', 
-    fastLines: 'fast_forward', 
-    fastTemporaryLines: 'directions_bus', // no one knows about them anyway
-    localLines: 'location_city', 
-    nightLines: 'bedtime', 
-    regularLines: 'directions_bus',
-    regularTemporaryLines: 'directions_bus', // no one knows about them anyway
-    specialLines: 'star',
-    substituteLines: 'swap_horiz', 
-    zoneLines: 'map',
-    zoneTemporaryLines: 'map', // no one knows about them anyway
-  };
+  private linesData$: Observable<Lines[]>;
   
+  private categoryIconsMapping: { [key: string]: string } = {
+    '1': 'directions_bus',
+    '2': 'directions_bus',
+    '3': 'directions_bus',
+    '4': 'directions_bus',
+    '5': 'fast_forward',
+    '7': 'map',
+    '8': 'map',
+    '9': 'star',
+    'C': 'local_florist',
+    'E': 'bolt',
+    'L': 'location_city',
+    'N': 'bedtime',
+    'Z': 'swap_horiz'
+  };
+
   constructor() {
-    this.linesData$ = this.http.get<Lines>('https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/api/v1/lines/')
+    this.linesData$ = this.http.get<Lines[]>('https://api.jakniedojade.waw.pl/v1/warsaw/lines/')
     .pipe(
       shareReplay(),
       catchError(this.handleError)
     );
   }
-
-  getLines() : Observable<Lines> {
+  
+  getLines() : Observable<Lines[]> {
     return this.linesData$;
   }
 
-  getLineIcon(lineNumber: string): Observable<string> {
-    return this.linesData$.pipe(
-      map(lines => {
-        const allLines = Object.entries(lines);
-        const lineCategory = allLines.find(lines => {
-          return lines[1].includes(lineNumber); 
-        });
-        return lineCategory ? this.categoryIconsMapping[lineCategory[0]] : 'error';
-      })
-    );
+  getLineIcon(lineNumber: string): string {
+    return this.categoryIconsMapping[lineNumber.charAt(0)] || '';
   }
 
   private handleError(error: HttpErrorResponse) {
