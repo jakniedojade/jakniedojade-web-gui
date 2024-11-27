@@ -1,6 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { MapComponent } from '../components/map/map.component';
-import { PoleDetails, Shape } from '../interfaces/line-data';
+import { PoleDetails } from '../interfaces/line-data';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,7 @@ export class MapService {
     this.mapComponent!.clearSlicedRouteLayers();
   }
 
-  drawRoute(shapes: Shape[], grayPolyline: boolean = false): void {
+  drawRoute(shapes: [number, number][], grayPolyline: boolean = false): void {
     this.mapComponent!.drawRoute(shapes, grayPolyline);
     this.routeDrawn.set(grayPolyline ? false : true);
   }
@@ -45,12 +45,12 @@ export class MapService {
     this.mapComponent!.resetMapView();
   }
   
-  drawSlicedRoute(shapes: Shape[], poles: PoleDetails[], startingPole: PoleDetails, endingPole: PoleDetails) {
+  drawSlicedRoute(shapes: [number, number][], poles: PoleDetails[], startingPole: PoleDetails, endingPole: PoleDetails) {
     const data = this.sliceRoute(poles, shapes, startingPole, endingPole)
     this.mapComponent!.drawSlicedRoute(data.shapes, data.poles);
   }
 
-  private sliceRoute(poles: PoleDetails[], shapes: Shape[], startingPole: PoleDetails, endingPole: PoleDetails) {
+  private sliceRoute(poles: PoleDetails[], shapes: [number, number][], startingPole: PoleDetails, endingPole: PoleDetails) {
     const calculateDistance = (x1: number, y1: number, x2: number, y2: number): number => {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
@@ -64,15 +64,15 @@ export class MapService {
       let minDistance = Infinity;
   
       shapes.forEach(shape => {
-        const distance = calculateDistance(pole.latitude, pole.longitude, shape.latitude, shape.longitude);
+        const distance = calculateDistance(pole.position.coordinates[0], pole.position.coordinates[1], shape[0],  shape[1]);
         if (distance < minDistance) {
           minDistance = distance;
           closestCoord = shape;
         }
       });
   
-      pole.latitude = closestCoord.latitude;
-      pole.longitude = closestCoord.longitude;
+      pole.position.coordinates[0] = closestCoord[0];
+      pole.position.coordinates[1] = closestCoord[1];
     });
     const mappedPoles = poles;
     
@@ -80,13 +80,13 @@ export class MapService {
     const lastPoleIndex = mappedPoles.findIndex(pole => pole.name === endingPole.name);
     const slicedPoles = mappedPoles.slice(firstPoleIndex, lastPoleIndex + 1)
     
-    const firstPoleLatitude = mappedPoles[firstPoleIndex].latitude;
-    const firstPoleLongitude = mappedPoles[firstPoleIndex].longitude;
-    const lastPoleLatitude = mappedPoles[lastPoleIndex].latitude;
-    const lastPoleLongitude = mappedPoles[lastPoleIndex].longitude;
+    const firstPoleLatitude = mappedPoles[firstPoleIndex].position.coordinates[0];
+    const firstPoleLongitude = mappedPoles[firstPoleIndex].position.coordinates[1];
+    const lastPoleLatitude = mappedPoles[lastPoleIndex].position.coordinates[0];
+    const lastPoleLongitude = mappedPoles[lastPoleIndex].position.coordinates[1];
 
-    const firstSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.latitude, coord.longitude, firstPoleLatitude, firstPoleLongitude));
-    const lastSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord.latitude, coord.longitude, lastPoleLatitude, lastPoleLongitude));
+    const firstSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord[0], coord[1], firstPoleLatitude, firstPoleLongitude));
+    const lastSliceIndex = shapes.findIndex(coord => checkIfCoordinatesEqual(coord[0], coord[1], lastPoleLatitude, lastPoleLongitude));
     
     const mappedShapes = shapes.slice(firstSliceIndex, lastSliceIndex + 1);
 

@@ -4,26 +4,18 @@
             <h2><mat-icon>{{ lineIcon }}</mat-icon>{{ routeLine }}</h2> 
             <h3>Wybierz kierunek</h3>
         </header>
-    
         <div id="direction-selection-buttons">
-            @if (directionsData$ | async; as directionData) {
-                <button
-                    class="stop-line-button"
-                    mat-stroked-button
-                    (click)="selectDirection(directionData[0])"
-                    [class.selected]="directionData[0].direction === selectedDirection()">
-                    <mat-icon>{{ lineIcon }}</mat-icon>
-                    {{ routeLine }} | {{ directionData[0].endStopName }}
-                </button>
-        
-                <button
-                    class="stop-line-button"
-                    mat-stroked-button
-                    (click)="selectDirection(directionData[1])"
-                    [class.selected]="directionData[1].direction === selectedDirection()">
-                    <mat-icon>{{ lineIcon }}</mat-icon>
-                    {{ routeLine }} | {{ directionData[1].endStopName }}
-                </button>
+            @if (directionsData$ | async; as directionsData) {
+                @for (direction of directionsData; track $index) {
+                    <button
+                        class="stop-line-button"
+                        mat-stroked-button
+                        (click)="selectDirection(direction)"
+                        [class.selected]="direction === selectedDirection()">
+                        <mat-icon>{{ lineIcon }}</mat-icon>
+                        {{ routeLine }} | {{ direction.headsign }}
+                    </button>
+                }
             }
         </div>
     }

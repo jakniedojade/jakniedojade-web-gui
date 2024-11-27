@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,9 +6,9 @@ import 'leaflet-active-area';
 import 'leaflet.polyline.snakeanim';
 import '../../plugins/leaflet-polyline-snakeanim.js';
 import { fromEvent } from 'rxjs';
-import { debounceTime, startWith } from 'rxjs/operators';
+import {  startWith } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
-import { PoleDetails, Shape } from '../../interfaces/line-data';
+import { PoleDetails } from '../../interfaces/line-data';
 
 @Component({
   selector: 'app-map',
@@ -42,6 +42,7 @@ export class MapComponent implements OnInit {
   readonly minimumZoomLevel: number = 11;
   readonly maximumZoomLevel: number = 18
   private poleMarkers: L.Marker[] = [];
+  private proj = L.CRS.EPSG3857;
 
   ngOnInit(): void {
     this.initMap()
@@ -102,7 +103,7 @@ export class MapComponent implements OnInit {
     this.tempPoles = [];
   }
 
-  public drawRoute(shapes: Shape[], grayPolyline: boolean = false): void {
+  public drawRoute(shapes: [number, number][], grayPolyline: boolean = false): void {
     this.clearMapLayers();
     if (grayPolyline) {
       this.mapService.grayRouteDrawn.set(true);
@@ -111,10 +112,9 @@ export class MapComponent implements OnInit {
       this.mapService.grayRouteDrawn.set(false);
       this.mapService.routeDrawn.set(true);
     }
-    const shapesCoords = shapes.map((shape: Shape) => ({
-      lat: shape.latitude,
-      lng: shape.longitude
-    }));
+
+    const shapesCoords = shapes.map((shape: [number, number]) => 
+      this.proj.unproject(L.point([shape[0], shape[1]])));
     
     const polyline = new L.Polyline(shapesCoords)
     
@@ -140,21 +140,19 @@ export class MapComponent implements OnInit {
       iconSize: [13, 13]
     });
 
-    const bounds = L.latLngBounds(polesToDraw.map((poleToDraw) => { 
-      return [poleToDraw.latitude, poleToDraw.longitude]; 
-    }));
-
+    const bounds = polesToDraw.map((pole: PoleDetails) => 
+      this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]])));
     let poleClicked = false;
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
-      const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
+      const stopMarker = L.marker(this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]])), {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
 
-      const hoverArea = L.circleMarker([pole.latitude, pole.longitude], {
+      const hoverArea = L.circleMarker(this.map.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]]), {
         radius: 10,
         opacity: 0,
         fillOpacity: 0,
         pane: 'popupPane' //because this pane has the highest z index
-      });
+      }));
 
       hoverArea.on({
         click: () => {
@@ -178,7 +176,7 @@ export class MapComponent implements OnInit {
       polesToDraw.length > 1 ? this.poleMarkers.push(stopMarker) : stopMarker.openPopup();
     });
     if (!this.mapService.routeDrawn()) {
-      this.map.fitBounds(bounds.pad(0.2));
+      this.map.fitBounds(L.latLngBounds(bounds).pad(0.2));
     }
   }
 
@@ -200,12 +198,10 @@ export class MapComponent implements OnInit {
     this.tempPoles = [];
   }
   
-  public drawSlicedRoute(slicedShapes: Shape[], slicedPoles: PoleDetails[]): void {
+  public drawSlicedRoute(slicedShapes: [number, number][], slicedPoles: PoleDetails[]): void {
     this.clearSlicedRouteLayers();
-    const shapesCoords = slicedShapes.map((shape: Shape) => ({
-      lat: shape.latitude,
-      lng: shape.longitude
-    }));
+    const shapesCoords = slicedShapes.map((shape: [number, number]) => 
+      this.proj.unproject([shape[0], shape[1]]));
 
     this.polyline = new L.Polyline(shapesCoords, { 
       color: '#16a813',
@@ -234,9 +230,9 @@ export class MapComponent implements OnInit {
           element.remove();
         }
       });
-      const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
+      const stopMarker = L.marker(this.proj.unproject([pole.position.coordinates[0], pole.position.coordinates[1]]), {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
 
-      const hoverArea = L.circleMarker([pole.latitude, pole.longitude], {
+      const hoverArea = L.circleMarker(this.proj.unproject([pole.position.coordinates[0], pole.position.coordinates[1]]), {
         radius: 10,
         opacity: 0,
         fillOpacity: 0,

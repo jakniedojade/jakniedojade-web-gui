@@ -34,16 +34,12 @@ export class DirectionSelectionComponent {
     })
   );
   
-  selectedDirection = signal<boolean | null>(null);
+  selectedDirection = signal<LineData | null>(null);
 
   directionsData$ = this.activatedRoute.paramMap.pipe(
-    switchMap(paramMap => {
-      const routeLine = paramMap.get('routeLine')!;
-      return forkJoin([
-        this.lineDataService.getLineData(routeLine, false),
-        this.lineDataService.getLineData(routeLine, true)
-      ]);
-    }),
+    switchMap(paramMap => 
+      this.lineDataService.getLineData(paramMap.get('routeLine')!)
+    ),
     catchError(error => {
       this.errorDialogService.openErrorDialog(error.message);
       return of(null);
@@ -51,8 +47,8 @@ export class DirectionSelectionComponent {
   );
 
   selectDirection(lineData: LineData) {
-    this.selectedDirection.set(lineData.direction);
-    this.mapService.drawRoute(lineData.shapes);
+    this.selectedDirection.set(lineData);
+    this.mapService.drawRoute(lineData.path.coordinates);
     this.mapService.drawPoles(lineData.poles);
   }
 
