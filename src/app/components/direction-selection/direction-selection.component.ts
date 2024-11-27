@@ -62,7 +62,7 @@ export class DirectionSelectionComponent {
   }
 
   navigateToDirectionAnalysisOptions(): void {
-    this.router.navigate([`${this.selectedDirection()}`], { relativeTo: this.activatedRoute });
+    this.router.navigate([`${this.selectedDirection()?.direction}`], { relativeTo: this.activatedRoute });
   }
 
   navigateToLineSelection(): void {
