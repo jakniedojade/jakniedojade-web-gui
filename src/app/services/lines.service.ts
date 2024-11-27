@@ -1,14 +1,19 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, shareReplay, throwError } from 'rxjs';
-import { Lines } from '../interfaces/lines';
+import { Line } from '../interfaces/lines';
+
+interface ResponseLines {
+  type: string;
+  lines: string[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class LinesService {
   private http = inject(HttpClient);
-  private linesData$: Observable<Lines[]>;
+  private linesData$: Observable<Line[]>;
   
   private categoryIconsMapping: { [key: string]: string } = {
     '1': 'directions_bus',
@@ -27,19 +32,30 @@ export class LinesService {
   };
 
   constructor() {
-    this.linesData$ = this.http.get<Lines[]>('https://api.jakniedojade.waw.pl/v1/warsaw/lines/')
-    .pipe(
-      shareReplay(),
-      catchError(this.handleError)
+    this.linesData$ = this.http.get<ResponseLines[]>('https://api.jakniedojade.waw.pl/v1/warsaw/lines/')
+      .pipe(
+        map((responseLines: ResponseLines[]) =>
+          responseLines.flatMap((line: ResponseLines) => line.lines)
+            .map((line: string) => ({
+              number: line,
+              icon: this.categoryIconsMapping[line.charAt(0)] || '',
+            }))
+        ),
+        shareReplay(),
+        catchError(this.handleError)
+      );
+  }
+
+  getLineIcon(lineNumber: string): Observable<string> {
+    return this.linesData$.pipe(
+      map((linesArray: Line[]) =>
+        linesArray.find(line => line.number.includes(lineNumber))?.icon || ''
+      )
     );
   }
   
-  getLines() : Observable<Lines[]> {
+  getLines() : Observable<Line[]> {
     return this.linesData$;
-  }
-
-  getLineIcon(lineNumber: string): string {
-    return this.categoryIconsMapping[lineNumber.charAt(0)] || '';
   }
 
   private handleError(error: HttpErrorResponse) {

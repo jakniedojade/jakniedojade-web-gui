@@ -1,4 +1,4 @@
-export interface Lines {
-    type: string;
-    lines: string[];
+export interface Line {
+    number: string;
+    icon: string;
 }

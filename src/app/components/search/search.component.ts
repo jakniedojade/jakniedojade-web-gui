@@ -9,11 +9,12 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
-import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged, pairwise, debounceTime, merge, tap } from 'rxjs';
-import { Stop } from '../../interfaces/stop';
+import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged, pairwise, debounceTime, merge, tap, Observable } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Line } from '../../interfaces/lines';
+import { Stop } from '../../interfaces/stop';
 
 @Component({
   selector: 'app-search',
@@ -53,28 +54,23 @@ export class SearchComponent {
   inputText = new FormControl('');
   
   stopSelection = signal<Stop | null>(null);
-  lineSelection = signal<string>('');
+  lineSelection = signal<Line | null>(null);
 
   inputText$ = this.inputText.valueChanges.pipe(
     startWith(''),
     map(inputText => inputText?.toLowerCase() ?? ''),
   );
   
-  lines$ = combineLatest([
+  lines$: Observable<Line[]> = combineLatest([
     this.linesService.getLines(),
     this.inputText$,
   ]).pipe(
     map(([responseLines, inputText]) => 
-      responseLines[0].lines
-        .filter(line => line.toLowerCase().includes(inputText))
-        .map(lineNumber => ({
-          lineNumber,
-          icon: this.linesService.getLineIcon(lineNumber) || '' //this is quite bad as we are calling this function 
-        }))                                                     //on every combineLatest change for every single line
+      responseLines.filter((line: Line) => line.number.toLowerCase().includes(inputText))
     ),
     catchError(err => {
       this.errorDialogService.openErrorDialog(err.message);
-      return of(null);
+      return of([]);
     }),
     shareReplay(1)
   );
@@ -84,7 +80,7 @@ export class SearchComponent {
     this.inputText$
   ]).pipe(
     map(([stops, inputText]) => 
-      stops.filter(stop => stop.name.toLowerCase().includes(inputText))
+      stops.filter((stop: Stop) => stop.name.toLowerCase().includes(inputText))
     ),
     catchError(err => {
       this.errorDialogService.openErrorDialog(err.message);
@@ -128,7 +124,7 @@ export class SearchComponent {
     if (this.stopSelection() !== null) {
       this.router.navigate([`stop/${this.stopSelection()?.id}/${this.stopSelection()?.name}`]);
     } else {
-      this.router.navigate([`line/${this.lineSelection()}`]);
+      this.router.navigate([`line/${this.lineSelection()?.number}`]);
     }
   }
   

@@ -20,10 +20,10 @@
               <button
                 class="line-button"
                 mat-stroked-button
-                [class.selected]="line.lineNumber === lineSelection()"
-                (click)="lineSelection.set(line.lineNumber); stopSelection.set(null)">
+                [class.selected]="line === lineSelection()"
+                (click)="lineSelection.set(line); stopSelection.set(null)">
                 <mat-icon>{{line.icon}}</mat-icon>
-                {{line.lineNumber}}
+                {{line.number}}
               </button>
             }
           }
@@ -42,7 +42,7 @@
                   class="stop-button"
                   mat-stroked-button
                   [class.selected]="stop.name === stopSelection()?.name"
-                  (click)="lineSelection.set(''); stopSelection.set(stop)">
+                  (click)="lineSelection.set(null); stopSelection.set(stop)">
                   {{stop.name}}
                 </button>
               }
@@ -57,7 +57,7 @@
                   class="stop-button"
                   mat-stroked-button
                   [class.selected]="popularStop.name === stopSelection()?.name"
-                  (click)="lineSelection.set(''); stopSelection.set(popularStop)">
+                  (click)="lineSelection.set(null); stopSelection.set(popularStop)">
                   {{popularStop.name}}
                 </button>
               }
