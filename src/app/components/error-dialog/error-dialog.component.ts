@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-error-dialog',
-  standalone: true,
   imports: [
     MatDialogContent,
     MatDialogActions,

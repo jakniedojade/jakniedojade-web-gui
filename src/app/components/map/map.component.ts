@@ -12,7 +12,6 @@ import { PoleDetails } from '../../interfaces/line-data';
 
 @Component({
   selector: 'app-map',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatIconModule

@@ -16,7 +16,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-direction-selection',
-  standalone: true,
   imports: [MatButton, NavigationButtonsComponent, AsyncPipe, MatIcon],
   templateUrl: './direction-selection.component.html',
   styleUrl: './direction-selection.component.scss',

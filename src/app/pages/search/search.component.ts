@@ -18,7 +18,6 @@ import { Stop } from '../../interfaces/stop';
 
 @Component({
   selector: 'app-search',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatFormFieldModule,

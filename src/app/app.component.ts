@@ -6,12 +6,11 @@ import { SideMenuComponent } from "./components/side-menu/side-menu.component";
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
-    SideMenuComponent,
-    MapComponent,
-    RouterOutlet,
-],
+      SideMenuComponent,
+      MapComponent,
+      RouterOutlet,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

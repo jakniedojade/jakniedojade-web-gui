@@ -5,7 +5,6 @@ import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicato
 
 @Component({
   selector: 'app-side-menu',
-  standalone: true,
   imports: [WelcomeScreenComponent, RouterOutlet, LoadingIndicatorComponent],
   templateUrl: './side-menu.component.html',
   styleUrl: './side-menu.component.scss'

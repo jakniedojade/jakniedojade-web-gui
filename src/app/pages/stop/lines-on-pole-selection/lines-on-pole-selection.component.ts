@@ -16,7 +16,6 @@ import { LineOnPole } from '../../../interfaces/line-on-pole';
 
 @Component({
   selector: 'app-lines-on-pole-selection',
-  standalone: true,
   imports: [AsyncPipe, NavigationButtonsComponent, MatIcon, MatButton],
   templateUrl: './lines-on-pole-selection.component.html',
   styleUrl: './lines-on-pole-selection.component.scss',

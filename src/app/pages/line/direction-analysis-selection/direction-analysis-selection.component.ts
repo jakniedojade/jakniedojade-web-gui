@@ -19,7 +19,6 @@ enum AnalysisType {
 
 @Component({
   selector: 'app-direction-analysis-selection',
-  standalone: true,
   imports: [AsyncPipe, NavigationButtonsComponent, MatRipple, MatIcon],
   templateUrl: './direction-analysis-selection.component.html',
   styleUrl: './direction-analysis-selection.component.scss'

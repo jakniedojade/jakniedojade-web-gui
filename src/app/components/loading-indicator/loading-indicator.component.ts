@@ -6,7 +6,6 @@ import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-loading-indicator',
-  standalone: true,
   imports: [MatProgressBar, CommonModule],
   templateUrl: './loading-indicator.component.html',
   styleUrl: './loading-indicator.component.scss'
