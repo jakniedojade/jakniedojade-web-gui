@@ -201,7 +201,7 @@ export class MapComponent implements OnInit {
   public drawSlicedRoute(slicedShapes: [number, number][], slicedPoles: PoleDetails[]): void {
     this.clearSlicedRouteLayers();
     const shapesCoords = slicedShapes.map((shape: [number, number]) => 
-      this.proj.unproject([shape[0], shape[1]]));
+      this.proj.unproject(L.point([shape[0], shape[1]])));
 
     this.polyline = new L.Polyline(shapesCoords, { 
       color: '#16a813',
@@ -230,9 +230,9 @@ export class MapComponent implements OnInit {
           element.remove();
         }
       });
-      const stopMarker = L.marker(this.proj.unproject([pole.position.coordinates[0], pole.position.coordinates[1]]), {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
+      const stopMarker = L.marker(this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]])), {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
 
-      const hoverArea = L.circleMarker(this.proj.unproject([pole.position.coordinates[0], pole.position.coordinates[1]]), {
+      const hoverArea = L.circleMarker(this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]])), {
         radius: 10,
         opacity: 0,
         fillOpacity: 0,

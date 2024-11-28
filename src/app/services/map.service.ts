@@ -46,7 +46,7 @@ export class MapService {
   }
   
   drawSlicedRoute(shapes: [number, number][], poles: PoleDetails[], startingPole: PoleDetails, endingPole: PoleDetails) {
-    const data = this.sliceRoute(poles, shapes, startingPole, endingPole)
+    const data = this.sliceRoute(poles, shapes, startingPole, endingPole);
     this.mapComponent!.drawSlicedRoute(data.shapes, data.poles);
   }
 

@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, inject, Input, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { switchMap, tap, catchError, of } from 'rxjs';
+import { switchMap, tap, catchError, of, map } from 'rxjs';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { LineDataService } from '../../services/line-data.service';
 import { LinesService } from '../../services/lines.service';
@@ -80,10 +80,13 @@ export class DirectionMeanlatencySettingsComponent {
 
   selectedDirectionFromRoute$ = this.activatedRoute.params.pipe(
     switchMap(paramMap => 
-      this.lineDataService.getLineData(paramMap['routeLine'], paramMap['direction']).pipe(
+      this.lineDataService.getLineData(paramMap['routeLine']).pipe(
+        map(lineData => lineData.find(data => data.direction.toString() === paramMap['direction'])),
         tap(lineData => {
-          this.mapService.drawRoute(lineData.shapes, true); //these booleans determine whether we draw route and poles in gray
-          this.mapService.drawPoles(lineData.poles, true);
+          if (lineData) {
+            this.mapService.drawRoute(lineData.path.coordinates, true);
+            this.mapService.drawPoles(lineData.poles, true);
+          }
         }),
       )
     ),
