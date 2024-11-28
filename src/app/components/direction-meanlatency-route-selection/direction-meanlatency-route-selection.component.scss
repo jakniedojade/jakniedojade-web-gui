@@ -1,0 +1,74 @@
+@use '@angular/material' as mat;
+@use '../../../mixins.scss' as *;
+
+.direction-meanlatency-route-component {
+    @include full-height-component;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.navigation-buttons {
+    @include navigation-buttons;
+}
+
+.sub-header {
+    display: flex;
+    padding-left: 16px;
+    p {
+        font-size: 16px;
+    }
+}
+
+.pole-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    overflow-y: auto;
+    padding-left: 16px;
+    padding-bottom: 0;
+    height: 380px;
+}
+
+.pole {
+    position: relative;
+    padding: 4px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.pole img {
+    width: 14px;
+    z-index: 1;
+}
+
+.pole::before {
+    content: '';
+    position: absolute;
+    left: 9.5px;
+    top: -10px; 
+    bottom: 0; 
+    width: 3px;
+    background-color: var(--sys-primary);
+    z-index: 0;
+}
+
+.pole:first-child::before {
+    top: 50%;
+}
+
+.pole:last-child::before {
+    bottom: 50%;
+}
+
+.pole-text {
+    padding-left: 8px;
+    font-weight: 500;
+    &.selected {
+        color: green;
+    }
+}

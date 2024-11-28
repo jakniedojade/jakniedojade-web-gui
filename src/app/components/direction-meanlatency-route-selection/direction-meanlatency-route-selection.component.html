@@ -1,0 +1,22 @@
+<div class="direction-meanlatency-route-selection-component">
+    <div class="sub-header">
+        <p>Aby wybrać trasę linii {{ routeLine() }}, wybierz przystanek początkowy oraz końcowy</p>
+    </div>
+    <div class="pole-container">
+        @for (pole of directionData().poles; track $index; let index = $index) {
+            <div class="pole" (click)="setIndex(index)">
+                <img [src]="pole.onDemand ? '../../../assets/stop_on_request.svg' : '../../../assets/stop_regular.svg'" alt="stop_image">
+                <span class="pole-text"
+                    [class.selected]="index >= (startingIndex() ?? -1) && index <= (endingIndex() ?? -1) || index === startingIndex()">
+                    {{pole.name}}
+                </span>
+            </div>
+        }
+    </div>
+    <div class="navigation-buttons">
+        <app-navigation-buttons
+            [nextDisabled]="(startingIndex() === undefined || endingIndex() === undefined)"
+            (next)="setRouteAndGoToSettings()"
+            (previous)="goToSettings()"/>
+    </div>
+</div>

@@ -10,16 +10,16 @@
                     <button
                         class="stop-line-button"
                         mat-stroked-button
-                        [class.selected]="line.lineNumber === lineSelection()"
-                        (click)="lineSelection.set(line.lineNumber)">
+                        [class.selected]="line === lineSelection()"
+                        (click)="lineSelection.set(line)">
                         <mat-icon>{{ line.icon }}</mat-icon>
-                        {{ line.lineNumber }} | Kierunek Jazdy
+                        {{ line.line }} | {{ line.headsign }}
                     </button>
                 }
             }
         </div>
     }
     <div class="navigation-buttons">
-        <app-navigation-buttons [nextDisabled]="!lineSelection()" (next)="navigateToDirectionSelection()" (previous)="navigateToPoleAnalysisSelection()"/>
+        <app-navigation-buttons [nextDisabled]="!lineSelection()" (next)="navigateToAnalysisSelection()" (previous)="navigateToPoleAnalysisSelection()"/>
     </div>
 </div>

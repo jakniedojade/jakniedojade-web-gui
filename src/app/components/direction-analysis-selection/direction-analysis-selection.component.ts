@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { MapService } from '../../services/map.service';
 import { LineDataService } from '../../services/line-data.service';
-import { catchError, of, switchMap, tap } from 'rxjs';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MatRipple } from '@angular/material/core';
@@ -12,8 +12,8 @@ import { LinesService } from '../../services/lines.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 enum AnalysisType {
-  TripTimeTable,
-  RouteStatistics,
+  RealSchedule,
+  MeanLatency,
   None
 }
 
@@ -32,6 +32,8 @@ export class DirectionAnalysisSelectionComponent {
   private linesService = inject(LinesService);
   private activatedRoute = inject(ActivatedRoute);
 
+  public enum: typeof AnalysisType = AnalysisType;
+
   @Input() routeLine!: string;
   lineIcon$ = this.activatedRoute.paramMap.pipe(
     switchMap((paramMap) => {
@@ -39,16 +41,17 @@ export class DirectionAnalysisSelectionComponent {
     })
   );
 
-  public enum: typeof AnalysisType = AnalysisType;
-
   selectedAnalysisType = signal<AnalysisType>(AnalysisType.None)
 
   selectedDirectionFromRoute$ = this.activatedRoute.params.pipe(
     switchMap(paramMap => 
-      this.lineDataService.getLineData(paramMap['routeLine'], paramMap['direction']).pipe(
+      this.lineDataService.getLineData(paramMap['routeLine']).pipe(
+        map(lineData => lineData.find(data => data.direction.toString() === paramMap['direction'])),
         tap(lineData => {
-          this.mapService.drawRoute(lineData.shapes);
-          this.mapService.drawPoles(lineData.poles);
+          if (lineData && !this.mapService.routeDrawn()) {
+            this.mapService.drawRoute(lineData.path.coordinates);
+            this.mapService.drawPoles(lineData.poles);
+          }
         }),
       )
     ),
@@ -58,8 +61,12 @@ export class DirectionAnalysisSelectionComponent {
     })
   );
 
-  navigateToDirectionOptions(): void {
-	
+  navigateToRealScheduleSettings(): void {
+    this.router.navigate([`real_schedule/settings`], { relativeTo: this.activatedRoute });
+  }
+
+  navigateToMeanLatencySettings(): void {
+    this.router.navigate([`mean_latency/settings`], { relativeTo: this.activatedRoute });
   }
 
   navigateToDirectionSelection(): void {

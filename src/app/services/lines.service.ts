@@ -1,52 +1,61 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, shareReplay, throwError } from 'rxjs';
-import { Lines } from '../interfaces/lines';
+import { Line } from '../interfaces/lines';
+
+interface ResponseLines {
+  type: string;
+  lines: string[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class LinesService {
   private http = inject(HttpClient);
-  private linesData$: Observable<Lines>;
-
-  public categoryIconsMapping: any = {
-    cementaryLines: 'local_florist', 
-    expressLines: 'bolt', 
-    fastLines: 'fast_forward', 
-    fastTemporaryLines: 'directions_bus', // no one knows about them anyway
-    localLines: 'location_city', 
-    nightLines: 'bedtime', 
-    regularLines: 'directions_bus',
-    regularTemporaryLines: 'directions_bus', // no one knows about them anyway
-    specialLines: 'star',
-    substituteLines: 'swap_horiz', 
-    zoneLines: 'map',
-    zoneTemporaryLines: 'map', // no one knows about them anyway
-  };
+  private linesData$: Observable<Line[]>;
   
-  constructor() {
-    this.linesData$ = this.http.get<Lines>('https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/api/v1/lines/')
-    .pipe(
-      shareReplay(),
-      catchError(this.handleError)
-    );
-  }
+  private categoryIconsMapping: { [key: string]: string } = {
+    '1': 'directions_bus',
+    '2': 'directions_bus',
+    '3': 'directions_bus',
+    '4': 'directions_bus',
+    '5': 'fast_forward',
+    '7': 'map',
+    '8': 'map',
+    '9': 'star',
+    'C': 'local_florist',
+    'E': 'bolt',
+    'L': 'location_city',
+    'N': 'bedtime',
+    'Z': 'swap_horiz'
+  };
 
-  getLines() : Observable<Lines> {
-    return this.linesData$;
+  constructor() {
+    this.linesData$ = this.http.get<ResponseLines[]>('https://api.jakniedojade.waw.pl/v1/warsaw/lines/')
+      .pipe(
+        map((responseLines: ResponseLines[]) =>
+          responseLines.flatMap((line: ResponseLines) => line.lines)
+            .map((line: string) => ({
+              number: line,
+              icon: this.categoryIconsMapping[line.charAt(0)] || 'directions_bus',
+            }))
+        ),
+        shareReplay(),
+        catchError(this.handleError)
+      );
   }
 
   getLineIcon(lineNumber: string): Observable<string> {
     return this.linesData$.pipe(
-      map(lines => {
-        const allLines = Object.entries(lines);
-        const lineCategory = allLines.find(lines => {
-          return lines[1].includes(lineNumber); 
-        });
-        return lineCategory ? this.categoryIconsMapping[lineCategory[0]] : 'error';
-      })
+      map((linesArray: Line[]) =>
+        linesArray.find(line => line.number.includes(lineNumber))?.icon || 'directions_bus'
+      )
     );
+  }
+  
+  getLines() : Observable<Line[]> {
+    return this.linesData$;
   }
 
   private handleError(error: HttpErrorResponse) {

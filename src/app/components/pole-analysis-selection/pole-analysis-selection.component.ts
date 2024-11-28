@@ -11,7 +11,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatRipple } from '@angular/material/core';
 
 enum AnalysisType {
-  StopTimetable,
+  RealSchedule,
   Line,
   None
 }
@@ -51,8 +51,8 @@ export class PoleAnalysisSelectionComponent {
     })
   );
 
-  navigateToPoleOptions(): void {
-    
+  navigateToRealScheduleSettings(): void {
+    this.router.navigate([`real_schedule/settings`], { relativeTo: this.activatedRoute });
   }
 
   navigateToLinesOnPoleSelection(): void {

@@ -1,0 +1,68 @@
+<div class="direction-meanlatency-settings-component">
+    @if (selectedDirectionFromRoute$ | async; as selectedDirection) {
+        <header>
+            @if (lineIcon$ | async; as lineIcon) {
+                <h2><mat-icon>{{ lineIcon }}</mat-icon><span>{{ routeLine }}&nbsp;|</span>{{selectedDirection.headsign}}</h2> 
+                <h3>{{selectedComponentHeader()}}</h3>
+            }
+        </header>
+        @switch (selectedComponentName()) {
+            @case (ChildComponents.RouteSelection) {
+                <app-direction-meanlatency-route-selection
+                    [routeLine]="routeLine"
+                    [directionData]="selectedDirection"
+                    (selectSettings)="selectComponent($event)"
+                    [(state)]="routeSelectionState"/>
+            }
+            @case (ChildComponents.WeekdaySelection) {
+                <app-weekdays-selection (selectSettings)="selectComponent($event)" [(weekdaysState)]="selectedWeekdays"/>
+            }
+            @default {
+                <div class="settings-page">
+                    <div class="setting">
+                        <span>Trasa:</span>
+                        <div class="button" (click)="selectComponent(ChildComponents.RouteSelection)">
+                            <span class="setting-text">
+                                {{ selectedRouteString() }}<mat-icon class="setting-icon">settings</mat-icon>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="setting">
+                        <span>Dni tygodnia:</span>
+                        <div class="button" (click)="selectComponent(ChildComponents.WeekdaySelection)">
+                            <span class="setting-text">
+                                {{ selectedWeekdaysString() }}<mat-icon class="setting-icon">settings</mat-icon>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="setting">
+                        <span>Zakres godzin:</span>
+                        <div class="button">
+                            <span class="setting-text">
+                                placeholder<mat-icon class="setting-icon">schedule</mat-icon>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="setting">
+                        <span>Okres analizy:</span>
+                        <select style="cursor: pointer;">
+                            <option mat-menu-item>1 miesiąc</option>
+                            <option mat-menu-item>3 miesiące</option>
+                            <option mat-menu-item>6 miesiący</option>
+                            <option mat-menu-item>9 miesiący</option>
+                            <option mat-menu-item>12 miesiący</option>
+                            <option mat-menu-item>Cały</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <app-navigation-buttons
+                    [nextDisabled]="false"
+                    [nextButtonLabel]="'Gotowe'"
+                    (next)="false"
+                    (previous)="navigateToDirectionAnalysisOptions()"/>
+                </div>
+            }
+        }
+    }
+</div>

@@ -2,7 +2,7 @@
     @if (selectedDirectionFromRoute$ | async; as selectedDirection) {
         <header>
             @if (lineIcon$ | async; as lineIcon) {
-                <h2><mat-icon>{{ lineIcon }}</mat-icon><span>{{ routeLine }}&nbsp;|</span>{{selectedDirection.endStopName}}</h2> 
+                <h2><mat-icon>{{ lineIcon }}</mat-icon><span>{{ routeLine }}&nbsp;|</span>{{selectedDirection.headsign}}</h2> 
                 <h3>Wybierz rodzaj analizy</h3>
             }
         </header>
@@ -12,8 +12,8 @@
                 [matRippleCentered]="true"
                 [matRippleDisabled]="false"
                 [matRippleUnbounded]="false"
-                (click)="selectedAnalysisType.set(enum.TripTimeTable)"
-                [class.selected]="selectedAnalysisType() === enum.TripTimeTable">
+                (click)="selectedAnalysisType.set(enum.RealSchedule)"
+                [class.selected]="selectedAnalysisType() === enum.RealSchedule">
                 <div class="selection-header">
                     Rzeczywisty rozkład przejazdu
                 </div>
@@ -25,8 +25,8 @@
                 [matRippleCentered]="true"
                 [matRippleDisabled]="false"
                 [matRippleUnbounded]="false"
-                (click)="selectedAnalysisType.set(enum.RouteStatistics)"
-                [class.selected]="selectedAnalysisType() === enum.RouteStatistics">
+                (click)="selectedAnalysisType.set(enum.MeanLatency)"
+                [class.selected]="selectedAnalysisType() === enum.MeanLatency">
                 <div class="selection-header">
                     Analiza statystyczna trasy
                 </div>
@@ -35,6 +35,9 @@
         </div>
     }
     <div class="navigation-buttons">
-        <app-navigation-buttons [nextDisabled]="selectedAnalysisType() === enum.None" (next)="navigateToDirectionOptions()" (previous)="navigateToDirectionSelection()"/>
+        <app-navigation-buttons
+            [nextDisabled]="selectedAnalysisType() === enum.None"
+            (next)="selectedAnalysisType() === enum.RealSchedule ? navigateToRealScheduleSettings() : navigateToMeanLatencySettings()"
+            (previous)="navigateToDirectionSelection()"/>
     </div>
 </div>

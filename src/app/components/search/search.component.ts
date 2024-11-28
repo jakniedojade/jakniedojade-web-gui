@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
@@ -7,14 +7,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ErrorDialogService } from '../../services/error-dialog.service';
-import { Lines } from '../../interfaces/lines';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
-import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged, pairwise, debounceTime, merge, tap } from 'rxjs';
-import { Stop } from '../../interfaces/stop';
-import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged, pairwise, debounceTime, merge, tap, Observable } from 'rxjs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Line } from '../../interfaces/lines';
+import { Stop } from '../../interfaces/stop';
 
 @Component({
   selector: 'app-search',
@@ -41,42 +41,36 @@ export class SearchComponent {
   private errorDialogService = inject(ErrorDialogService);
   
   public popularStopsNames: Stop[] = [
-    { id: 701300, name: "Centrum" },
-    { id: 200800, name: "Wiatraczna" },
-    { id: 700900, name: "Marszałkowska" },
-    { id: 700600, name: "Metro Politechnika" },
-    { id: 505500, name: "Stare Bemowo" },
-    { id: 214000, name: "Stacja Krwiodawstwa" },
-    { id: 209700, name: "Saska" },
-    { id: 700200, name: "Dw. Centralny" },
+    { id: 7013, name: "Centrum" },
+    { id: 2008, name: "Wiatraczna" },
+    { id: 7009, name: "Marszałkowska" },
+    { id: 7006, name: "Metro Politechnika" },
+    { id: 5055, name: "Stare Bemowo" },
+    { id: 2140, name: "Stacja Krwiodawstwa" },
+    { id: 2097, name: "Saska" },
+    { id: 7002, name: "Dw. Centralny" },
   ];
 
   inputText = new FormControl('');
   
   stopSelection = signal<Stop | null>(null);
-  lineSelection = signal<string>('');
+  lineSelection = signal<Line | null>(null);
 
   inputText$ = this.inputText.valueChanges.pipe(
     startWith(''),
     map(inputText => inputText?.toLowerCase() ?? ''),
   );
   
-  lines$ = combineLatest([
+  lines$: Observable<Line[]> = combineLatest([
     this.linesService.getLines(),
     this.inputText$,
   ]).pipe(
-    map(([lines, inputText]) => ({
-      ...lines,
-      ...Object.keys(lines).reduce((result, key) => ({
-        ...result,
-        [key]: lines[key as keyof Lines].filter(line =>
-          line.toLowerCase().includes(inputText)
-        )
-      }), {})
-    })),
+    map(([responseLines, inputText]) => 
+      responseLines.filter((line: Line) => line.number.toLowerCase().includes(inputText))
+    ),
     catchError(err => {
       this.errorDialogService.openErrorDialog(err.message);
-      return of(null);
+      return of([]);
     }),
     shareReplay(1)
   );
@@ -86,7 +80,7 @@ export class SearchComponent {
     this.inputText$
   ]).pipe(
     map(([stops, inputText]) => 
-      stops.filter(stop => stop.name.toLowerCase().includes(inputText))
+      stops.filter((stop: Stop) => stop.name.toLowerCase().includes(inputText))
     ),
     catchError(err => {
       this.errorDialogService.openErrorDialog(err.message);
@@ -104,7 +98,7 @@ export class SearchComponent {
     map(([lines, stops]) => {
       const linesTabIndex: number = 0;
       const stopsTabIndex: number = 1;
-      const hasLines = !!lines && Object.values(lines).some(lineArray => lineArray.length > 0);
+      const hasLines = !!lines && lines.length > 0;
       const hasStops = !!stops && stops.length > 0;
   
       if (hasLines && !hasStops) return linesTabIndex;
@@ -130,7 +124,7 @@ export class SearchComponent {
     if (this.stopSelection() !== null) {
       this.router.navigate([`stop/${this.stopSelection()?.id}/${this.stopSelection()?.name}`]);
     } else {
-      this.router.navigate([`line/${this.lineSelection()}`]);
+      this.router.navigate([`line/${this.lineSelection()?.number}`]);
     }
   }
   

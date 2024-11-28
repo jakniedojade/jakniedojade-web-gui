@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,9 +6,9 @@ import 'leaflet-active-area';
 import 'leaflet.polyline.snakeanim';
 import '../../plugins/leaflet-polyline-snakeanim.js';
 import { fromEvent } from 'rxjs';
-import { debounceTime, startWith } from 'rxjs/operators';
+import {  startWith } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
-import { PoleDetails, Shape } from '../../interfaces/line-data';
+import { PoleDetails } from '../../interfaces/line-data';
 
 @Component({
   selector: 'app-map',
@@ -35,18 +35,20 @@ export class MapComponent implements OnInit {
    */
   private map!: any;
   private polyline!: any;
-  private markersGroup: any;
-  // private map!: L.Map;
+  private routeMarkersGroup: any;
+  private slicedRouteMarkersGroup: any;
   private centroid: L.LatLngExpression = [52.2302, 21.0101] //Warsaw
   readonly defaultZoomLevel: number = 13;
   readonly minimumZoomLevel: number = 11;
   readonly maximumZoomLevel: number = 18
   private poleMarkers: L.Marker[] = [];
+  private proj = L.CRS.EPSG3857;
 
   ngOnInit(): void {
     this.initMap()
     this.mapService.setMapComponent(this);
-    this.markersGroup = L.layerGroup().addTo(this.map);
+    this.routeMarkersGroup = L.layerGroup().addTo(this.map);
+    this.slicedRouteMarkersGroup = L.layerGroup().addTo(this.map);
   }
 
   initMap() {
@@ -71,7 +73,6 @@ export class MapComponent implements OnInit {
     fromEvent(window, 'resize')
     .pipe(
       startWith(null),
-      debounceTime(200)
     )
     .subscribe(() => {
       this.map.setActiveArea({
@@ -92,19 +93,28 @@ export class MapComponent implements OnInit {
     this.map.setZoom(this.map.getZoom() - 1);
   }
 
-  private routeDrawn = false;
+  private tempPoles: any = [] //used to store removed gray poles green route overwrites gray one
+
   public clearMapLayers() {
-    this.markersGroup.clearLayers();
-    this.routeDrawn = false;
+    this.routeMarkersGroup.clearLayers();
+    this.slicedRouteMarkersGroup.clearLayers();
+    this.mapService.routeDrawn.set(false);
+    this.poleMarkers = [];
+    this.tempPoles = [];
   }
 
-  public drawRoute(shapes: Shape[]): void {
+  public drawRoute(shapes: [number, number][], grayPolyline: boolean = false): void {
     this.clearMapLayers();
-    this.routeDrawn = true;
-    const shapesCoords = shapes.map((shape: Shape) => ({
-      lat: shape.latitude,
-      lng: shape.longitude
-    }));
+    if (grayPolyline) {
+      this.mapService.grayRouteDrawn.set(true);
+      this.mapService.routeDrawn.set(false);
+    } else {
+      this.mapService.grayRouteDrawn.set(false);
+      this.mapService.routeDrawn.set(true);
+    }
+
+    const shapesCoords = shapes.map((shape: [number, number]) => 
+      this.proj.unproject(L.point([shape[0], shape[1]])));
     
     const polyline = new L.Polyline(shapesCoords)
     
@@ -112,35 +122,33 @@ export class MapComponent implements OnInit {
     this.map.fitBounds(routeBounds);
 
     this.polyline = new L.Polyline(shapesCoords, { 
-      color: '#16a813',
+      color: grayPolyline ? 'gray' : '#16a813', //TODO adjust gray to palette here and in SVGs!!
       snakingSpeed: 1800
     } as L.PolylineOptions);
 
     this.polyline.addTo(this.map).snakeIn();
-    this.markersGroup.addLayer(this.polyline);
+    this.routeMarkersGroup.addLayer(this.polyline);
   }
-
-  public drawPoles(polesToDraw: PoleDetails[]): void {
+  
+  public drawPoles(polesToDraw: PoleDetails[], grayIcons: boolean = false): void {
     const stopIcon = L.icon({
-      iconUrl: '/assets/stop_regular.svg',
+      iconUrl: grayIcons ? '/assets/stop_regular_gray.svg' : '/assets/stop_regular.svg',
       iconSize: [13, 13]
     });
-
     const stopOnRequestIcon = L.icon({
-      iconUrl: '/assets/stop_on_request.svg',
+      iconUrl: grayIcons ? '/assets/stop_on_request_gray.svg' : '/assets/stop_on_request.svg',
       iconSize: [13, 13]
     });
 
-    const bounds = L.latLngBounds(polesToDraw.map((poleToDraw) => { 
-      return [poleToDraw.latitude, poleToDraw.longitude]; 
-    }));
-
+    const bounds = polesToDraw.map((pole: PoleDetails) => 
+      this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]])));
     let poleClicked = false;
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
-      const stopMarker = L.marker([pole.latitude, pole.longitude], {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
+      const poleCoordinates = this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]]))
+      const stopMarker = L.marker(poleCoordinates, {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
 
-      const hoverArea = L.circleMarker([pole.latitude, pole.longitude], {
+      const hoverArea = L.circleMarker((poleCoordinates), {
         radius: 10,
         opacity: 0,
         fillOpacity: 0,
@@ -162,15 +170,14 @@ export class MapComponent implements OnInit {
           }
         }
       });
-      this.poleMarkers.push(stopMarker);
       hoverArea.addTo(this.map);
       stopMarker.addTo(this.map);
-      this.markersGroup.addLayer(hoverArea);
-      this.markersGroup.addLayer(stopMarker);
+      this.routeMarkersGroup.addLayer(hoverArea);
+      this.routeMarkersGroup.addLayer(stopMarker);
       polesToDraw.length > 1 ? this.poleMarkers.push(stopMarker) : stopMarker.openPopup();
     });
-    if (!this.routeDrawn) {
-      this.map.fitBounds(bounds.pad(0.2));
+    if (!this.mapService.routeDrawn()) {
+      this.map.fitBounds(L.latLngBounds(bounds).pad(0.2));
     }
   }
 
@@ -180,6 +187,78 @@ export class MapComponent implements OnInit {
       if (popupContent === poleName) {
         marker.openPopup();
       }
+    });
+  }
+
+  public clearSlicedRouteLayers(): void {
+    this.slicedRouteMarkersGroup.clearLayers();
+    this.tempPoles.forEach((marker: any) => {
+      marker.addTo(this.map);
+      this.routeMarkersGroup.addLayer(marker);
+    });
+    this.tempPoles = [];
+  }
+  
+  public drawSlicedRoute(slicedShapes: [number, number][], slicedPoles: PoleDetails[]): void {
+    this.clearSlicedRouteLayers();
+    const shapesCoords = slicedShapes.map((shape: [number, number]) => 
+      this.proj.unproject(L.point([shape[0], shape[1]])));
+
+    this.polyline = new L.Polyline(shapesCoords, { 
+      color: '#16a813',
+      snakingSpeed: 1800,
+      weight: 6
+    } as L.PolylineOptions);
+    this.polyline.addTo(this.map).snakeIn();
+    this.slicedRouteMarkersGroup.addLayer(this.polyline);
+
+    const stopIcon = L.icon({
+      iconUrl: '/assets/stop_regular.svg',
+      iconSize: [15, 15]
+    });
+
+    const stopOnRequestIcon = L.icon({
+      iconUrl: '/assets/stop_on_request.svg',
+      iconSize: [15, 15]
+    });
+
+    let poleClicked = false;
+
+    slicedPoles.forEach((pole) => {
+      this.poleMarkers.forEach(element => {
+        if (element.getPopup()?.getContent() === pole.name) {
+          this.tempPoles.push(element);
+          element.remove();
+        }
+      });
+      const stopMarker = L.marker(this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]])), {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
+
+      const hoverArea = L.circleMarker(this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]])), {
+        radius: 10,
+        opacity: 0,
+        fillOpacity: 0,
+        pane: 'popupPane'
+      });
+
+      hoverArea.on({
+        click: () => {
+          this.mapService.setSelectedPole(pole);
+          poleClicked = true;
+        },
+        mouseover: () => {
+          stopMarker.openPopup();
+          poleClicked = false;
+        },
+        mouseout: () => {
+          if (!poleClicked) {
+            stopMarker.closePopup();
+          }
+        }
+      });
+      //this.poleMarkers.push(stopMarker);
+      hoverArea.addTo(this.map);
+      stopMarker.addTo(this.map);
+      this.slicedRouteMarkersGroup.addLayer(stopMarker);
     });
   }
 
