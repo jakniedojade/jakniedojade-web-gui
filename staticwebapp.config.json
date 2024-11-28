@@ -3,5 +3,10 @@
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": ["/assets/*"]
+  },
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/index.html"
+    }
   }
 }
