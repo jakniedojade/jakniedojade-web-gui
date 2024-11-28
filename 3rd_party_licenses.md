@@ -1,12 +1,12 @@
 | Name                              | License type       | Installed version |
 | :-------------------------------- | :----------------- | :---------------- |
 | @angular/animations               | MIT                | 19.0.1            |
-| @angular/cdk                      | MIT                | 18.1.0            |
+| @angular/cdk                      | MIT                | 19.0.1            |
 | @angular/common                   | MIT                | 19.0.1            |
 | @angular/compiler                 | MIT                | 19.0.1            |
 | @angular/core                     | MIT                | 19.0.1            |
 | @angular/forms                    | MIT                | 19.0.1            |
-| @angular/material                 | MIT                | 18.1.0            |
+| @angular/material                 | MIT                | 19.0.1            |
 | @angular/platform-browser         | MIT                | 19.0.1            |
 | @angular/platform-browser-dynamic | MIT                | 19.0.1            |
 | @angular/router                   | MIT                | 19.0.1            |
