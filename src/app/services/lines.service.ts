@@ -38,7 +38,7 @@ export class LinesService {
           responseLines.flatMap((line: ResponseLines) => line.lines)
             .map((line: string) => ({
               number: line,
-              icon: this.categoryIconsMapping[line.charAt(0)] || '',
+              icon: this.categoryIconsMapping[line.charAt(0)] || 'directions_bus',
             }))
         ),
         shareReplay(),
@@ -49,7 +49,7 @@ export class LinesService {
   getLineIcon(lineNumber: string): Observable<string> {
     return this.linesData$.pipe(
       map((linesArray: Line[]) =>
-        linesArray.find(line => line.number.includes(lineNumber))?.icon || ''
+        linesArray.find(line => line.number.includes(lineNumber))?.icon || 'directions_bus'
       )
     );
   }
