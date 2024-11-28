@@ -145,14 +145,15 @@ export class MapComponent implements OnInit {
     let poleClicked = false;
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
-      const stopMarker = L.marker(this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]])), {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
+      const poleCoordinates = this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]]))
+      const stopMarker = L.marker(poleCoordinates, {icon: pole.onDemand ? stopOnRequestIcon : stopIcon}).bindPopup(pole.name);
 
-      const hoverArea = L.circleMarker(this.map.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]]), {
+      const hoverArea = L.circleMarker((poleCoordinates), {
         radius: 10,
         opacity: 0,
         fillOpacity: 0,
         pane: 'popupPane' //because this pane has the highest z index
-      }));
+      });
 
       hoverArea.on({
         click: () => {
