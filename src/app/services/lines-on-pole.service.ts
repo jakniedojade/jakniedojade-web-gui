@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, shareReplay, throwError } from 'rxjs';
+import { LineOnPole } from '../interfaces/line-on-pole';
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +9,8 @@ import { catchError, Observable, shareReplay, throwError } from 'rxjs';
 export class LinesOnPoleService {
   private http = inject(HttpClient);
 
-  getLinesOnPole(poleId: number): Observable<string[]> {
-    return this.http.get<string[]>(`https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/api/v1/poles/${poleId}/lines/`)
+  getLinesOnPole(poleId: number): Observable<LineOnPole[]> {
+    return this.http.get<LineOnPole[]>(`https://api.jakniedojade.waw.pl/v1/warsaw/poles/${poleId}/directions/`)
       .pipe(
         shareReplay(),
         catchError(this.handleError)
