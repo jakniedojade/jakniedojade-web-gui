@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
 import { SearchComponent } from './components/search/search.component';
-import { ResultsComponent } from './components/results/results.component';
 import { DirectionSelectionComponent } from './components/direction-selection/direction-selection.component';
 import { PoleSelectionComponent } from './components/pole-selection/pole-selection.component';
 import { DirectionAnalysisSelectionComponent } from './components/direction-analysis-selection/direction-analysis-selection.component';
@@ -45,7 +44,5 @@ export const routes: Routes = [
     {
         path: 'stop/:routeStopId/:routeStopName/:routePoleName/lines', component: LinesOnPoleSelectionComponent,
     },
-    //THIS PATH IS HERE TEMPORARLY 
-    { path: 'results/:line/:directionSwapped/:startStop/:endStop', component: ResultsComponent },  // TODO: Refactor this route
 ];
 

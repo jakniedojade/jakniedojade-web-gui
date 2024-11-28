@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LineDataService } from '../../services/line-data.service';
-import { catchError, forkJoin, of, switchMap } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { LineData } from '../../interfaces/line-data';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
@@ -10,6 +10,9 @@ import { AsyncPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { LinesService } from '../../services/lines.service';
 import { MatButton } from '@angular/material/button';
+import { Line } from '../../interfaces/lines';
+import { toSignal } from '@angular/core/rxjs-interop';
+
 
 @Component({
   selector: 'app-direction-selection',
@@ -27,23 +30,25 @@ export class DirectionSelectionComponent {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   
-  @Input() routeLine!: string;
-  lineIcon$ = this.activatedRoute.paramMap.pipe(
-    switchMap((paramMap) => {
-      return this.linesService.getLineIcon(paramMap.get('routeLine')!);
-    })
-  );
-  
-  selectedDirection = signal<boolean | null>(null);
-
-  directionsData$ = this.activatedRoute.paramMap.pipe(
+  private line$: Observable<Line> = this.activatedRoute.paramMap.pipe(
     switchMap(paramMap => {
       const routeLine = paramMap.get('routeLine')!;
-      return forkJoin([
-        this.lineDataService.getLineData(routeLine, false),
-        this.lineDataService.getLineData(routeLine, true)
-      ]);
-    }),
+      return this.linesService.getLineIcon(routeLine).pipe(
+        map(lineIcon => ({
+          number: routeLine,
+          icon: lineIcon
+        }))
+      );
+    })
+  );
+  line = toSignal(this.line$);
+  
+  selectedDirection = signal<LineData | null>(null);
+
+  directionsData$ = this.activatedRoute.paramMap.pipe(
+    switchMap(paramMap => 
+      this.lineDataService.getLineData(paramMap.get('routeLine')!)
+    ),
     catchError(error => {
       this.errorDialogService.openErrorDialog(error.message);
       return of(null);
@@ -51,13 +56,13 @@ export class DirectionSelectionComponent {
   );
 
   selectDirection(lineData: LineData) {
-    this.selectedDirection.set(lineData.direction);
-    this.mapService.drawRoute(lineData.shapes);
+    this.selectedDirection.set(lineData);
+    this.mapService.drawRoute(lineData.path.coordinates);
     this.mapService.drawPoles(lineData.poles);
   }
 
   navigateToDirectionAnalysisOptions(): void {
-    this.router.navigate([`${this.selectedDirection()}`], { relativeTo: this.activatedRoute });
+    this.router.navigate([`${this.selectedDirection()?.direction}`], { relativeTo: this.activatedRoute });
   }
 
   navigateToLineSelection(): void {

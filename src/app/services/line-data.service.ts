@@ -8,44 +8,28 @@ import { LineData } from '../interfaces/line-data';
 })
 export class LineDataService {
   private http = inject(HttpClient);
-  private readonly lineData = new Map<string, Observable<LineData>>();
+  private readonly lineData = new Map<string, Observable<LineData[]>>();
 
-  getLineData(line: string, directionSwapped: boolean): Observable<LineData> {
-    const directionNumber: string = directionSwapped ? "1" : "0";
-    const url = `https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/api/v1/lines/${line}/poles/?direction=${directionNumber}`;
-    const key = this.constructKey(line, directionSwapped);
+  getLineData(line: string): Observable<LineData[]> {
+    const url = `https://api.jakniedojade.waw.pl/v1/warsaw/lines/${line}/directions/`;
 
-    if (!this.lineData.has(key)) {
-      this.lineData.set(key, this.http.get<LineData>(url).pipe(
-        map(lineData => {
-          if (!lineData.poles || lineData.poles.length === 0) {
-            throw new Error('No poles data available');
-          }
-          return lineData;
-        }),
+    if (!this.lineData.has(line)) {
+      this.lineData.set(line, this.http.get<LineData[]>(url).pipe(
         shareReplay(),
         catchError(error => this.handleError(error))
       ));
     }
 
-    return this.lineData.get(key) as Observable<LineData>;
+    return this.lineData.get(line) as Observable<LineData[]>;
   }
 
-  private handleError(error: Error) {
-    if (error instanceof HttpErrorResponse) {
-      if (error.status === 0) {
-        console.error('A client side or network error occurred:', error.error);
-      } else {
-        console.error(`Backend returned code ${error.status}`);
-      }
-      return throwError(() => new Error('An error occurred while fetching stops'));
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      console.error('A client side or network error occurred:', error.error);
     } else {
-      console.error(error.message);
-      return throwError(() => new Error(error.message));
+      console.error(
+        `Backend returned code ${error.status}`);
     }
-  }
-
-  private constructKey(line: string, directionSwapped: boolean): string {
-    return `${line}-${directionSwapped}`; 
+    return throwError(() => new Error(`An error occurred while fetching line data`));
   }
 }

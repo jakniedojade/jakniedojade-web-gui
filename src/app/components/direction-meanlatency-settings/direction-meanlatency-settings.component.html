@@ -2,7 +2,7 @@
     @if (selectedDirectionFromRoute$ | async; as selectedDirection) {
         <header>
             @if (lineIcon$ | async; as lineIcon) {
-                <h2><mat-icon>{{ lineIcon }}</mat-icon><span>{{ routeLine }}&nbsp;|</span>{{selectedDirection.endStopName}}</h2> 
+                <h2><mat-icon>{{ lineIcon }}</mat-icon><span>{{ routeLine }}&nbsp;|</span>{{selectedDirection.headsign}}</h2> 
                 <h3>{{selectedComponentHeader()}}</h3>
             }
         </header>

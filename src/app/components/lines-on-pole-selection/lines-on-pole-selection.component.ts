@@ -1,26 +1,26 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorDialogService } from '../../services/error-dialog.service';
 import { map } from 'rxjs/operators';
 import { MapService } from '../../services/map.service';
 import { PolesOnStopService } from '../../services/poles-on-stop.service';
-import { catchError, combineLatest, filter, forkJoin, of, switchMap, tap } from 'rxjs';
+import { catchError, filter, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
 import { PoleDetails } from '../../interfaces/line-data';
 import { LinesOnPoleService } from '../../services/lines-on-pole.service';
 import { AsyncPipe } from '@angular/common';
-import { MapComponent } from "../map/map.component";
 import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { LinesService } from '../../services/lines.service';
-import { LineDataService } from '../../services/line-data.service';
+import { LineOnPole } from '../../interfaces/line-on-pole';
 
 @Component({
   selector: 'app-lines-on-pole-selection',
   standalone: true,
-  imports: [AsyncPipe, MapComponent, NavigationButtonsComponent, MatIcon, MatButton],
+  imports: [AsyncPipe, NavigationButtonsComponent, MatIcon, MatButton],
   templateUrl: './lines-on-pole-selection.component.html',
-  styleUrl: './lines-on-pole-selection.component.scss'
+  styleUrl: './lines-on-pole-selection.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LinesOnPoleSelectionComponent {
   private router = inject(Router);
@@ -31,9 +31,9 @@ export class LinesOnPoleSelectionComponent {
   private activatedRoute = inject(ActivatedRoute);
   private linesService = inject(LinesService);
 
-  lineSelection = signal<string>('');
+  lineSelection = signal<LineOnPole | null>(null);
 
-  selectedPoleFromRoute$ = this.activatedRoute.params.pipe(
+  selectedPoleFromRoute$: Observable<PoleDetails | null> = this.activatedRoute.params.pipe(
     switchMap(paramMap => 
       this.polesOnStopService.getPolesOnStop(paramMap['routeStopId']).pipe(
         map(poles => poles.find(pole => pole.name === paramMap['routePoleName'])),
@@ -51,23 +51,28 @@ export class LinesOnPoleSelectionComponent {
     })
   );
 
-  linesOnPole$ = this.selectedPoleFromRoute$.pipe(
+  linesOnPole$: Observable<LineOnPole[]> = this.selectedPoleFromRoute$.pipe(
     switchMap(pole => 
       this.linesOnPoleService.getLinesOnPole(pole!.id).pipe(
-        switchMap(lines => 
-          forkJoin(
-            lines.map(line => 
-              this.linesService.getLineIcon(line).pipe(
-                map(icon => ({ lineNumber: line, icon }))
+          switchMap(lines => 
+            forkJoin(
+              lines.map(line => 
+                this.linesService.getLineIcon(line.line).pipe(
+                  map(icon => ({
+                    line: line.line,
+                    direction: line.direction,
+                    headsign: line.headsign,
+                    icon: icon
+                  }))
+                )
               )
             )
           )
         )
-      )
     ),
     catchError(error => {
       this.errorDialogService.openErrorDialog(error.message);
-      return of(null);
+      return of([]);
     })
   );
 
@@ -76,7 +81,7 @@ export class LinesOnPoleSelectionComponent {
     this.router.navigate([`stop/${params['routeStopId']}/${params['routeStopName']}/${this.mapService.selectedPole()?.name}`]);
   }
   
-  navigateToDirectionSelection(): void {
-    this.router.navigate([`line/${this.lineSelection()}`]);
+  navigateToAnalysisSelection(): void {
+    this.router.navigate([`line/${this.lineSelection()?.line}/${this.lineSelection()?.direction}`]);
   }
 }

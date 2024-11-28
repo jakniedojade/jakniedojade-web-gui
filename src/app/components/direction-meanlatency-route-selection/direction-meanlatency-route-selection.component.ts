@@ -48,7 +48,7 @@ export class DirectionMeanlatencyRouteSelectionComponent implements OnInit{
     } else if (index !== start) {
       end = index;
       if (end < start) [start, end] = [end, start];
-      this.mapService.drawSlicedRoute(data.shapes, data.poles, data.poles[start], data.poles[end]);
+      this.mapService.drawSlicedRoute(data.path.coordinates, data.poles, data.poles[start], data.poles[end]);
     }
 
     this.startingIndex.set(start);
@@ -68,7 +68,7 @@ export class DirectionMeanlatencyRouteSelectionComponent implements OnInit{
 
   goToSettings(): void {
     if (this.state()?.startingIndex !== undefined && this.state()?.endingIndex !== undefined) {
-      this.mapService.drawSlicedRoute(this.directionData().shapes, this.directionData().poles,
+      this.mapService.drawSlicedRoute(this.directionData().path.coordinates, this.directionData().poles,
         this.directionData().poles[this.state()?.startingIndex!], this.directionData().poles[this.state()?.endingIndex!]);
     } else {
       this.mapService.clearSlicedRouteLayers();
