@@ -1,8 +1,8 @@
 import { Component, inject, Input, input, model, OnInit, output, signal } from '@angular/core';
-import { MapService } from '../../services/map.service';
-import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
+import { MapService } from '../../../services/map.service';
+import { NavigationButtonsComponent } from "../../../components/navigation-buttons/navigation-buttons.component";
 import { MeanlatencyChildComponents } from '../direction-meanlatency-settings/direction-meanlatency-settings.component';
-import { LineData, PoleDetails } from '../../interfaces/line-data';
+import { LineData, PoleDetails } from '../../../interfaces/line-data';
 
 export interface RouteSelectionState {
   selectedRoute: PoleDetails[],

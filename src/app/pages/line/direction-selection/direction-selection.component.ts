@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LineDataService } from '../../services/line-data.service';
+import { LineDataService } from '../../../services/line-data.service';
 import { catchError, forkJoin, map, Observable, of, switchMap } from 'rxjs';
-import { LineData } from '../../interfaces/line-data';
-import { ErrorDialogService } from '../../services/error-dialog.service';
-import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
-import { MapService } from '../../services/map.service';
+import { LineData } from '../../../interfaces/line-data';
+import { ErrorDialogService } from '../../../services/error-dialog.service';
+import { NavigationButtonsComponent } from "../../../components/navigation-buttons/navigation-buttons.component";
+import { MapService } from '../../../services/map.service';
 import { AsyncPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
-import { LinesService } from '../../services/lines.service';
+import { LinesService } from '../../../services/lines.service';
 import { MatButton } from '@angular/material/button';
-import { Line } from '../../interfaces/lines';
+import { Line } from '../../../interfaces/lines';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 

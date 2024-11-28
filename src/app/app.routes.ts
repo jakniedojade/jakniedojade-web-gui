@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
-import { SearchComponent } from './components/search/search.component';
-import { DirectionSelectionComponent } from './components/direction-selection/direction-selection.component';
-import { PoleSelectionComponent } from './components/pole-selection/pole-selection.component';
-import { DirectionAnalysisSelectionComponent } from './components/direction-analysis-selection/direction-analysis-selection.component';
-import { PoleAnalysisSelectionComponent } from './components/pole-analysis-selection/pole-analysis-selection.component';
-import { LinesOnPoleSelectionComponent } from './components/lines-on-pole-selection/lines-on-pole-selection.component';
-import { DirectionMeanlatencySettingsComponent } from './components/direction-meanlatency-settings/direction-meanlatency-settings.component';
+import { WelcomeScreenComponent } from './pages/home-page/welcome-screen/welcome-screen.component';
+import { SearchComponent } from './pages/search/search.component';
+import { DirectionSelectionComponent } from './pages/line/direction-selection/direction-selection.component';
+import { PoleSelectionComponent } from './pages/stop/pole-selection/pole-selection.component';
+import { DirectionAnalysisSelectionComponent } from './pages/line/direction-analysis-selection/direction-analysis-selection.component';
+import { PoleAnalysisSelectionComponent } from './pages/stop/pole-analysis-selection/pole-analysis-selection.component';
+import { LinesOnPoleSelectionComponent } from './pages/stop/lines-on-pole-selection/lines-on-pole-selection.component';
+import { DirectionMeanlatencySettingsComponent } from './pages/line/direction-meanlatency-settings/direction-meanlatency-settings.component';
 import { WrongRouteScreenComponent } from './components/wrong-route-screen/wrong-route-screen.component';
 
 export const routes: Routes = [

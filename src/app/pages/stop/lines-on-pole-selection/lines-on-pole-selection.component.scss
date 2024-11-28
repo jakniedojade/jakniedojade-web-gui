@@ -1,12 +1,13 @@
-@use '../../../mixins.scss' as *;
+@use '../../../../mixins.scss' as *;
 @use '@angular/material' as mat;
 
-.pole-selection-component {
+.lines-on-pole-selection-component {
     @include full-height-component;
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
 
     & > header {
         display: flex;
@@ -41,7 +42,7 @@
     }
 }
 
-#pole-selection-buttons {
+#lines-on-pole-selection-buttons {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -54,16 +55,10 @@
     overflow-y: auto;
 }
 
-:host ::ng-deep .mat-mdc-button-touch-target {
-    height: unset !important;
-}
-
 .stop-line-button {
-    --mdc-outlined-button-container-height: 35px;
-    margin: 6px 0;
-    margin-right: 10px;
-    padding: 0 12px;
-    width: fit-content;
+    margin: 7px 5px;
+    padding-left: 15px;
+    padding-right: 10px;
 
     &.selected {
         background-color: var(--sys-primary);
@@ -73,6 +68,20 @@
 
     --mdc-outlined-button-label-text-color: #4e544a;
     --mdc-outlined-button-outline-color: #4e544a;
+
+    mat-icon {
+        margin-right: 5px;
+    }
+}
+
+.selection-header {
+    width: 90%;
+    height: 30px;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 15px;
+    background-color: var(--sys-primary);
+    color: white;
 }
 
 .navigation-buttons {

@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ErrorDialogService } from '../../services/error-dialog.service';
+import { ErrorDialogService } from '../../../services/error-dialog.service';
 import { map } from 'rxjs/operators';
-import { MapService } from '../../services/map.service';
-import { PolesOnStopService } from '../../services/poles-on-stop.service';
+import { MapService } from '../../../services/map.service';
+import { PolesOnStopService } from '../../../services/poles-on-stop.service';
 import { catchError, filter, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
-import { PoleDetails } from '../../interfaces/line-data';
-import { LinesOnPoleService } from '../../services/lines-on-pole.service';
+import { PoleDetails } from '../../../interfaces/line-data';
+import { LinesOnPoleService } from '../../../services/lines-on-pole.service';
 import { AsyncPipe } from '@angular/common';
-import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
+import { NavigationButtonsComponent } from "../../../components/navigation-buttons/navigation-buttons.component";
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
-import { LinesService } from '../../services/lines.service';
-import { LineOnPole } from '../../interfaces/line-on-pole';
+import { LinesService } from '../../../services/lines.service';
+import { LineOnPole } from '../../../interfaces/line-on-pole';
 
 @Component({
   selector: 'app-lines-on-pole-selection',

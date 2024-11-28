@@ -5,7 +5,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, Subject, takeUntil, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MeanlatencyChildComponents } from '../direction-meanlatency-settings/direction-meanlatency-settings.component';
+import { MeanlatencyChildComponents } from '../../pages/line/direction-meanlatency-settings/direction-meanlatency-settings.component';
 
 export interface Weekdays {
   mondays: boolean;

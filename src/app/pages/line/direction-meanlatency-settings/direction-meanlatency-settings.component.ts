@@ -2,14 +2,14 @@ import { AsyncPipe } from '@angular/common';
 import { Component, computed, inject, Input, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { switchMap, tap, catchError, of, map } from 'rxjs';
-import { ErrorDialogService } from '../../services/error-dialog.service';
-import { LineDataService } from '../../services/line-data.service';
-import { LinesService } from '../../services/lines.service';
-import { MapService } from '../../services/map.service';
+import { ErrorDialogService } from '../../../services/error-dialog.service';
+import { LineDataService } from '../../../services/line-data.service';
+import { LinesService } from '../../../services/lines.service';
+import { MapService } from '../../../services/map.service';
 import { MatIcon } from '@angular/material/icon';
-import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
+import { NavigationButtonsComponent } from "../../../components/navigation-buttons/navigation-buttons.component";
 import { DirectionMeanlatencyRouteSelectionComponent, RouteSelectionState } from '../direction-meanlatency-route-selection/direction-meanlatency-route-selection.component';
-import { regularWeekdays, saturdaysAndHolidays, Weekdays, WeekdaysSelectionComponent } from "../weekdays-selection/weekdays-selection.component";
+import { regularWeekdays, saturdaysAndHolidays, Weekdays, WeekdaysSelectionComponent } from "../../../components/weekdays-selection/weekdays-selection.component";
 
 export enum MeanlatencyChildComponents {
   RouteSelection = 'routeSelection',
