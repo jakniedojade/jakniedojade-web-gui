@@ -12,7 +12,7 @@ export class PolesOnStopService {
 
   getPolesOnStop(stopId: number): Observable<PoleDetails[]> {
     if (!this.polesData[stopId]) {
-      this.polesData[stopId] = this.http.get<PoleDetails[]>(`https://jakniedojade-web-d9aeg6bfauh2hwcs.polandcentral-01.azurewebsites.net/api/v1/stops/${stopId}/poles/`)
+      this.polesData[stopId] = this.http.get<PoleDetails[]>(`https://api.jakniedojade.waw.pl/v1/warsaw/stops/${stopId}/poles/`)
         .pipe(
           shareReplay(),
           catchError(this.handleError)
