@@ -79,7 +79,7 @@ export class StopSelectionComponent {
   }
 
   navigateToResults(): void {
-    this.router.navigate([`results/${this.line}/${this.directionSwapped}/${this.poles[this.startIndex].name}/${this.poles[this.endIndex].name}`]);
+    // TO DO: navigate to results page
   }
 
   navigateToLineSelection(): void {

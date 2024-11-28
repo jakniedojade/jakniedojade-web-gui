@@ -49,9 +49,6 @@ export const routes: Routes = [
     {
         path: 'stop/:routeStopId/:routeStopName/:routePoleName/lines', component: LinesOnPoleSelectionComponent,
     },
-    { 
-        path: 'results/:line/:directionSwapped/:startStop/:endStop', component: ResultsComponent, // TODO: Refactor this route
-    },  
     {
         path: '**', pathMatch: 'full', component: WrongRouteScreenComponent,
     },   
