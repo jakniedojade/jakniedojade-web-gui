@@ -1,7 +1,7 @@
-@use '../../../mixins.scss' as *;
 @use '@angular/material' as mat;
+@use '../../../../mixins.scss' as *;
 
-.pole-analysis-type-selection-component {
+.direction-meanlatency-settings-component {
     @include full-height-component;
 
     display: flex;
@@ -46,38 +46,37 @@
     }
 }
 
-#selection-buttons-container {
-    padding: 0 16px;
+.settings-page {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
 }
 
-.selection-button {
-    border: 1px solid #8D9387;
-    border-radius: 16px;
-    padding: 8px 16px;
-    margin: 10px 0;
+.setting {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+
+    > * {
+        padding: 4px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.setting-text {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.setting-icon {
+    padding-left: 5px;
+    padding-right: 10px;
+}
+
+.button {
     cursor: pointer;
-
-    .selection-header {
-        width: fit-content;
-        padding: 4px 8px;
-        border-radius: 5px;
-        background-color: var(--sys-primary);
-        color: white;
-        margin-bottom: 7px;
-        font-size: 15px;
-    }
-
-    &.selected {
-        background-color: var(--sys-primary);
-        color: white;
-
-        .selection-header {
-            padding: 4px 0;
-        }
-    }
-
-    font-size: 13px;
-    line-height: 15px;
 }
 
 .navigation-buttons {

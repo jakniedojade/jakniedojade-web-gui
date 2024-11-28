@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ErrorDialogService } from '../../services/error-dialog.service';
-import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
+import { NavigationButtonsComponent } from "../../components/navigation-buttons/navigation-buttons.component";
 import { StopsService } from '../../services/stops.service';
 import { catchError, combineLatest, map, of, startWith, shareReplay, distinctUntilChanged, pairwise, debounceTime, merge, tap, Observable } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';

@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@use '../../../mixins.scss' as *;
+@use '../../../../mixins.scss' as *;
 
 .direction-meanlatency-route-component {
     @include full-height-component;

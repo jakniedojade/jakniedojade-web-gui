@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PoleDetails } from '../../interfaces/line-data';
-import { ErrorDialogService } from '../../services/error-dialog.service';
+import { PoleDetails } from '../../../interfaces/line-data';
+import { ErrorDialogService } from '../../../services/error-dialog.service';
 import { MatButton } from '@angular/material/button';
-import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
-import { MapService } from '../../services/map.service';
-import { PolesOnStopService } from '../../services/poles-on-stop.service';
+import { NavigationButtonsComponent } from "../../../components/navigation-buttons/navigation-buttons.component";
+import { MapService } from '../../../services/map.service';
+import { PolesOnStopService } from '../../../services/poles-on-stop.service';
 import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';

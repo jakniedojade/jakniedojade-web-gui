@@ -1,14 +1,14 @@
 import { Component, inject, Input, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ErrorDialogService } from '../../services/error-dialog.service';
-import { MapService } from '../../services/map.service';
-import { LineDataService } from '../../services/line-data.service';
+import { ErrorDialogService } from '../../../services/error-dialog.service';
+import { MapService } from '../../../services/map.service';
+import { LineDataService } from '../../../services/line-data.service';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
+import { NavigationButtonsComponent } from "../../../components/navigation-buttons/navigation-buttons.component";
 import { MatRipple } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
-import { LinesService } from '../../services/lines.service';
+import { LinesService } from '../../../services/lines.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 enum AnalysisType {

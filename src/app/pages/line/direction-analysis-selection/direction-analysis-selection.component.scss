@@ -1,7 +1,7 @@
-@use '../../../mixins.scss' as *;
+@use '../../../../mixins.scss' as *;
 @use '@angular/material' as mat;
 
-.lines-on-pole-selection-component {
+.pole-analysis-type-selection-component {
     @include full-height-component;
 
     display: flex;
@@ -33,6 +33,10 @@
             mat-icon {
                 margin-right: 3px;
             }
+
+            & > span {
+                margin-right: 8px;
+            }
         }
 
         h3 {
@@ -42,46 +46,38 @@
     }
 }
 
-#lines-on-pole-selection-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+#selection-buttons-container {
     padding: 0 16px;
-
-    max-height: 465px;
-    margin-bottom: 7px;
-    overflow-y: auto;
 }
 
-.stop-line-button {
-    margin: 7px 5px;
-    padding-left: 15px;
-    padding-right: 10px;
+.selection-button {
+    border: 1px solid #8D9387;
+    border-radius: 16px;
+    padding: 8px 16px;
+    margin: 10px 0;
+    cursor: pointer;
+
+    .selection-header {
+        width: fit-content;
+        padding: 4px 8px;
+        border-radius: 5px;
+        background-color: var(--sys-primary);
+        color: white;
+        margin-bottom: 7px;
+        font-size: 15px;
+    }
 
     &.selected {
         background-color: var(--sys-primary);
-        --mdc-outlined-button-outline-color: var(--sys-primary);
         color: white;
+
+        .selection-header {
+            padding: 4px 0;
+        }
     }
 
-    --mdc-outlined-button-label-text-color: #4e544a;
-    --mdc-outlined-button-outline-color: #4e544a;
-
-    mat-icon {
-        margin-right: 5px;
-    }
-}
-
-.selection-header {
-    width: 90%;
-    height: 30px;
-    padding: 5px;
-    margin: 10px;
-    border-radius: 15px;
-    background-color: var(--sys-primary);
-    color: white;
+    font-size: 13px;
+    line-height: 15px;
 }
 
 .navigation-buttons {

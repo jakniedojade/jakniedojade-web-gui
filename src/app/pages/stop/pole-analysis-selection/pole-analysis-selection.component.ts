@@ -1,10 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
-import { NavigationButtonsComponent } from "../navigation-buttons/navigation-buttons.component";
+import { NavigationButtonsComponent } from "../../../components/navigation-buttons/navigation-buttons.component";
 import { ActivatedRoute, Router } from '@angular/router';
-import { MapService } from '../../services/map.service';
-import { PolesOnStopService } from '../../services/poles-on-stop.service';
-import { PoleDetails } from '../../interfaces/line-data';
-import { ErrorDialogService } from '../../services/error-dialog.service';
+import { MapService } from '../../../services/map.service';
+import { PolesOnStopService } from '../../../services/poles-on-stop.service';
+import { PoleDetails } from '../../../interfaces/line-data';
+import { ErrorDialogService } from '../../../services/error-dialog.service';
 import { catchError, filter, map, of, switchMap, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
