@@ -41,14 +41,14 @@ export class SearchComponent {
   private errorDialogService = inject(ErrorDialogService);
   
   public popularStopsNames: Stop[] = [
-    { id: 701300, name: "Centrum" },
-    { id: 200800, name: "Wiatraczna" },
-    { id: 700900, name: "Marszałkowska" },
-    { id: 700600, name: "Metro Politechnika" },
-    { id: 505500, name: "Stare Bemowo" },
-    { id: 214000, name: "Stacja Krwiodawstwa" },
-    { id: 209700, name: "Saska" },
-    { id: 700200, name: "Dw. Centralny" },
+    { id: 7013, name: "Centrum" },
+    { id: 2008, name: "Wiatraczna" },
+    { id: 7009, name: "Marszałkowska" },
+    { id: 7006, name: "Metro Politechnika" },
+    { id: 5055, name: "Stare Bemowo" },
+    { id: 2140, name: "Stacja Krwiodawstwa" },
+    { id: 2097, name: "Saska" },
+    { id: 7002, name: "Dw. Centralny" },
   ];
 
   inputText = new FormControl('');
