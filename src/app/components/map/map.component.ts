@@ -142,6 +142,7 @@ export class MapComponent implements OnInit {
 
     const bounds = polesToDraw.map((pole: PoleDetails) => 
       this.proj.unproject(L.point([pole.position.coordinates[0], pole.position.coordinates[1]])));
+
     let poleClicked = false;
     polesToDraw.forEach((pole) => {
       //TODO adjust popup style and font
@@ -176,7 +177,7 @@ export class MapComponent implements OnInit {
       this.routeMarkersGroup.addLayer(stopMarker);
       polesToDraw.length > 1 ? this.poleMarkers.push(stopMarker) : stopMarker.openPopup();
     });
-    if (!this.mapService.routeDrawn()) {
+    if (!this.mapService.routeDrawn() && !this.mapService.grayRouteDrawn()) {
       this.map.fitBounds(L.latLngBounds(bounds).pad(0.2));
     }
   }
