@@ -94,6 +94,7 @@ export class MapComponent implements OnInit {
   }
 
   private tempPoles: any = [] //used to store removed gray poles green route overwrites gray one
+  private drawingTimeout: any;
 
   public clearMapLayers() {
     this.routeMarkersGroup.clearLayers();
@@ -101,6 +102,8 @@ export class MapComponent implements OnInit {
     this.mapService.routeDrawn.set(false);
     this.poleMarkers = [];
     this.tempPoles = [];
+
+    clearTimeout(this.drawingTimeout);
   }
 
   public drawRoute(shapes: [number, number][], grayPolyline: boolean = false): void {
@@ -126,8 +129,10 @@ export class MapComponent implements OnInit {
       snakingSpeed: 1800
     } as L.PolylineOptions);
 
-    this.polyline.addTo(this.map).snakeIn();
-    this.routeMarkersGroup.addLayer(this.polyline);
+    this.drawingTimeout = setTimeout(() => {
+      this.polyline.addTo(this.map).snakeIn();
+      this.routeMarkersGroup.addLayer(this.polyline);
+    }, 300)
   }
   
   public drawPoles(polesToDraw: PoleDetails[], grayIcons: boolean = false): void {

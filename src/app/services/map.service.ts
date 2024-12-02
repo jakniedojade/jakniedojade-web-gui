@@ -27,7 +27,6 @@ export class MapService {
 
   drawRoute(shapes: [number, number][], grayPolyline: boolean = false): void {
     this.mapComponent!.drawRoute(shapes, grayPolyline);
-    this.routeDrawn.set(grayPolyline ? false : true);
   }
 
   drawPoles(poles: PoleDetails[], grayIcons: boolean = false): void {
