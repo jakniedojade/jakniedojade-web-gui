@@ -84,8 +84,7 @@ export class DirectionMeanlatencySettingsComponent {
         map(lineData => lineData.find(data => data.direction.toString() === paramMap['direction'])),
         tap(lineData => {
           if (lineData) {
-            this.mapService.drawRoute(lineData.path.coordinates, true);
-            this.mapService.drawPoles(lineData.poles, true);
+            this.mapService.drawRoute(lineData.path.coordinates, lineData.poles, true);
           }
         }),
       )

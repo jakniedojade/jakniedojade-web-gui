@@ -25,9 +25,10 @@ export class MapService {
     this.mapComponent!.clearSlicedRouteLayers();
   }
 
-  drawRoute(shapes: [number, number][], grayPolyline: boolean = false): void {
-    this.mapComponent!.drawRoute(shapes, grayPolyline);
-    this.routeDrawn.set(grayPolyline ? false : true);
+  drawRoute(shapes: [number, number][], poles: PoleDetails[], grayRoute: boolean = false): void {
+    const mappedData = this.mapPolesToShapes(poles, shapes, poles[0], poles[poles.length - 1]);
+    this.mapComponent!.drawRoute(mappedData.shapes, grayRoute);
+    this.mapComponent!.drawPoles(mappedData.poles, grayRoute);
   }
 
   drawPoles(poles: PoleDetails[], grayIcons: boolean = false): void {
@@ -46,11 +47,11 @@ export class MapService {
   }
   
   drawSlicedRoute(shapes: [number, number][], poles: PoleDetails[], startingPole: PoleDetails, endingPole: PoleDetails) {
-    const data = this.sliceRoute(poles, shapes, startingPole, endingPole);
+    const data = this.mapPolesToShapes(poles, shapes, startingPole, endingPole);
     this.mapComponent!.drawSlicedRoute(data.shapes, data.poles);
   }
 
-  private sliceRoute(poles: PoleDetails[], shapes: [number, number][], startingPole: PoleDetails, endingPole: PoleDetails) {
+  private mapPolesToShapes(poles: PoleDetails[], shapes: [number, number][], startingPole: PoleDetails, endingPole: PoleDetails) {
     const calculateDistance = (x1: number, y1: number, x2: number, y2: number): number => {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }

@@ -57,8 +57,7 @@ export class DirectionSelectionComponent {
 
   selectDirection(lineData: LineData) {
     this.selectedDirection.set(lineData);
-    this.mapService.drawRoute(lineData.path.coordinates);
-    this.mapService.drawPoles(lineData.poles);
+    this.mapService.drawRoute(lineData.path.coordinates, lineData.poles);
   }
 
   navigateToDirectionAnalysisOptions(): void {
