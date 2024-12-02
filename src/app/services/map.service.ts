@@ -25,10 +25,10 @@ export class MapService {
     this.mapComponent!.clearSlicedRouteLayers();
   }
 
-  drawRoute(shapes: [number, number][], poles: PoleDetails[], grayPolyline: boolean = false, grayPoleIcons: boolean = false): void {
+  drawRoute(shapes: [number, number][], poles: PoleDetails[], grayRoute: boolean = false): void {
     const mappedData = this.mapPolesToShapes(poles, shapes, poles[0], poles[poles.length - 1]);
-    this.mapComponent!.drawRoute(mappedData.shapes, grayPolyline);
-    this.mapComponent!.drawPoles(mappedData.poles, grayPoleIcons);
+    this.mapComponent!.drawRoute(mappedData.shapes, grayRoute);
+    this.mapComponent!.drawPoles(mappedData.poles, grayRoute);
   }
 
   drawPoles(poles: PoleDetails[], grayIcons: boolean = false): void {
