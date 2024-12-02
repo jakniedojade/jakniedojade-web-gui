@@ -49,8 +49,7 @@ export class DirectionAnalysisSelectionComponent {
         map(lineData => lineData.find(data => data.direction.toString() === paramMap['direction'])),
         tap(lineData => {
           if (lineData && !this.mapService.routeDrawn()) {
-            this.mapService.drawRoute(lineData.path.coordinates);
-            this.mapService.drawPoles(lineData.poles);
+            this.mapService.drawRoute(lineData.path.coordinates, lineData.poles);
           }
         }),
       )
