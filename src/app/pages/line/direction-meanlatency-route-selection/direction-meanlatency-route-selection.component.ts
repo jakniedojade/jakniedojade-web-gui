@@ -12,7 +12,6 @@ export interface RouteSelectionState {
 
 @Component({
   selector: 'app-direction-meanlatency-route-selection',
-  standalone: true,
   imports: [NavigationButtonsComponent],
   templateUrl: './direction-meanlatency-route-selection.component.html',
   styleUrl: './direction-meanlatency-route-selection.component.scss'

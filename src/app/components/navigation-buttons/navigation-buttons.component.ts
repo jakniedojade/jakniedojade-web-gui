@@ -3,7 +3,6 @@ import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-navigation-buttons',
-  standalone: true,
   imports: [MatButton],
   templateUrl: './navigation-buttons.component.html',
   styleUrl: './navigation-buttons.component.scss'

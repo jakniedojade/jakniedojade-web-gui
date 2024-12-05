@@ -18,7 +18,6 @@ enum AnalysisType {
 
 @Component({
   selector: 'app-pole-analysis-type-selection',
-  standalone: true,
   imports: [NavigationButtonsComponent, AsyncPipe, MatIcon, MatRipple],
   templateUrl: './pole-analysis-selection.component.html',
   styleUrl: './pole-analysis-selection.component.scss'

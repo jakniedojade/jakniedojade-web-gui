@@ -4,7 +4,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-welcome-screen',
-  standalone: true,
   imports: [MatButtonModule, RouterLink],
   templateUrl: './welcome-screen.component.html',
   styleUrl: './welcome-screen.component.scss'

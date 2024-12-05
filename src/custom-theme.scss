@@ -1,7 +1,8 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 $_palettes: (
   primary: (
@@ -130,9 +131,11 @@ $jakniedojade-theme: mat.define-theme(
       primary: $_primary,
       tertiary: $_tertiary,
       use-system-variables: true, 
+    system-variables-prefix: sys,
     ),
     typography: (
       use-system-variables: true,
+    system-variables-prefix: sys,
     ),
     density: (
       scale: 0,

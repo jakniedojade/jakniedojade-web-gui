@@ -53,7 +53,6 @@ export const noWeekdaySelected: Weekdays = {
 
 @Component({
   selector: 'app-weekdays-selection',
-  standalone: true,
   imports: [NavigationButtonsComponent, MatButtonToggleModule, MatChipsModule, FormsModule, ReactiveFormsModule],
   templateUrl: './weekdays-selection.component.html',
   styleUrl: './weekdays-selection.component.scss'

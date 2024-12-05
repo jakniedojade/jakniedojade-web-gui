@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @use '../../../mixins.scss' as *;
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 .line-selection-component {
     @include full-height-component;

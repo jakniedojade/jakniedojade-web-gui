@@ -25,7 +25,6 @@ const COMPONENT_HEADERS = {
 
 @Component({
   selector: 'app-direction-meanlatency-settings',
-  standalone: true,
   imports: [
     AsyncPipe,
     MatIcon,

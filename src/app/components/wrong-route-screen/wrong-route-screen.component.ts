@@ -4,7 +4,6 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-wrong-route-screen',
-  standalone: true,
   imports: [MatButtonModule, RouterLink],
   templateUrl: './wrong-route-screen.component.html',
   styleUrl: './wrong-route-screen.component.scss'

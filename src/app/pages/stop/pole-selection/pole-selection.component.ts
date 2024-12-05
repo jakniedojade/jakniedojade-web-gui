@@ -12,7 +12,6 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-direction-selection',
-  standalone: true,
   imports: [MatButton, NavigationButtonsComponent, AsyncPipe, MatIcon],
   templateUrl: './pole-selection.component.html',
   styleUrl: './pole-selection.component.scss',
