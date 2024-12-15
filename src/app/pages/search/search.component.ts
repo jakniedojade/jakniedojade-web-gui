@@ -67,10 +67,7 @@ export class SearchComponent {
     map(([responseLines, inputText]) => 
       responseLines.filter((line: Line) => line.number.toLowerCase().includes(inputText))
     ),
-    catchError(err => {
-      this.errorDialogService.openErrorDialog(err.message);
-      return of([]);
-    }),
+    catchError(err => of(err)),
     shareReplay(1)
   );
   
@@ -81,10 +78,7 @@ export class SearchComponent {
     map(([stops, inputText]) => 
       stops.filter((stop: Stop) => stop.name.toLowerCase().includes(inputText))
     ),
-    catchError(err => {
-      this.errorDialogService.openErrorDialog(err.message);
-      return of(null);
-    }),
+    catchError(err => of(err)),
     shareReplay(1)
   );
   

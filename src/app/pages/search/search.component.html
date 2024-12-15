@@ -16,15 +16,22 @@
         </ng-template>
         <div class="line-buttons-container">
           @if (lines$ | async; as lines) {
-            @for (line of lines; track $index) {
-              <button
-                class="line-button"
-                mat-stroked-button
-                [class.selected]="line === lineSelection()"
-                (click)="lineSelection.set(line); stopSelection.set(null)">
-                <mat-icon>{{line.icon}}</mat-icon>
-                {{line.number}}
-              </button>
+            @if (lines.length > 0) {
+              @for (line of lines; track $index) {
+                <button
+                  class="line-button"
+                  mat-stroked-button
+                  [class.selected]="line === lineSelection()"
+                  (click)="lineSelection.set(line); stopSelection.set(null)">
+                  <mat-icon>{{line.icon}}</mat-icon>
+                  {{line.number}}
+                </button>
+              }
+            }
+            @else {
+              <div class="error-container">
+                {{lines}}
+              </div>
             }
           }
         </div>
@@ -36,31 +43,38 @@
         </ng-template>
         <div class="stop-buttons-container">    
           @if (stops$ | async; as stops) {
-            @if (inputText.value!.length > 1) { <!-- start showing stops when more than 1 letter is typed because it lags a bit -->
-                @for (stop of stops; track stop.id) {
+            @if(stops.length > 0) {
+              @if (inputText.value!.length > 1) { <!-- start showing stops when more than 1 letter is typed because it lags a bit -->
+                  @for (stop of stops; track stop.id) {
+                    <button
+                    class="stop-button"
+                    mat-stroked-button
+                    [class.selected]="stop.name === stopSelection()?.name"
+                    (click)="lineSelection.set(null); stopSelection.set(stop)">
+                    {{stop.name}}
+                  </button>
+                }
+              }
+              @else {
+                <div id="popular-stops-title">
+                  <h4>Użyj wyszukiwarki, aby wybrać przystanek,</h4>
+                  <h5>lub wybierz z listy najpopularniejszych przystanków</h5>
+                </div>
+                @for (popularStop of popularStopsNames; track popularStop.id) {
                   <button
-                  class="stop-button"
-                  mat-stroked-button
-                  [class.selected]="stop.name === stopSelection()?.name"
-                  (click)="lineSelection.set(null); stopSelection.set(stop)">
-                  {{stop.name}}
-                </button>
+                    class="stop-button"
+                    mat-stroked-button
+                    [class.selected]="popularStop.name === stopSelection()?.name"
+                    (click)="lineSelection.set(null); stopSelection.set(popularStop)">
+                    {{popularStop.name}}
+                  </button>
+                }
               }
             }
             @else {
-              <div id="popular-stops-title">
-                <h4>Użyj wyszukiwarki, aby wybrać przystanek,</h4>
-                <h5>lub wybierz z listy najpopularniejszych przystanków</h5>
+              <div class="error-container">
+                {{stops}}
               </div>
-              @for (popularStop of popularStopsNames; track popularStop.id) {
-                <button
-                  class="stop-button"
-                  mat-stroked-button
-                  [class.selected]="popularStop.name === stopSelection()?.name"
-                  (click)="lineSelection.set(null); stopSelection.set(popularStop)">
-                  {{popularStop.name}}
-                </button>
-              }
             }
           }
         </div>
