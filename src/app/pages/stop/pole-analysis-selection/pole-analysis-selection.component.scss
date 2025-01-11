@@ -76,6 +76,13 @@
     line-height: 15px;
 }
 
+.gray-disabled-button {
+    background-color: #e2e3e2;
+    color: #969696;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .navigation-buttons {
     @include navigation-buttons;
 }
