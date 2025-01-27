@@ -8,13 +8,17 @@ import { PoleAnalysisSelectionComponent } from './pages/stop/pole-analysis-selec
 import { LinesOnPoleSelectionComponent } from './pages/stop/lines-on-pole-selection/lines-on-pole-selection.component';
 import { DirectionMeanlatencySettingsComponent } from './pages/line/direction-meanlatency-settings/direction-meanlatency-settings.component';
 import { WrongRouteScreenComponent } from './components/wrong-route-screen/wrong-route-screen.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
 
 export const routes: Routes = [
     { 
-      path: '', component: WelcomeScreenComponent,
+        path: '', component: WelcomeScreenComponent,
+    },
+    {
+        path: 'about', component: AboutUsComponent,
     },
     { 
-      path: 'search', component: SearchComponent,
+        path: 'search', component: SearchComponent,
     },
     {
         path: 'line/:routeLine', component: DirectionSelectionComponent,
