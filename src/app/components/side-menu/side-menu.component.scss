@@ -29,3 +29,16 @@ main {
     margin-bottom: 15px;
     height: 590px;
 }
+
+#demo-info
+{
+    position: absolute;
+    top: 15px;
+    font-size: 18px;
+    left: -40px;
+    display: block;
+    background-color: #D64045;
+    color: white;
+    padding: 0 50px;
+    transform: rotate(-45deg);
+}
